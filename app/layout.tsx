@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { LangProvider } from './components/ui'
+import MouseFX from './components/mousefx-wrapper'
 
 export const metadata: Metadata = {
   title: 'बाटो — IOE/KU Engineering Prep',
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <LangProvider>{children}</LangProvider>
+        <MouseFX />
       </body>
     </html>
   )
