@@ -85,13 +85,13 @@ export function LangProvider({ children }: { children: React.ReactNode }) {
 
 export function useLang() { return useContext(Ctx) }
 
-export function LangToggle({ dark = false }: { dark?: boolean }) {
+export function LangToggle() {
   const { lang, setLang } = useLang()
   const label = lang === 'en' ? 'नेपाली' : 'English'
   const other = lang === 'en' ? 'ne' : 'en'
   return (
     <button
-      className={`lang-toggle ${dark ? 'dark' : ''}`}
+      className="lang-toggle"
       onClick={() => setLang(other)}
       title={label}
       aria-label={`Switch to ${label}`}
@@ -114,7 +114,7 @@ export function ThemeToggle() {
   }
   return (
     <button
-      className={`lang-toggle ${dark ? 'dark' : ''}`}
+      className="lang-toggle"
       onClick={toggle}
       title={dark ? 'Light mode' : 'Dark mode'}
       aria-label="Toggle dark mode"
@@ -143,10 +143,9 @@ export function TopBar() {
           <div className="nav-sub">{t('appSub')}</div>
         </div>
       </Link>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <span className="nav-tagline">{t('tagline')}</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <ThemeToggle />
-        <LangToggle dark />
+        <LangToggle />
       </div>
     </nav>
   )
