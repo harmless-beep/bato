@@ -542,7 +542,7 @@ html[data-theme="dark"] .filter-label { color: var(--muted); }
   flex-wrap: wrap;
   border: 1px solid rgba(255,255,255,0.12);
 }
-.countdown-inner { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 200px; }
+.countdown-inner { display: flex; align-items: center; justify-content: center; text-align: center; gap: 10px; flex: 1; min-width: 200px; }
 .countdown-icon { font-size: 26px; }
 .countdown-label { color: rgba(255,255,255,0.85); font-size: 14px; font-weight: 700; }
 .countdown-days { color: #ffd166; font-size: 17px; font-weight: 900; letter-spacing: 0.3px; }
