@@ -1,0 +1,177 @@
+'use client'
+
+import { useEffect, useMemo, useState } from 'react'
+import Link from 'next/link'
+import { useLang } from '../components/ui'
+
+type SugType = 'idea' | 'xp' | 'problem' | 'feature'
+type Sug = { id: string; type: SugType; text: string; ts: number }
+
+const TYPES: { id: SugType; icon: string; label: string; labelNp: string }[] = [
+  { id: 'idea', icon: '💡', label: 'Idea', labelNp: 'विचार' },
+  { id: 'xp', icon: '🧪', label: 'My Experience', labelNp: 'मेरो अनुभव' },
+  { id: 'problem', icon: '🚧', label: 'Problem', labelNp: 'समस्या' },
+  { id: 'feature', icon: '✨', label: 'Feature Wish', labelNp: 'नयाँ सुविधा' },
+]
+const LS = 'bato-suggestions'
+const LS_VOTES = 'bato-sug-votes'
+const MAX = 400
+
+function load(): Sug[] { try { return JSON.parse(localStorage.getItem(LS) || '[]') } catch { return [] } }
+function loadVotes(): Record<string, number> { try { return JSON.parse(localStorage.getItem(LS_VOTES) || '{}') } catch { return {} } }
+
+function ago(ts: number): string {
+  const s = Math.floor((Date.now() - ts) / 1000)
+  if (s < 60) return 'now'
+  if (s < 3600) return `${Math.floor(s / 60)}m ago`
+  if (s < 86400) return `${Math.floor(s / 3600)}h ago`
+  return `${Math.floor(s / 86400)}d ago`
+}
+
+export default function Suggest() {
+  const { lang } = useLang()
+  const isNe = lang === 'ne'
+
+  const [items, setItems] = useState<Sug[]>([])
+  const [votes, setVotes] = useState<Record<string, number>>({})
+  const [type, setType] = useState<SugType>('idea')
+  const [text, setText] = useState('')
+  const [filter, setFilter] = useState<SugType | 'all'>('all')
+  const [sortNew, setSortNew] = useState(false)
+  const [done, setDone] = useState(false)
+
+  useEffect(() => { setItems(load()); setVotes(loadVotes()) }, [])
+
+  const submit = () => {
+    const t = text.trim()
+    if (!t) return
+    const sug: Sug = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), type, text: t, ts: Date.now() }
+    const next = [sug, ...items]
+    setItems(next)
+    localStorage.setItem(LS, JSON.stringify(next))
+    setText(''); setDone(true)
+    setTimeout(() => setDone(false), 2600)
+  }
+
+  const vote = (id: string) => {
+    const next = { ...votes, [id]: votes[id] ? 0 : 1 }
+    setVotes(next)
+    localStorage.setItem(LS_VOTES, JSON.stringify(next))
+  }
+
+  const exportJson = () => {
+    const blob = new Blob([JSON.stringify(items, null, 2)], { type: 'application/json' })
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = 'bato-suggestions.json'
+    a.click()
+    URL.revokeObjectURL(a.href)
+  }
+
+  const shown = useMemo(() => {
+    const list = filter === 'all' ? items : items.filter(i => i.type === filter)
+    return [...list].sort((a, b) => sortNew ? b.ts - a.ts : (votes[b.id] || 0) - (votes[a.id] || 0) || b.ts - a.ts)
+  }, [items, votes, filter, sortNew])
+
+  const totalVotes = Object.values(votes).reduce((a, b) => a + b, 0)
+
+  return (
+    <div className="page">
+      <div className="topbar">
+        <Link href="/" className="back-btn" aria-label="Home">←</Link>
+        <span className="nav-title">💬 {isNe ? 'सुझाव' : 'Suggestions'}</span>
+        <div />
+      </div>
+      <div className="page-content">
+
+        <div className="info-box" style={{ marginBottom: 16 }}>
+          <strong>🗣️ {isNe ? 'तपाईंको आवाजले बाटो बनाउँछ' : 'Your voice shapes बाटो'}</strong> —{' '}
+          {isNe
+            ? 'विचार, अनुभव, समस्या वा चाहेको सुविधा — यहाँ राख्नुहोस्। अरूले like गरे, हामी त्यही पहिले बनाउँछौं।'
+            : 'Share ideas, experiences, problems or feature wishes. The most-liked ones get built first.'}
+        </div>
+
+        {/* ── Submit form ── */}
+        <div className="card sug-form" style={{ padding: 16, marginBottom: 18 }}>
+          <div className="sug-chips" role="radiogroup" aria-label="Suggestion type">
+            {TYPES.map(t => (
+              <button key={t.id} className={`chip${type === t.id ? ' active' : ''}`} onClick={() => setType(t.id)} aria-checked={type === t.id} role="radio">
+                {t.icon} {isNe ? t.labelNp : t.label}
+              </button>
+            ))}
+          </div>
+          <textarea
+            className="input sug-input"
+            placeholder={isNe ? 'के भन्न चाहनुहुन्छ? (जस्तै: Physics मा numerical को practice चाहियो…)' : 'What would you like to say? (e.g. I need more numerical practice in Physics…)'}
+            value={text}
+            maxLength={MAX}
+            onChange={e => setText(e.target.value)}
+            rows={4}
+          />
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginTop: 10, flexWrap: 'wrap' }}>
+            <span className="sug-count">{text.length}/{MAX}</span>
+            <button className="btn btn-primary btn-sm" onClick={submit} disabled={!text.trim()}>
+              {done ? '✓ ' + (isNe ? 'थपियो!' : 'Submitted!') : '🚀 ' + (isNe ? 'सुझाव पठाउनुहोस्' : 'Submit suggestion')}
+            </button>
+          </div>
+        </div>
+
+        {/* ── Board ── */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 12, flexWrap: 'wrap' }}>
+          <div className="sug-chips">
+            <button className={`chip${filter === 'all' ? ' active' : ''}`} onClick={() => setFilter('all')}>{isNe ? 'सबै' : 'All'} ({items.length})</button>
+            {TYPES.map(t => (
+              <button key={t.id} className={`chip${filter === t.id ? ' active' : ''}`} onClick={() => setFilter(t.id)}>{t.icon}</button>
+            ))}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span className="sug-count">▲ {totalVotes} {isNe ? 'भोट' : 'votes'}</span>
+            <button className="btn btn-outline btn-sm" onClick={() => setSortNew(!sortNew)}>
+              {sortNew ? '🔥 ' + (isNe ? 'लोकप्रिय' : 'Top') : '🕒 ' + (isNe ? 'नयाँ' : 'Newest')}
+            </button>
+          </div>
+        </div>
+
+        {shown.length === 0 ? (
+          <div className="card sug-empty">
+            <div className="sug-empty-icon">🪹</div>
+            <div className="sug-empty-title">{isNe ? 'अहिलेसम्म केही छैन' : 'Nothing here yet'}</div>
+            <div className="sug-empty-sub">{isNe ? 'पहिलो सुझाव दिनुहोस् — माथिको फारम भर्नुहोस्!' : 'Be the first — use the form above!'}</div>
+          </div>
+        ) : (
+          shown.map(s => {
+            const t = TYPES.find(x => x.id === s.type)!
+            const my = votes[s.id] || 0
+            return (
+              <div key={s.id} className="card sug-item" style={{ padding: 12, marginBottom: 10 }}>
+                <button className={`sug-vote${my ? ' on' : ''}`} onClick={() => vote(s.id)} aria-label={isNe ? 'भोट' : 'Vote'} title={isNe ? 'भोट दिनुहोस्' : 'Upvote'}>
+                  <span className="sug-vote-arrow">▲</span>
+                  <span className="sug-vote-num">{my}</span>
+                </button>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="sug-item-top">
+                    <span className="sug-item-type">{t.icon} {isNe ? t.labelNp : t.label}</span>
+                    <span className="sug-item-ago">{ago(s.ts)}</span>
+                  </div>
+                  <div className="sug-item-text">{s.text}</div>
+                </div>
+              </div>
+            )
+          })
+        )}
+
+        {items.length > 0 && (
+          <div style={{ textAlign: 'center', marginTop: 18 }}>
+            <button className="btn btn-outline btn-sm" onClick={exportJson} title="Download all suggestions (JSON)">
+              📥 {isNe ? 'सबै सुझाव डाउनलोड (JSON)' : 'Download all suggestions (JSON)'}
+            </button>
+          </div>
+        )}
+
+        {/* ponytail: votes are per-device (localStorage) — static GH Pages has no shared store.
+            To aggregate votes across users, point submit() at a form service (Formspree) or
+            Firebase; the board UI stays the same. */}
+      </div>
+    </div>
+  )
+}

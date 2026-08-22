@@ -47,6 +47,7 @@ const quickItems = [
   { icon: '🎯', label: 'Branch Predictor', labelNp: 'शाखा अनुमान', href: '/predictor',   desc: 'See which branches you can get',            descNp: 'कुन शाखा पाउन सकिन्छ हेर्नुहोस्' },
   { icon: '🗂️', label: 'Syllabus',       labelNp: 'पाठ्यक्रम',      href: '/syllabus',    desc: 'IOE, KU & CEE exam patterns + PDFs',        descNp: 'IOE, KU र CEE परीक्षा ढाँचा + PDF' },
   { icon: '🩺', label: 'Med Predictor',  labelNp: 'मेडिकल अनुमान',  href: '/med-predictor', desc: 'MECEE rank → medical colleges',           descNp: 'MECEE rank → मेडिकल कलेज' },
+  { icon: '💬', label: 'Suggest',         labelNp: 'सुझाव',          href: '/suggest',       desc: 'Ideas, problems & feature wishes',        descNp: 'विचार, समस्या र नयाँ सुविधा' },
   { icon: '💼', label: 'Careers',         labelNp: 'करियर',          href: '/careers',       desc: 'Jobs, salaries & paths after degree',      descNp: 'डिग्री पछि जागिर, तलब र बाटो' },
 ]
 

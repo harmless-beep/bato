@@ -45,6 +45,9 @@ export default function Contribute() {
             <a href="https://github.com/harmless-beep/bato" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ textDecoration: 'none', display: 'inline-block' }}>
               GitHub →
             </a>
+            <Link href="/suggest" className="btn btn-gold" style={{ textDecoration: 'none', display: 'inline-block', marginLeft: 8 }}>
+              💬 {isNe ? 'सुझाव दिनुहोस्' : 'Suggest an idea'}
+            </Link>
           </div>
         </div>
       </div>

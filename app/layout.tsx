@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { LangProvider } from './components/ui'
+import EasterEggs from './components/easter-eggs'
 
 export const metadata: Metadata = {
   title: 'बाटो — IOE/KU Engineering Prep',
@@ -21,7 +22,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: `if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/bato/sw.js').catch(function(){})})}` }} />
       </head>
       <body>
-        <LangProvider>{children}</LangProvider>
+        <LangProvider>
+          {children}
+          <EasterEggs />
+        </LangProvider>
       </body>
     </html>
   )
