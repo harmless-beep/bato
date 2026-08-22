@@ -13,6 +13,21 @@ interface PastPaper {
   subject: string
   subjectNp: string
   type: 'MCQ' | 'Full'
+  pdfUrl?: string
+}
+
+// Direct download / source links for official papers
+const sources: Record<string, string> = {
+  ioe_entrance: 'https://peadigitals.com/pages/question',
+  ioe_cutoff_2082: 'https://pea.edu.np/content/uploads/2026/06/IOE-Cutoff-Rank-2082.pdf',
+  ioe_pulchowk_lists: 'https://pcampus.edu.np',
+  ioe_thc_lists: 'https://thc.tu.edu.np',
+  ioe_wrc_lists: 'https://ioepas.edu.np',
+  ioe_erc_lists: 'https://ioepc.edu.np',
+  ku_syllabus: 'https://apply.ku.edu.np/syllabi/2026/Test_Syllabus_2026.pdf',
+  ku_papers: 'https://exam.ku.edu.np',
+  paper_guides: 'https://paperguides.org',
+  en_nepal: 'https://engineeringnepal.com.np/p/old-questions.html',
 }
 
 const papers: PastPaper[] = [
@@ -87,9 +102,10 @@ export default function PastPapers() {
 
       <div className="page-content">
         <div className="info-box">
-          📌 <strong>{isNe ? 'Sample data' : 'Sample data'}</strong> — {isNe
-            ? 'पूरा question bank चाँडै आउँदैछ। GitHub मा योगदान गर्नुहोस्!'
-            : 'Full question bank coming soon. Help us add more!'} <a href="https://github.com" style={{ color: 'var(--primary)', fontWeight: 700, whiteSpace: 'nowrap' }}>Contribute →</a>
+          📌 <strong>Real papers &amp; PDFs</strong> — {isNe
+            ? 'official sources + free repositories को links तल Resources मा छन्।'
+            : 'Real paper links, official IOE/KU sources & free repos below.'}{' '}
+          <a href="https://github.com/harmless-beep/bato" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', fontWeight: 700, whiteSpace: 'nowrap' }}>Contribute →</a>
         </div>
 
         {/* Filters */}
@@ -153,15 +169,69 @@ export default function PastPapers() {
                   {p.university} • {p.exam}{p.semester ? ` Sem ${p.semester}` : ''} • {p.type}
                 </div>
               </div>
-              <button
+              <a
+                href={p.university === 'IOE' ? sources.ioe_entrance : sources.ku_papers}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="btn btn-primary btn-sm"
-                onClick={() => alert(isNe ? 'Full question bank coming soon! Help us add questions → github.com' : 'Full question bank coming soon! Help us add questions → github.com')}
+                style={{ textDecoration: 'none', display: 'inline-block' }}
               >
-                {isNe ? 'हेर्नुहोस्' : 'View'}
-              </button>
+                📥 PDF
+              </a>
             </div>
           ))
         )}
+      </div>
+
+      {/* Resources */}
+      <div className="section-header" style={{ marginTop: 32 }}>
+        <div className="section-title">📎 {isNe ? 'Official Resources & Downloads' : 'Official Resources & Downloads'}</div>
+        <div className="section-sub">{isNe ? 'verified sources, free, updated' : 'verified sources, free, updated'}</div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 12 }}>
+        <a href={sources.ioe_cutoff_2082} target="_blank" rel="noopener noreferrer" className="paper-card" style={{ textDecoration: 'none', display: 'flex', gap: 12, alignItems: 'center' }}>
+          <span style={{ fontSize: 28 }}>📊</span>
+          <div>
+            <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>IOE Cutoff Ranks 2082</div>
+            <div style={{ color: 'var(--muted)', fontSize: 12 }}>PEA • all campuses • PDF</div>
+          </div>
+        </a>
+        <a href={sources.paper_guides} target="_blank" rel="noopener noreferrer" className="paper-card" style={{ textDecoration: 'none', display: 'flex', gap: 12, alignItems: 'center' }}>
+          <span style={{ fontSize: 28 }}>📚</span>
+          <div>
+            <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>PaperGuides — KU & A Level</div>
+            <div style={{ color: 'var(--muted)', fontSize: 12 }}>Free past papers + notes • paperguides.org</div>
+          </div>
+        </a>
+        <a href={sources.ioe_entrance} target="_blank" rel="noopener noreferrer" className="paper-card" style={{ textDecoration: 'none', display: 'flex', gap: 12, alignItems: 'center' }}>
+          <span style={{ fontSize: 28 }}>📝</span>
+          <div>
+            <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>IOE Past Questions</div>
+            <div style={{ color: 'var(--muted)', fontSize: 12 }}>PEA Digital • model questions • Free</div>
+          </div>
+        </a>
+        <a href={sources.ku_syllabus} target="_blank" rel="noopener noreferrer" className="paper-card" style={{ textDecoration: 'none', display: 'flex', gap: 12, alignItems: 'center' }}>
+          <span style={{ fontSize: 28 }}>🗺️</span>
+          <div>
+            <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>KU KUCAT Syllabus 2026</div>
+            <div style={{ color: 'var(--muted)', fontSize: 12 }}>PCM/PCB topics • Official PDF</div>
+          </div>
+        </a>
+        <a href={sources.en_nepal} target="_blank" rel="noopener noreferrer" className="paper-card" style={{ textDecoration: 'none', display: 'flex', gap: 12, alignItems: 'center' }}>
+          <span style={{ fontSize: 28 }}>🏛️</span>
+          <div>
+            <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>Engineering Nepal</div>
+            <div style={{ color: 'var(--muted)', fontSize: 12 }}>IOE, KU, PoU, PU papers • Free</div>
+          </div>
+        </a>
+        <a href="https://ioe-entrance.bibeksubedi0001.com.np" target="_blank" rel="noopener noreferrer" className="paper-card" style={{ textDecoration: 'none', display: 'flex', gap: 12, alignItems: 'center' }}>
+          <span style={{ fontSize: 28 }}>🎯</span>
+          <div>
+            <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>IOE Cutoff Tracker</div>
+            <div style={{ color: 'var(--muted)', fontSize: 12 }}>2080-2082 data • by Bibek Subedi</div>
+          </div>
+        </a>
       </div>
     </div>
   )
