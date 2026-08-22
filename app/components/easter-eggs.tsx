@@ -132,12 +132,12 @@ export default function EasterEggs() {
         rain(18)
         toast('🚀 बाटो 2.0 coming soon… (बाटो Ninja सदस्यलाई पहिले!)')
       }
-      // egg 7 (hard): the tiny gold sun in the logo, 7 taps
-      const sunEl = t.closest('.nav-logo-icon circle')
-      if (sunEl && sunEl.getAttribute('fill') === '#f59e0b' && rapid(sun.current, 7)) {
+      // egg 7 (hard): tap the gold "sun" in the logo icon 7× fast
+      const sunEl = t.closest('.nav-logo-icon')
+      if (sunEl && rapid(sun.current, 7)) {
         sun.current = []
         mark('sun')
-        const r = (sunEl as SVGCircleElement).getBoundingClientRect()
+        const r = (sunEl as SVGSVGElement).getBoundingClientRect()
         burst(r.left + r.width / 2, r.top + r.height / 2, ['#f59e0b', '#fbbf24', '#fde68a', '#f97316'], 26)
         rain(10)
         toast('🌻 सूर्यमुखी! तपाईंले घाम छुनुभयो!')
