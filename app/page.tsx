@@ -357,7 +357,7 @@ export default function Home() {
           </Reveal>
         </div>
 
-        {/* ── Support (privacy-safe) ──────────────────────────────────────── */}
+        {/* ── Support ──────────────────────────────────────────────────── */}
                 <Reveal delay={200}>
                   <div className="contribute-section">
                     <div className="contribute-icon">☕</div>
@@ -370,18 +370,15 @@ export default function Home() {
                           ? 'बाटो पूर्ण रूपमा निःशुल्क छ — तर तपाईंको साथले यसलाई जीवित राख्छ।'
                           : 'बाटो is completely free — but your support keeps it alive.'}
                       </div>
-                      <div style={{ marginTop: 14, fontSize: 13, lineHeight: 1.8, color: 'rgba(255,255,255,0.85)' }}>
-                        <div style={{ fontWeight: 700, marginBottom: 6 }}>
-                          {isNe ? 'गोपनीयता-मैत्री तरिका:' : 'Privacy-safe ways to support:'}
-                        </div>
-                        <div>• <strong>Ko-fi</strong> — <a href="https://ko-fi.com" target="_blank" rel="noopener noreferrer" style={{ color: '#ffd166' }}>ko-fi.com</a> — free, username only, no phone/bank exposed</div>
-                        <div>• <strong>Buy Me a Coffee</strong> — <a href="https://buymeacoffee.com" target="_blank" rel="noopener noreferrer" style={{ color: '#ffd166' }}>buymeacoffee.com</a></div>
-                        <div>• <strong>PayPal.me</strong> — <a href="https://paypal.me" target="_blank" rel="noopener noreferrer" style={{ color: '#ffd166' }}>paypal.me</a></div>
-                        <div style={{ marginTop: 10, fontSize: 11.5, color: 'rgba(255,255,255,0.6)' }}>
-                          {isNe
-                            ? 'यी मध्ये कुनै एकमा account बनाउनुहोस् (२ मिनेट) र मलाई link दिनुहोस् — म QR अपडेट गरिदिन्छु।'
-                            : 'Create a free account on any of these (2 min), then send me the link — I\'ll update the QR.'}
-                        </div>
+                      <div style={{ margin: '16px auto 0', width: 200, background: '#fff', borderRadius: 18, padding: 10, display: 'inline-block', boxShadow: '0 6px 20px rgba(0,0,0,0.2)' }}>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src="/bato/qr-donate.png" alt="QR" style={{ width: '100%', display: 'block', borderRadius: 10 }} />
+                      </div>
+                      <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.7)', marginTop: 8, fontWeight: 600 }}>
+                        {isNe ? 'QR scan गरेर दान गर्नुहोस्' : 'Scan to donate'}
+                      </div>
+                      <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginTop: 4 }}>
+                        {isNe ? 'बैंक QR — तपाईंको नाम/फोन सार्वजनिक हुँदैन' : 'Bank QR — your name/phone stays private'}
                       </div>
                     </div>
                   </div>
