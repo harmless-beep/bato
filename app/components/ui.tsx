@@ -102,26 +102,40 @@ export function LangToggle() {
   )
 }
 
+const THEMES = [
+  { id: 'light', icon: '☀️', label: 'Light' },
+  { id: 'dark',  icon: '🌙', label: 'Dark' },
+  { id: 'forest', icon: '🌿', label: 'Forest' },
+  { id: 'ocean',  icon: '🌊', label: 'Ocean' },
+] as const
+
 export function ThemeToggle() {
-  const [dark, setDark] = useState(false)
+  const [theme, setTheme] = useState<typeof THEMES[number]['id']>('light')
   useEffect(() => {
-    setDark(document.documentElement.dataset.theme === 'dark')
+    const t = document.documentElement.dataset.theme as typeof THEMES[number]['id']
+    if (t) setTheme(t)
   }, [])
-  const toggle = () => {
-    const next = !dark
-    setDark(next)
-    document.documentElement.dataset.theme = next ? 'dark' : 'light'
-    localStorage.setItem('bato-theme', next ? 'dark' : 'light')
+  const pick = (id: typeof THEMES[number]['id']) => {
+    setTheme(id)
+    document.documentElement.dataset.theme = id
+    localStorage.setItem('bato-theme', id)
   }
   return (
-    <button
-      className="lang-toggle"
-      onClick={toggle}
-      title={dark ? 'Light mode' : 'Dark mode'}
-      aria-label="Toggle dark mode"
-    >
-      {dark ? '☀️' : '🌙'}
-    </button>
+    <div className="theme-switcher" role="radiogroup" aria-label="Theme">
+      {THEMES.map(t => (
+        <button
+          key={t.id}
+          className={`theme-switcher-btn${theme === t.id ? ' active' : ''}`}
+          onClick={() => pick(t.id)}
+          title={t.label}
+          aria-label={t.label}
+          aria-checked={theme === t.id}
+          role="radio"
+        >
+          {t.icon}
+        </button>
+      ))}
+    </div>
   )
 }
 
