@@ -60,6 +60,21 @@ export default function MedPredictor() {
 
         {valid && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 }}>
+            <div className="card" style={{ padding: 14, display: 'flex', gap: 12, alignItems: 'center' }}>
+              <div style={{ fontSize: 28 }}>📊</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)' }}>
+                  {isNe ? 'तपाईंको स्थिति' : 'Your position'}
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>
+                  {band ? band.label : r > 10000 ? (isNe ? 'List बाहिर' : 'Outside list') : '—'}
+                </div>
+              </div>
+              <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600 }}>{isNe ? 'तपाईंको rank' : 'Your rank'}</div>
+                <div style={{ fontSize: 18, fontWeight: 900, color: band?.color ?? 'var(--primary)' }}>{r}</div>
+              </div>
+            </div>
             <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--muted)' }}>
               {isNe ? `Rank ${r} मा — ${result.filter(x => x.status !== 'no').length} वटा college` : `At rank ${r} — ${result.filter(x => x.status !== 'no').length} colleges`}
             </div>

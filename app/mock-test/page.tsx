@@ -4,6 +4,7 @@ import { useMemo, useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { questions, type Question } from '@/data/questions'
 import { useLang } from '../components/ui'
+import Molecule from '../components/molecule'
 
 type Phase = 'select' | 'instructions' | 'test' | 'result'
 
@@ -308,6 +309,7 @@ export default function MockTest() {
             <div style={{ fontSize: 15.5, fontWeight: 700, lineHeight: 1.6, color: 'var(--text)', marginBottom: 16 }}>
               {current + 1}. {q.text}
             </div>
+            {q.mol && <Molecule name={q.mol} />}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {q.options.map((opt, oi) => (
                 <button
@@ -439,6 +441,7 @@ export default function MockTest() {
                     Q{i + 1} • {q.topic} • {isRight ? '✓' : a === null ? '—' : '✗'}
                   </div>
                   <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)', marginBottom: 6 }}>{q.text}</div>
+                  {q.mol && <Molecule name={q.mol} />}
                   {a !== null && (
                     <div style={{ fontSize: 12.5, marginBottom: 4 }}>
                       <span style={{ color: 'var(--muted)' }}>{L('Your answer', 'तपाईंको उत्तर')}: </span>

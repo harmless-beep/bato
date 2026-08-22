@@ -6,6 +6,7 @@ export interface Question {
   options: string[]
   correct: number // 0-indexed
   explanation?: string
+  mol?: string // molecule structure to render (benzene, ethanol, etc.)
 }
 
 export const questions: Question[] = [
@@ -655,14 +656,14 @@ export const questions: Question[] = [
   { id: 243, subject: 'chemistry', topic: 'Organic Chemistry', text: "General formula of alkanes:", options: ['CₙH₂ₙ₊₂', 'CₙH₂ₙ', 'CₙH₂ₙ₋₂', 'CₙHₙ'], correct: 0, explanation: "Alkanes: CₙH₂ₙ₊₂ (saturated)." },
   { id: 244, subject: 'chemistry', topic: 'Electrochemistry', text: "pH of pure water at 25°C is:", options: ['7', '0', '14', '1'], correct: 0, explanation: "Neutral water: pH = 7 at 25°C." },
   { id: 245, subject: 'chemistry', topic: 'Periodic Table', text: "Which group contains noble gases?", options: ['Group 18', 'Group 1', 'Group 2', 'Group 14'], correct: 0, explanation: "Noble gases are in Group 18 (helium through oganesson)." },
-  { id: 246, subject: 'chemistry', topic: 'Organic Chemistry', text: "Functional group of alcohols is:", options: ['-OH', '-COOH', '-CHO', '-NH₂'], correct: 0, explanation: "Alcohols contain the hydroxyl group -OH." },
+  { id: 246, subject: 'chemistry', topic: 'Organic Chemistry', text: "Functional group of alcohols is:", options: ['-OH', '-COOH', '-CHO', '-NH₂'], correct: 0, explanation: "Alcohols contain the hydroxyl group -OH.", mol: 'ethanol' },
   { id: 247, subject: 'chemistry', topic: 'Atomic Structure', text: "An atom with 11 protons, 12 neutrons has mass number:", options: ['23', '11', '12', '1'], correct: 0, explanation: "Mass number A = protons + neutrons = 11 + 12 = 23." },
   { id: 248, subject: 'chemistry', topic: 'Chemical Bonding', text: "Water (H₂O) has which bond type?", options: ['Polar covalent', 'Ionic', 'Nonpolar covalent', 'Metallic'], correct: 0, explanation: "O-H bonds are polar covalent (oxygen more electronegative)." },
   { id: 249, subject: 'chemistry', topic: 'Electrochemistry', text: "In electrolysis, oxidation happens at the:", options: ['Anode', 'Cathode', 'Both', 'Neither'], correct: 0, explanation: "Oxidation at anode (loss of electrons)." },
   { id: 250, subject: 'chemistry', topic: 'Periodic Table', text: "Most reactive metal in Group 1 is:", options: ['Francium', 'Lithium', 'Sodium', 'Potassium'], correct: 0, explanation: "Reactivity increases down group 1: Fr most reactive." },
-  { id: 251, subject: 'chemistry', topic: 'Organic Chemistry', text: "Benzene formula is:", options: ['C₆H₆', 'C₆H₁₂', 'C₆H₁₄', 'C₆H₈'], correct: 0, explanation: "Benzene: C₆H₆ (aromatic ring)." },
+  { id: 251, subject: 'chemistry', topic: 'Organic Chemistry', text: "Benzene formula is:", options: ['C₆H₆', 'C₆H₁₂', 'C₆H₁₄', 'C₆H₈'], correct: 0, explanation: "Benzene: C₆H₆ (aromatic ring).", mol: 'benzene' },
   { id: 252, subject: 'chemistry', topic: 'Atomic Structure', text: "Maximum electrons in s-orbital:", options: ['2', '6', '10', '14'], correct: 0, explanation: "s orbital holds max 2 electrons." },
-  { id: 253, subject: 'chemistry', topic: 'Chemical Bonding', text: "Number of bonds in N₂ molecule:", options: ['Triple', 'Single', 'Double', 'None'], correct: 0, explanation: "N≡N triple bond." },
+  { id: 253, subject: 'chemistry', topic: 'Chemical Bonding', text: "Number of bonds in N₂ molecule:", options: ['Triple', 'Single', 'Double', 'None'], correct: 0, explanation: "N≡N triple bond.", mol: 'ethyne' },
   { id: 254, subject: 'chemistry', topic: 'Electrochemistry', text: "Nernst equation at 25°C: E = E° - (0.059/n) × ?", options: ['log Q', 'ln Q', 'Q', 'log K'], correct: 0, explanation: "E = E° - (0.059/n) log Q at 25°C." },
   { id: 255, subject: 'chemistry', topic: 'Organic Chemistry', text: "Isomers have the same formula but different:", options: ['Structure', 'Mass', 'Composition', 'Elements'], correct: 0, explanation: "Isomers: same molecular formula, different arrangement." },
   { id: 256, subject: 'chemistry', topic: 'Periodic Table', text: "Element with atomic number 6 is:", options: ['Carbon', 'Nitrogen', 'Boron', 'Oxygen'], correct: 0, explanation: "Z=6 = Carbon." },

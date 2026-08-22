@@ -116,6 +116,21 @@ export default function Predictor() {
               <strong>{isNe ? `Rank ${rank} (${fee === 'regular' ? 'Regular' : 'Full Fee'}${campus !== 'All' ? `, ${campus}` : ''}) को आधारमा:` : `Rank ${rank} (${fee}${campus !== 'All' ? `, ${campus}` : ''}):`}</strong>{' '}
               {isNe ? `${result.length} वटा options तपाईंको दायरामा छन्।` : `${result.length} options fall in your range.`}
             </div>
+            <div className="card" style={{ padding: 14, marginBottom: 12, display: 'flex', gap: 12, alignItems: 'center' }}>
+              <div style={{ fontSize: 28 }}>📊</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)' }}>
+                  {isNe ? 'तपाईंको स्थिति' : 'Your position'}
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>
+                  {result[0]
+                    ? isNe
+                      ? `सबैभन्दा प्रतिस्पर्धी: ${result[0].c.campus} — cutoff rank ${fee === 'regular' ? result[0].c.regular : result[0].c.fullFee} (तपाईं ${Math.max(0, (fee === 'regular' ? result[0].c.regular : result[0].c.fullFee) - Number(rank))} rank माथि)`
+                      : `Best option: ${result[0].c.campus} — cutoff ${fee === 'regular' ? result[0].c.regular : result[0].c.fullFee} (you are ${Math.max(0, (fee === 'regular' ? result[0].c.regular : result[0].c.fullFee) - Number(rank))} ranks above)`
+                    : isNe ? 'कुनै option छैन' : 'No options'}
+                </div>
+              </div>
+            </div>
             {result.length === 0 ? (
               <div className="warn-box">😞 {isNe ? 'यो rank ले हालका cutoff भन्दा धेरै तल छ।' : 'This rank is below current cutoffs.'}</div>
             ) : (
@@ -131,6 +146,10 @@ export default function Predictor() {
                       </div>
                       <span className={`tier-badge ${T[r.tier as Exclude<Tier, 'none'>].cls}`}>{isNe ? T[r.tier as Exclude<Tier, 'none'>].ne : T[r.tier as Exclude<Tier, 'none'>].en}</span>
                     </div>
+                  </div>
+                  <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                    <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600 }}>{isNe ? 'तपाईं' : 'You'}</div>
+                    <div style={{ fontSize: 15, fontWeight: 900, color: 'var(--primary)' }}>{rank}</div>
                   </div>
                 </div>
               ))

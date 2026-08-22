@@ -1,8 +1,8 @@
-// Flashcards — derived from the real question bank + notes data.
-// Every question becomes a card (Q → A+explanation); every note becomes a card.
-// Imported live, so cards grow automatically as data grows.
-import { questions, type Question } from './questions'
+// Flashcards — generic facts & formulas, separated by exam (IOE / KU / CEE).
+// Sources: curated fact cards (flash-facts.ts) + facts split from the notes content.
+// NO question-with-options cards — these are the "things you forget".
 import { notes } from './notes'
+import { factCards, type FactCard } from './flash-facts'
 
 export interface Flashcard {
   id: string
@@ -13,16 +13,8 @@ export interface Flashcard {
   back: string
 }
 
-// Subject → which exams test it
-const examMap: Record<string, ('IOE' | 'KU' | 'CEE')[]> = {
-  math: ['IOE', 'KU'],
-  physics: ['IOE', 'KU', 'CEE'],
-  chemistry: ['IOE', 'KU', 'CEE'],
-  biology: ['CEE'],
-}
-
+// Notes → fact pairs: each **Bold heading** becomes a front, its detail the back
 function splitMd(md: string): { t: string; d: string }[] {
-  // Split note content into front/back pairs: lines become fronts, following detail backs
   const lines = md.split('\n').filter(l => l.trim().length > 0)
   const cards: { t: string; d: string }[] = []
   let current = ''
@@ -47,31 +39,30 @@ function splitMd(md: string): { t: string; d: string }[] {
 
 const cards: Flashcard[] = []
 
-// 1. Questions → cards (with options as part of front)
-for (const q of questions) {
-  const opts = q.options.map((o, i) => `${String.fromCharCode(65 + i)}. ${o}`).join('  ')
-  const letter = String.fromCharCode(65 + q.correct)
-  const back = `**Answer: ${letter}. ${q.options[q.correct]}**\n\n${q.explanation ?? ''}`
-  for (const exam of examMap[q.subject] ?? ['All']) {
-    cards.push({
-      id: `q-${exam}-${q.id}`,
-      exam,
-      subject: q.subject,
-      topic: q.topic,
-      front: `${q.text}\n${opts}`,
-      back,
-    })
-  }
+// 1. Curated fact cards (generic formulas, constants, definitions)
+for (const f of factCards) {
+  cards.push({
+    id: `f-${f.exam}-${f.topic.replace(/[^a-z0-9]/gi, '')}-${f.front.slice(0, 24).replace(/[^a-z0-9]/gi, '')}`,
+    exam: f.exam,
+    subject: f.topic.split(' — ')[0] ?? f.topic,
+    topic: f.topic,
+    front: f.front,
+    back: f.back,
+  })
 }
 
-// 2. Notes → cards (each bold heading is a front, detail is the back)
+// 2. Notes → fact cards (medical/engineering content, tagged to the right exam)
 for (const sec of notes) {
+  const exam: Flashcard['exam'] = sec.id.startsWith('med') ? 'CEE'
+    : sec.id.startsWith('sem') ? 'All'
+    : sec.id === 'csit' ? 'KU'
+    : 'IOE'
   for (const item of sec.items) {
     const pairs = splitMd(item.content)
     if (pairs.length === 0) {
       cards.push({
         id: `n-${sec.id}-${item.title.slice(0, 20).replace(/[^a-z0-9]/gi, '')}`,
-        exam: sec.id.startsWith('med') ? 'CEE' : sec.id.startsWith('sem') ? 'All' : 'IOE',
+        exam,
         subject: sec.title,
         topic: item.title,
         front: item.title,
@@ -80,8 +71,8 @@ for (const sec of notes) {
     } else {
       for (const p of pairs) {
         cards.push({
-          id: `n-${sec.id}-${p.t.slice(0, 20).replace(/[^a-z0-9]/gi, '')}`,
-          exam: sec.id.startsWith('med') ? 'CEE' : sec.id.startsWith('sem') ? 'All' : 'IOE',
+          id: `n-${sec.id}-${p.t.slice(0, 24).replace(/[^a-z0-9]/gi, '')}`,
+          exam,
           subject: sec.title,
           topic: item.title,
           front: p.t,
