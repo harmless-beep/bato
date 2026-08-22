@@ -357,29 +357,35 @@ export default function Home() {
           </Reveal>
         </div>
 
-        {/* ── Buy Me a Coffee ───────────────────────────────────────────── */}
-        <Reveal delay={200}>
-          <div className="contribute-section">
-            <div className="contribute-icon">☕</div>
-            <div className="contribute-body">
-              <div className="contribute-title">
-                {isNe ? 'हामीलाई साथ दिनुहोस् ☕' : 'Buy Me a Coffee ☕'}
-              </div>
-              <div className="contribute-sub">
-                {isNe
-                  ? 'बाटो पूर्ण रूपमा निःशुल्क छ — तर तपाईंको साथले यसलाई अझ राम्रो बनाउँछ। QR scan गरेर दान गर्नुहोस्।'
-                  : 'बाटो is completely free — but your support keeps it alive. Scan the QR to donate.'}
-              </div>
-              <div style={{ margin: '14px auto 4px', width: 180, background: '#fff', borderRadius: 14, padding: 8, display: 'inline-block' }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/bato/qr-donate.png" alt="Donate QR" style={{ width: '100%', display: 'block', borderRadius: 8 }} />
-              </div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', marginTop: 6 }}>
-                {isNe ? 'eSewa / Khalti / bank — जुन सजिलो लाग्छ' : 'eSewa / Khalti / bank — whatever is easiest'}
-              </div>
-            </div>
-          </div>
-        </Reveal>
+        {/* ── Support (privacy-safe) ──────────────────────────────────────── */}
+                <Reveal delay={200}>
+                  <div className="contribute-section">
+                    <div className="contribute-icon">☕</div>
+                    <div className="contribute-body">
+                      <div className="contribute-title">
+                        {isNe ? 'हामीलाई साथ दिनुहोस्' : 'Support बाटो'}
+                      </div>
+                      <div className="contribute-sub">
+                        {isNe
+                          ? 'बाटो पूर्ण रूपमा निःशुल्क छ — तर तपाईंको साथले यसलाई जीवित राख्छ।'
+                          : 'बाटो is completely free — but your support keeps it alive.'}
+                      </div>
+                      <div style={{ marginTop: 14, fontSize: 13, lineHeight: 1.8, color: 'rgba(255,255,255,0.85)' }}>
+                        <div style={{ fontWeight: 700, marginBottom: 6 }}>
+                          {isNe ? 'गोपनीयता-मैत्री तरिका:' : 'Privacy-safe ways to support:'}
+                        </div>
+                        <div>• <strong>Ko-fi</strong> — <a href="https://ko-fi.com" target="_blank" rel="noopener noreferrer" style={{ color: '#ffd166' }}>ko-fi.com</a> — free, username only, no phone/bank exposed</div>
+                        <div>• <strong>Buy Me a Coffee</strong> — <a href="https://buymeacoffee.com" target="_blank" rel="noopener noreferrer" style={{ color: '#ffd166' }}>buymeacoffee.com</a></div>
+                        <div>• <strong>PayPal.me</strong> — <a href="https://paypal.me" target="_blank" rel="noopener noreferrer" style={{ color: '#ffd166' }}>paypal.me</a></div>
+                        <div style={{ marginTop: 10, fontSize: 11.5, color: 'rgba(255,255,255,0.6)' }}>
+                          {isNe
+                            ? 'यी मध्ये कुनै एकमा account बनाउनुहोस् (२ मिनेट) र मलाई link दिनुहोस् — म QR अपडेट गरिदिन्छु।'
+                            : 'Create a free account on any of these (2 min), then send me the link — I\'ll update the QR.'}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Reveal>
 
       </div>
 
