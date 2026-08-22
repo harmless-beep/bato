@@ -96,6 +96,7 @@ export default function Home() {
 
   const [stats, setStats] = useState({ questions: 0, accuracy: 0, streak: 0, days: [] as string[] })
   const [mounted, setMounted] = useState(false)
+  const [showSupport, setShowSupport] = useState(false)
 
   useEffect(() => {
     setStats(getStats())
@@ -359,7 +360,7 @@ export default function Home() {
 
         {/* ── Support ──────────────────────────────────────────────────── */}
         <Reveal delay={120}>
-          <div className="support-bar">
+          <button className="support-bar" onClick={() => setShowSupport(true)} style={{ width: '100%', cursor: 'pointer', fontFamily: 'inherit', textAlign: 'left', border: '1px solid rgba(255,255,255,0.12)' }}>
             <div className="support-icon">☕</div>
             <div className="support-body">
               <div className="support-title">
@@ -375,8 +376,38 @@ export default function Home() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/bato/qr-donate.png" alt="Donate QR" />
             </div>
-          </div>
+          </button>
         </Reveal>
+
+        {/* ── Support modal ────────────────────────────────────────────── */}
+        {showSupport && (
+          <div className="support-modal" onClick={() => setShowSupport(false)}>
+            <div className="support-modal-card" onClick={e => e.stopPropagation()}>
+              <button className="support-close" onClick={() => setShowSupport(false)} aria-label="Close">✕</button>
+              <div className="support-hearts">
+                <span>☕</span><span>❤️</span><span>☕</span>
+              </div>
+              <div className="support-thanks">
+                {isNe ? 'धन्यवाद! 🙏' : 'Thank you! 🙏'}
+              </div>
+              <div className="support-thanks-sub">
+                {isNe
+                  ? 'तपाईंको साथले बाटोलाई जीवित राख्छ।'
+                  : 'Your support keeps बाटो alive.'}
+              </div>
+              <div className="support-qr-big">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/bato/qr-donate.png" alt="Donate QR" />
+              </div>
+              <div className="support-scan">
+                {isNe ? 'QR scan गरेर दान गर्नुहोस्' : 'Scan the QR to donate'}
+              </div>
+              <button className="btn btn-gold btn-sm" onClick={() => setShowSupport(false)}>
+                {isNe ? 'बन्द गर्नुहोस्' : 'Close'}
+              </button>
+            </div>
+          </div>
+        )}
 
       </div>
 
