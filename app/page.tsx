@@ -91,7 +91,7 @@ const topMed = [
 ]
 
 export default function Home() {
-  const { t, lang } = useLang()
+  const { lang } = useLang()
   const isNe = lang === 'ne'
 
   const [stats, setStats] = useState({ questions: 0, accuracy: 0, streak: 0, days: [] as string[] })
@@ -361,8 +361,16 @@ export default function Home() {
 
       {/* ── Footer ─────────────────────────────────────────────────────── */}
       <footer className="footer">
-        <p>{t('footer1')} — <a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
-        <p style={{ marginTop: 6, color: '#94a3b8' }}>{t('footer2')}</p>
+        <div className="footer-divider" />
+        <div className="footer-tagline">
+          {isNe ? 'नेपालका भावी इन्जिनियर र डाक्टरहरूका लागि' : 'For Nepal\u2019s future engineers & doctors'}
+        </div>
+        <div className="footer-heart">
+          <span className="heart-emoji">❤️</span>
+        </div>
+        <p className="footer-note">
+          {isNe ? 'बाटो — निःशुल्क, सबैका लागि।' : 'बाटो — free, for everyone.'}
+        </p>
       </footer>
 
       
