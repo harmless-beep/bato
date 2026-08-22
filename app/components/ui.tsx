@@ -124,6 +124,53 @@ export function ThemeToggle() {
   )
 }
 
+// ── Support button + QR modal (self-contained) ─────────────────────────────
+export function SupportButton() {
+  const { lang } = useLang()
+  const isNe = lang === 'ne'
+  const [open, setOpen] = useState(false)
+  return (
+    <>
+      <button
+        className="lang-toggle support-btn"
+        onClick={() => setOpen(true)}
+        title={isNe ? 'साथ दिनुहोस्' : 'Support us'}
+        aria-label="Support us"
+      >
+        ☕
+      </button>
+      {open && (
+        <div className="support-modal" onClick={() => setOpen(false)}>
+          <div className="support-modal-card" onClick={e => e.stopPropagation()}>
+            <button className="support-close" onClick={() => setOpen(false)} aria-label="Close">✕</button>
+            <div className="support-hearts">
+              <span>☕</span><span>❤️</span><span>☕</span>
+            </div>
+            <div className="support-thanks">
+              {isNe ? 'धन्यवाद! 🙏' : 'Thank you! 🙏'}
+            </div>
+            <div className="support-thanks-sub">
+              {isNe
+                ? 'तपाईंको साथले बाटोलाई जीवित राख्छ।'
+                : 'Your support keeps बाटो alive.'}
+            </div>
+            <div className="support-qr-big">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/bato/qr-donate.png" alt="Donate QR" />
+            </div>
+            <div className="support-scan">
+              {isNe ? 'QR scan गरेर दान गर्नुहोस्' : 'Scan the QR to donate'}
+            </div>
+            <button className="btn btn-gold btn-sm" onClick={() => setOpen(false)}>
+              {isNe ? 'बन्द गर्नुहोस्' : 'Close'}
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
+
 export function TopBar() {
   const { t } = useLang()
   return (
@@ -145,6 +192,7 @@ export function TopBar() {
       </Link>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <ThemeToggle />
+        <SupportButton />
         <LangToggle />
       </div>
     </nav>
