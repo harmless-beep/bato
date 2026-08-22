@@ -357,23 +357,27 @@ export default function Home() {
           </Reveal>
         </div>
 
-        {/* ── Contribute CTA ────────────────────────────────────────────── */}
+        {/* ── Buy Me a Coffee ───────────────────────────────────────────── */}
         <Reveal delay={200}>
           <div className="contribute-section">
-            <div className="contribute-icon">🤝</div>
+            <div className="contribute-icon">☕</div>
             <div className="contribute-body">
               <div className="contribute-title">
-                {isNe ? 'नोट्स राख्नुहोस्, मद्दत गर्नुहोस्!' : 'Have notes to share?'}
+                {isNe ? 'हामीलाई साथ दिनुहोस् ☕' : 'Buy Me a Coffee ☕'}
               </div>
               <div className="contribute-sub">
                 {isNe
-                  ? 'तपाईंको संक्षिप्त नोट्स, formulas, र summaries अरू विद्यार्थीहरूसँग share गर्नुहोस्। सबै निःशुल्क।'
-                  : 'Share your concise notes, formulas, and summaries with fellow students. Totally free.'}
+                  ? 'बाटो पूर्ण रूपमा निःशुल्क छ — तर तपाईंको साथले यसलाई अझ राम्रो बनाउँछ। QR scan गरेर दान गर्नुहोस्।'
+                  : 'बाटो is completely free — but your support keeps it alive. Scan the QR to donate.'}
+              </div>
+              <div style={{ margin: '14px auto 4px', width: 180, background: '#fff', borderRadius: 14, padding: 8, display: 'inline-block' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/bato/qr-donate.png" alt="Donate QR" style={{ width: '100%', display: 'block', borderRadius: 8 }} />
+              </div>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', marginTop: 6 }}>
+                {isNe ? 'eSewa / Khalti / bank — जुन सजिलो लाग्छ' : 'eSewa / Khalti / bank — whatever is easiest'}
               </div>
             </div>
-            <Link href="/contribute" className="btn btn-gold btn-sm">
-              {isNe ? 'नोट्स share गर्नुहोस् 📤' : 'Share Notes 📤'}
-            </Link>
           </div>
         </Reveal>
 
