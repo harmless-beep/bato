@@ -26,16 +26,23 @@ function todayQuote() {
   return quotes[day % quotes.length]
 }
 function getStats() {
-  if (typeof window === 'undefined') return { questions: 0, accuracy: 0, streak: 0 }
-  return {
-    questions: Number(localStorage.getItem('bato-questions') ?? 0),
-    accuracy: Number(localStorage.getItem('bato-accuracy') ?? 0),
-    streak: Number(localStorage.getItem('bato-streak') ?? 0),
+  if (typeof window === 'undefined') return { questions: 0, accuracy: 0, streak: 0, days: [] as string[] }
+  const questions = Number(localStorage.getItem('bato-questions') ?? 0)
+  const accuracy = Number(localStorage.getItem('bato-accuracy') ?? 0)
+  let streak = 0
+  let days: string[] = []
+  try { days = JSON.parse(localStorage.getItem('bato-days') ?? '[]') } catch {}
+  if (days.length) {
+    const daySet = new Set(days)
+    const today = new Date().toISOString().slice(0, 10)
+    // if today not studied yet, start counting from yesterday
+    let cursor = new Date(daySet.has(today) ? today : Date.now() - 86400000)
+    while (daySet.has(cursor.toISOString().slice(0, 10))) {
+      streak++
+      cursor = new Date(cursor.getTime() - 86400000)
+    }
   }
-}
-
-function saveStat(key: string, val: number) {
-  localStorage.setItem(key, String(val))
+  return { questions, accuracy, streak, days }
 }
 
 // ── Quick-access items ───────────────────────────────────────────────────────
@@ -78,7 +85,7 @@ export default function Home() {
   const { t, lang } = useLang()
   const isNe = lang === 'ne'
 
-  const [stats, setStats] = useState({ questions: 0, accuracy: 0, streak: 0 })
+  const [stats, setStats] = useState({ questions: 0, accuracy: 0, streak: 0, days: [] as string[] })
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -161,6 +168,61 @@ export default function Home() {
             <div className="stat-tile-label">{isNe ? 'दिनको लगातार' : 'Day Streak'}</div>
           </div>
         </div>
+
+        {/* ── Streak calendar (last 7 weeks) ─────────────────────────── */}
+        {mounted && stats.days.length > 0 && (
+          <Reveal>
+            <div className="card" style={{ padding: 14, marginBottom: 22 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                <div style={{ fontSize: 12.5, fontWeight: 800, color: 'var(--text)' }}>
+                  📅 {isNe ? 'पढाइ क्यालेन्डर' : 'Study Calendar'}
+                </div>
+                <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600 }}>
+                  {stats.days.length} {isNe ? 'दिन' : 'days'}
+                </div>
+              </div>
+              {(() => {
+                const daySet = new Set(stats.days)
+                let cur = new Date()
+                cur.setHours(0, 0, 0, 0)
+                const start = new Date(cur)
+                start.setDate(start.getDate() - 41) // 6 weeks back
+                const anchor = new Date(start)
+                anchor.setDate(anchor.getDate() - anchor.getDay()) // back to Sunday
+                const cells: { date: Date; inRange: boolean }[] = []
+                for (let i = 0; i < 49; i++) {
+                  const d = new Date(anchor)
+                  d.setDate(anchor.getDate() + i)
+                  cells.push({ date: d, inRange: d >= start && d <= cur })
+                }
+                return (
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4 }}>
+                    {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => (
+                      <div key={i} style={{ fontSize: 9, fontWeight: 800, color: 'var(--muted)', textAlign: 'center' }}>{d}</div>
+                    ))}
+                    {cells.map((c, i) => {
+                      const key = c.date.toISOString().slice(0, 10)
+                      const studied = daySet.has(key)
+                      const isToday = key === new Date().toISOString().slice(0, 10)
+                      return (
+                        <div
+                          key={i}
+                          title={key}
+                          style={{
+                            aspectRatio: '1', borderRadius: 5,
+                            background: studied ? 'var(--primary)' : c.inRange ? 'var(--bg)' : 'transparent',
+                            border: isToday ? '2px solid var(--gold, #f59e0b)' : c.inRange ? '1px solid var(--border)' : 'none',
+                            opacity: c.inRange ? 1 : 0,
+                          }}
+                        />
+                      )
+                    })}
+                  </div>
+                )
+              })()}
+            </div>
+          </Reveal>
+        )}
 
         {/* ── Quick Access ────────────────────────────────────────────── */}
         <Reveal delay={80}>

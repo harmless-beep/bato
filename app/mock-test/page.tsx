@@ -6,7 +6,7 @@ import { questions, type Question } from '@/data/questions'
 import { useLang } from '../components/ui'
 import Molecule from '../components/molecule'
 
-type Phase = 'select' | 'instructions' | 'test' | 'result'
+type Phase = 'select' | 'instructions' | 'test' | 'result' | 'wrong'
 
 interface ExamConfig {
   id: string
@@ -93,6 +93,8 @@ export default function MockTest() {
   const [timeLeft, setTimeLeft] = useState(0)
   const [result, setResult] = useState<{ score: number; maxScore: number; correct: number; wrong: number; skipped: number } | null>(null)
   const [startSection, setStartSection] = useState(0)
+  const [wrongIds, setWrongIds] = useState<number[]>([])
+  const [wrongIdx, setWrongIdx] = useState(0)
 
   const bySubject = useMemo(() => {
     const m = new Map<string, Question[]>()
@@ -137,6 +139,13 @@ export default function MockTest() {
     setResult(null)
     setPhase('instructions')
   }
+
+  // Load wrong-answer bank
+  useEffect(() => {
+    try {
+      setWrongIds(JSON.parse(localStorage.getItem('bato-wrong') ?? '[]'))
+    } catch {}
+  }, [])
 
   // Timer
   useEffect(() => {
@@ -184,10 +193,21 @@ export default function MockTest() {
       const acc = session.length ? Math.round((correct / (correct + wrong || 1)) * 100) : 0
       localStorage.setItem('bato-accuracy', String(Math.max(Number(localStorage.getItem('bato-accuracy') ?? 0), acc)))
       localStorage.setItem('bato-streak', String(Number(localStorage.getItem('bato-streak') ?? 0) + 1))
+      // study day
+      const today = new Date().toISOString().slice(0, 10)
+      const days: string[] = JSON.parse(localStorage.getItem('bato-days') ?? '[]')
+      if (!days.includes(today)) days.push(today)
+      localStorage.setItem('bato-days', JSON.stringify(days))
       // attempt history (last 10)
       const hist = JSON.parse(localStorage.getItem('bato-attempts') ?? '[]')
       hist.push({ exam: config.id, score, maxScore, correct, wrong, skipped, ts: Date.now() })
       localStorage.setItem('bato-attempts', JSON.stringify(hist.slice(-10)))
+      // wrong-answer bank: collect missed question ids (max 200)
+      const wrongSet = new Set<number>(JSON.parse(localStorage.getItem('bato-wrong') ?? '[]'))
+      session.forEach((q, i) => {
+        if (answers[i] !== null && answers[i] !== q.correct) wrongSet.add(q.id)
+      })
+      localStorage.setItem('bato-wrong', JSON.stringify(Array.from(wrongSet).slice(-200)))
     } catch {}
   }, [config, session, answers, valueOf])
 
@@ -236,6 +256,26 @@ export default function MockTest() {
               </button>
             ))}
           </div>
+
+          {/* Wrong-answer bank review */}
+          {wrongIds.length > 0 && (
+            <div className="card" style={{ padding: 18, marginTop: 16, border: '1.5px solid #f59e0b' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
+                <span style={{ fontSize: 26 }}>📕</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--text)' }}>
+                    {L('Wrong Answer Bank', 'गलत उत्तरहरूको बैंक')}
+                  </div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>
+                    {L(`You missed ${wrongIds.length} question(s) — review them before the next test.`, `तपाईंले ${wrongIds.length} वटा प्रश्न गलत गर्नुभयो — अर्को परीक्षा अघि दोहोर् याउनुहोस्।`)}
+                  </div>
+                </div>
+                <button className="btn btn-primary btn-sm" onClick={() => setPhase('wrong')}>
+                  {L('Review →', 'दोहोर् याउनुहोस् →')}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     )
@@ -438,6 +478,93 @@ export default function MockTest() {
     )
   }
 
+  // ── Phase: Wrong Answer Review ─────────────────────────────────
+  if (phase === 'wrong') {
+    const wrongQs = wrongIds.map(id => questions.find(q => q.id === id)).filter(Boolean) as Question[]
+    const wq = wrongQs[wrongIdx]
+    return (
+      <div className="page">
+        <div className="topbar">
+          <Link href="/" className="back-btn" aria-label="Home">←</Link>
+          <span className="nav-title">📕 {L('Wrong Answer Review', 'गलत उत्तर दोहोर् याउनुहोस्')}</span>
+          <div />
+        </div>
+        <div className="page-content">
+          <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 700, marginBottom: 10 }}>
+            {wrongQs.length > 0 ? `${wrongIdx + 1} / ${wrongQs.length}` : L('All cleared!', 'सबै सकियो!')}
+          </div>
+          {wrongQs.length === 0 ? (
+            <div className="card" style={{ padding: 40, textAlign: 'center' }}>
+              <div style={{ fontSize: 44, marginBottom: 10 }}>🎉</div>
+              <div style={{ fontWeight: 800, fontSize: 16 }}>{L('No wrong answers saved', 'कुनै गलत उत्तर छैन')}</div>
+              <button className="btn btn-outline btn-sm" style={{ marginTop: 14 }} onClick={() => setPhase('select')}>
+                {L('← Back', '← फिर्ता')}
+              </button>
+            </div>
+          ) : wq ? (
+            <div className="card" style={{ padding: 20 }}>
+              <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700, marginBottom: 6 }}>
+                📍 {wq.topic} • {wq.subject}
+              </div>
+              <div style={{ fontSize: 15.5, fontWeight: 700, lineHeight: 1.6, color: 'var(--text)', marginBottom: 14 }}>
+                {wrongIdx + 1}. {wq.text}
+              </div>
+              {wq.mol && <Molecule name={wq.mol} />}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {wq.options.map((opt, oi) => (
+                  <div
+                    key={oi}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', borderRadius: 10,
+                      background: oi === wq.correct ? 'rgba(16,185,129,0.12)' : 'var(--bg)',
+                      border: oi === wq.correct ? '1.5px solid #10b981' : '1.5px solid var(--border)',
+                      fontSize: 14, fontWeight: 600, color: 'var(--text)',
+                    }}
+                  >
+                    <span className="cbt-opt-letter">{String.fromCharCode(65 + oi)}</span>
+                    <span style={{ flex: 1 }}>{opt}</span>
+                    {oi === wq.correct && <span style={{ fontSize: 12, fontWeight: 800, color: '#10b981' }}>✓ {L('Correct', 'सही')}</span>}
+                  </div>
+                ))}
+              </div>
+              {wq.explanation && (
+                <div style={{ marginTop: 14, fontSize: 13, lineHeight: 1.7, color: 'var(--muted)', background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 10, padding: 12 }}>
+                  💡 {wq.explanation}
+                </div>
+              )}
+              <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
+                <button
+                  className="btn btn-outline btn-sm"
+                  style={{ flex: 1 }}
+                  disabled={wrongIdx === 0}
+                  onClick={() => setWrongIdx(i => Math.max(0, i - 1))}
+                >
+                  ← {L('Prev', 'अघिल्लो')}
+                </button>
+                <button
+                  className="btn btn-primary btn-sm"
+                  style={{ flex: 2 }}
+                  onClick={() => {
+                    if (wrongIdx >= wrongQs.length - 1) {
+                      setWrongIds([])
+                      try { localStorage.removeItem('bato-wrong') } catch {}
+                      setWrongIdx(0)
+                      setPhase('select')
+                    } else {
+                      setWrongIdx(i => i + 1)
+                    }
+                  }}
+                >
+                  {wrongIdx >= wrongQs.length - 1 ? L('✅ Done', '✅ सकियो') : L('Next →', 'अर्को →')}
+                </button>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    )
+  }
+
   // ── Phase: Result ──────────────────────────────────────────────
   if (phase === 'result' && config && result) {
     const total = session.length
@@ -486,6 +613,42 @@ export default function MockTest() {
               <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600 }}>— {L('Skipped', 'छोडिएको')}</div>
             </div>
           </div>
+
+          {/* Progress over time */}
+          {(() => {
+            try {
+              const hist = JSON.parse(localStorage.getItem('bato-attempts') ?? '[]') as { exam: string; score: number; maxScore: number; ts: number }[]
+              const mine = hist.filter(h => h.exam === config.id).slice(-8)
+              if (mine.length < 2) return null
+              const max = Math.max(...mine.map(h => h.maxScore))
+              return (
+                <div className="card" style={{ padding: 16, marginBottom: 16 }}>
+                  <div style={{ fontSize: 12.5, fontWeight: 800, color: 'var(--text)', marginBottom: 10 }}>
+                    📈 {L('Your progress (last attempts)', 'तपाईंको प्रगति (पछिल्ला प्रयासहरू)')}
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, height: 90 }}>
+                    {mine.map((h, i) => (
+                      <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                        <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--primary)' }}>
+                          {Math.round((h.score / h.maxScore) * 100)}%
+                        </div>
+                        <div
+                          style={{
+                            width: '100%', borderRadius: '6px 6px 0 0',
+                            height: `${Math.max(6, (h.score / max) * 100)}%`,
+                            background: i === mine.length - 1 ? 'var(--primary)' : 'var(--primary-soft, #c7d2fe)',
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ fontSize: 10, color: 'var(--muted)', textAlign: 'center', marginTop: 6 }}>
+                    {L('Newest on right', 'नयाँ दायाँतिर')}
+                  </div>
+                </div>
+              )
+            } catch { return null }
+          })()}
 
           <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
             <button className="btn btn-outline" style={{ flex: 1 }} onClick={() => setPhase('select')}>
