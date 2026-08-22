@@ -1,6 +1,6 @@
 export interface Question {
   id: number
-  subject: 'math' | 'physics' | 'chemistry'
+  subject: 'math' | 'physics' | 'chemistry' | 'biology'
   topic: string
   text: string
   options: string[]
@@ -375,16 +375,199 @@ export const questions: Question[] = [
     correct: 1,
     explanation: "Group 1 (excluding H) = alkali metals (Li, Na, K, ...)."
   },
+  // BIOLOGY (MECEE medical entrance level)
+  {
+    id: 100,
+    subject: 'biology',
+    topic: 'Cell Biology - Organelles',
+    text: "Which organelle is known as the 'powerhouse of the cell'?",
+    options: ['Ribosome', 'Mitochondria', 'Golgi apparatus', 'Lysosome'],
+    correct: 1,
+    explanation: "Mitochondria produces ATP via cellular respiration (Krebs cycle + oxidative phosphorylation)."
+  },
+  {
+    id: 101,
+    subject: 'biology',
+    topic: 'Cell Biology - Membrane',
+    text: "Which process moves water across a selectively permeable membrane from low to high solute concentration?",
+    options: ['Active transport', 'Osmosis', 'Diffusion', 'Endocytosis'],
+    correct: 1,
+    explanation: "Osmosis = movement of water across a semipermeable membrane toward higher solute concentration."
+  },
+  {
+    id: 102,
+    subject: 'biology',
+    topic: 'Genetics - Mendelian',
+    text: "In a monohybrid cross (Tt x Tt), what fraction of offspring is heterozygous (Tt)?",
+    options: ['1/4', '1/2', '3/4', '1/3'],
+    correct: 1,
+    explanation: "Tt x Tt gives TT : Tt : tt = 1:2:1, so heterozygous = 2/4 = 1/2."
+  },
+  {
+    id: 103,
+    subject: 'biology',
+    topic: 'Genetics - DNA',
+    text: "In DNA, adenine pairs with which base?",
+    options: ['Guanine', 'Cytosine', 'Thymine', 'Uracil'],
+    correct: 2,
+    explanation: "A-T (2 H-bonds) and G-C (3 H-bonds). Uracil replaces thymine in RNA only."
+  },
+  {
+    id: 104,
+    subject: 'biology',
+    topic: 'Human Physiology - Blood',
+    text: "Which blood cell type is responsible for immune defense?",
+    options: ['Erythrocyte', 'Leukocyte', 'Thrombocyte', 'Reticulocyte'],
+    correct: 1,
+    explanation: "Leukocytes (WBCs) fight infection: neutrophils, lymphocytes, monocytes, etc."
+  },
+  {
+    id: 105,
+    subject: 'biology',
+    topic: 'Human Physiology - Heart',
+    text: "The normal resting heart rate for an adult human is approximately:",
+    options: ['40-50 bpm', '60-100 bpm', '120-150 bpm', '150-200 bpm'],
+    correct: 1,
+    explanation: "Normal adult resting heart rate is 60-100 beats per minute."
+  },
+  {
+    id: 106,
+    subject: 'biology',
+    topic: 'Botany - Photosynthesis',
+    text: "Which pigment is the primary photosynthetic pigment in green plants?",
+    options: ['Carotene', 'Xanthophyll', 'Chlorophyll a', 'Chlorophyll b'],
+    correct: 2,
+    explanation: "Chlorophyll a is primary; chlorophyll b and carotenoids are accessory pigments."
+  },
+  {
+    id: 107,
+    subject: 'biology',
+    topic: 'Botany - Plant Tissues',
+    text: "Xylem tissue is mainly responsible for:",
+    options: ['Photosynthesis', 'Translocation of food', 'Water and mineral transport', 'Support only'],
+    correct: 2,
+    explanation: "Xylem conducts water + minerals upward; phloem translocates food."
+  },
+  {
+    id: 108,
+    subject: 'biology',
+    topic: 'Zoology - Classification',
+    text: "Which animal is NOT a mammal?",
+    options: ['Whale', 'Dolphin', 'Bat', 'Shark'],
+    correct: 3,
+    explanation: "Shark is a fish (Chondrichthyes). Whales, dolphins and bats are mammals."
+  },
+  {
+    id: 109,
+    subject: 'biology',
+    topic: 'Human Physiology - Respiratory',
+    text: "Which structure is the site of gas exchange in human lungs?",
+    options: ['Bronchi', 'Trachea', 'Alveoli', 'Pleura'],
+    correct: 2,
+    explanation: "Alveoli are thin-walled air sacs where O2/CO2 exchange occurs."
+  },
+  {
+    id: 110,
+    subject: 'biology',
+    topic: 'Cell Biology - Division',
+    text: "During which phase do sister chromatids separate?",
+    options: ['Prophase', 'Metaphase', 'Anaphase', 'Telophase'],
+    correct: 2,
+    explanation: "Anaphase: spindle fibers pull sister chromatids to opposite poles."
+  },
+  {
+    id: 111,
+    subject: 'biology',
+    topic: 'Genetics - Human',
+    text: "How many chromosomes does a normal human somatic cell have?",
+    options: ['23', '44', '46', '48'],
+    correct: 2,
+    explanation: "46 chromosomes (23 pairs): 22 autosome pairs + 1 sex chromosome pair."
+  },
+  {
+    id: 112,
+    subject: 'biology',
+    topic: 'Biochemistry - Enzymes',
+    text: "Enzymes are mainly composed of:",
+    options: ['Lipids', 'Proteins', 'Carbohydrates', 'Nucleic acids'],
+    correct: 1,
+    explanation: "Most enzymes are globular proteins (some are ribozymes made of RNA)."
+  },
+  {
+    id: 113,
+    subject: 'biology',
+    topic: 'Zoology - Endocrine',
+    text: "Insulin is secreted by which cells of the pancreas?",
+    options: ['Alpha cells', 'Beta cells', 'Delta cells', 'Acinar cells'],
+    correct: 1,
+    explanation: "Beta cells secrete insulin (lowers blood glucose); alpha cells secrete glucagon."
+  },
+  {
+    id: 114,
+    subject: 'biology',
+    topic: 'Botany - Reproduction',
+    text: "In angiosperms, the mature pollen grain (male gametophyte) contains how many nuclei?",
+    options: ['1', '2', '3', '4'],
+    correct: 2,
+    explanation: "Mature pollen grain has 3 nuclei: 1 tube nucleus + 2 generative nuclei."
+  },
+  {
+    id: 115,
+    subject: 'biology',
+    topic: 'Human Physiology - Excretion',
+    text: "The functional unit of the kidney is the:",
+    options: ['Neuron', 'Nephron', 'Alveolus', 'Glomerulus'],
+    correct: 1,
+    explanation: "Nephron is the structural/functional unit of the kidney (filtration + reabsorption)."
+  },
+  {
+    id: 116,
+    subject: 'biology',
+    topic: 'Genetics - Molecular',
+    text: "Which nitrogenous base is found ONLY in RNA?",
+    options: ['Adenine', 'Guanine', 'Cytosine', 'Uracil'],
+    correct: 3,
+    explanation: "Uracil replaces thymine in RNA; pairs with adenine."
+  },
+  {
+    id: 117,
+    subject: 'biology',
+    topic: 'Zoology - Digestive',
+    text: "Which enzyme digests protein in the stomach?",
+    options: ['Amylase', 'Lipase', 'Pepsin', 'Trypsin'],
+    correct: 2,
+    explanation: "Pepsin (stomach, acidic pH) breaks proteins into peptides."
+  },
+  {
+    id: 118,
+    subject: 'biology',
+    topic: 'Botany - Transport',
+    text: "The process of water loss from plant leaves is called:",
+    options: ['Guttation', 'Transpiration', 'Evaporation', 'Respiration'],
+    correct: 1,
+    explanation: "Transpiration = water vapor loss via stomata; guttation = liquid water via hydathodes."
+  },
+  {
+    id: 119,
+    subject: 'biology',
+    topic: 'Human Physiology - Nervous',
+    text: "The gap between two neurons where signals pass chemically is the:",
+    options: ['Axon', 'Dendrite', 'Synapse', 'Node of Ranvier'],
+    correct: 2,
+    explanation: "Synapse — neurotransmitters carry the signal across the gap."
+  },
 ]
 
 export const subjects = [
   { id: 'math',  label: 'Math',    labelNp: 'Ganit',   color: '#1a237e', bg: '#e8f0fc', emoji: '∑' },
   { id: 'physics', label: 'Physics', labelNp: 'Bhaoutik', color: '#c2185b', bg: '#fce4ec', emoji: '⚛' },
   { id: 'chemistry', label: 'Chemistry', labelNp: 'Rasayan', color: '#2e7d32', bg: '#e8f5e9', emoji: '🧪' },
+  { id: 'biology', label: 'Biology', labelNp: 'Jib Bisyan', color: '#00695c', bg: '#e0f2f1', emoji: '🧬' },
 ]
 
 export const subjectTopics: Record<string, string[]> = {
   math:    ['Calculus - Differentiation', 'Calculus - Integration', 'Algebra', 'Coordinate Geometry', 'Trigonometry', 'Vectors', 'Probability'],
   physics: ['Mechanics - Kinematics', "Mechanics - Newton's Laws", 'Waves & Optics', 'Thermodynamics', 'Electricity', 'Magnetism', 'Modern Physics'],
   chemistry: ['Atomic Structure', 'Periodic Table', 'Chemical Bonding', 'Electrochemistry', 'Organic Chemistry', 'Inorganic Chemistry', 'Physical Chemistry'],
+  biology: ['Cell Biology - Organelles', 'Cell Biology - Membrane', 'Cell Biology - Division', 'Genetics - Mendelian', 'Genetics - DNA', 'Genetics - Molecular', 'Genetics - Human', 'Human Physiology - Blood', 'Human Physiology - Heart', 'Human Physiology - Respiratory', 'Human Physiology - Excretion', 'Human Physiology - Nervous', 'Biochemistry - Enzymes', 'Botany - Photosynthesis', 'Botany - Plant Tissues', 'Botany - Reproduction', 'Botany - Transport', 'Zoology - Classification', 'Zoology - Endocrine', 'Zoology - Digestive'],
 }
