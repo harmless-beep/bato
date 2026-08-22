@@ -9,7 +9,7 @@ type FeeType = 'regular' | 'fullFee'
 
 type Tier = 'safe' | 'likely' | 'reach' | 'none'
 
-const T: Record<Tier, { cls: string; en: string; ne: string }> = {
+const T: Record<Exclude<Tier, 'none'>, { cls: string; en: string; ne: string }> = {
   safe:   { cls: 'tier-safe',   en: '✅ Safe',   ne: '✅ पक्का' },
   likely: { cls: 'tier-likely', en: '🎯 Likely', ne: '🎯 सम्भव' },
   reach:  { cls: 'tier-reach',  en: '🔥 Reach', ne: '🔥 चुनौती' },
@@ -48,7 +48,7 @@ export default function Predictor() {
     setResult(rows)
   }
 
-  const getRank = (i: number) => (i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : 'rank-other')
+  const getRankClass = (i: number) => (i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : 'rank-other')
 
   return (
     <div className="page">
@@ -121,7 +121,7 @@ export default function Predictor() {
             ) : (
               result.map((r, i) => (
                 <div key={`${r.c.campus}-${r.c.program}`} className="branch-result">
-                  <div className={`branch-rank ${getRank(i)}`}>{i + 1}</div>
+                  <div className={`branch-rank ${getRankClass(i)}`}>{i + 1}</div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div className="branch-name" style={{ color: r.c.color }}>{isNe ? r.c.programNp : r.c.program}</div>
                     <div className="branch-college">{isNe ? r.c.campusNp : r.c.campus} • {isNe ? 'cutoff rank' : 'cutoff'} {fee === 'regular' ? r.c.regular : r.c.fullFee}</div>
@@ -129,7 +129,7 @@ export default function Predictor() {
                       <div className="meter" style={{ flex: 1, maxWidth: 140 }}>
                         <div className="meter-fill" style={{ width: `${Math.max(8, 100 - (r.c.regular / 90))}%`, background: r.tier === 'safe' ? 'var(--success)' : r.tier === 'likely' ? 'var(--primary)' : 'var(--gold)' }} />
                       </div>
-                      <span className={`tier-badge ${T[r.tier].cls}`}>{isNe ? T[r.tier].ne : T[r.tier].en}</span>
+                      <span className={`tier-badge ${T[r.tier as Exclude<Tier, 'none'>].cls}`}>{isNe ? T[r.tier as Exclude<Tier, 'none'>].ne : T[r.tier as Exclude<Tier, 'none'>].en}</span>
                     </div>
                   </div>
                 </div>
@@ -147,7 +147,7 @@ export default function Predictor() {
             </div>
             {cutoffs.filter(c => c.campus === 'Pulchowk').map((b, i) => (
               <div key={`ref-${b.program}`} className="branch-result" style={{ opacity: 0.9 }}>
-                <div className={`branch-rank ${getRank(i)}`}>{i + 1}</div>
+                <div className={`branch-rank ${getRankClass(i)}`}>{i + 1}</div>
                 <div style={{ flex: 1 }}>
                   <div className="branch-name" style={{ color: b.color, fontSize: 14 }}>{isNe ? b.programNp : b.program}</div>
                   <div className="branch-college">{isNe ? 'पुल्चोक' : 'Pulchowk'} • R {b.regular} / FF {b.fullFee}</div>
