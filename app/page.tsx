@@ -5,7 +5,26 @@ import Link from 'next/link'
 import { TopBar, useLang } from './components/ui'
 import { Reveal, CountUp } from './components/reveal'
 
-// ── User stats from localStorage ──────────────────────────────────────────────
+// ── Daily motivational quotes ────────────────────────────────────────────────
+const quotes = [
+  { en: '"The expert in anything was once a beginner."', ne: '"हरेक विज्ञ कहिल्यै सुरुवातकर्ता थिए।"', by: 'Helen Hayes', byNp: 'हेलेन हेज' },
+  { en: '"Success is the sum of small efforts, repeated day in and day out."', ne: '"सफलता भनेको साना प्रयासहरूको योग हो, दिनहुँ दोहोर्याइएको।"', by: 'Robert Collier', byNp: 'रोबर्ट कोलियर' },
+  { en: '"Don\'t watch the clock; do what it does. Keep going."', ne: '"घडी नहेर्नुहोस्; घडीले जे गर्छ त्यही गर्नुहोस्। अगाडि बढिरहनुहोस्।"', by: 'Sam Levenson', byNp: 'साम लेभेन्सन' },
+  { en: '"The harder you work for something, the greater you\'ll feel when you achieve it."', ne: '"जति मेहनत गर्नुहुन्छ, उपलब्धि त्यति नै ठूलो लाग्छ।"', by: 'Unknown', byNp: 'अज्ञात' },
+  { en: '"Dream big. Start small. Act now."', ne: '"ठूलो सपना। सानो सुरुवात। अहिले नै काम।"', by: 'Robin Sharma', byNp: 'रोबिन शर्मा' },
+  { en: '"It always seems impossible until it\'s done."', ne: '"सकिएपछि मात्र सम्भव लाग्छ।"', by: 'Nelson Mandela', byNp: 'नेल्सन मन्डेला' },
+  { en: '"Push yourself, because no one else is going to do it for you."', ne: '"आफैलाई धकेल्नुहोस्, किनकि अरू कसैले तपाईंको लागि गर्दैन।"', by: 'Unknown', byNp: 'अज्ञात' },
+  { en: '"Your only limit is your mind."', ne: '"तपाईंको एक मात्र सीमा तपाईंको दिमाग हो।"', by: 'Unknown', byNp: 'अज्ञात' },
+  { en: '"Study while others are sleeping; work while others are loafing."', ne: '"अरू सुत्दा पढ्नुहोस्; अरू अल्छी गर्दा काम गर्नुहोस्।"', by: 'William A. Ward', byNp: 'विलियम वार्ड' },
+  { en: '"The secret of getting ahead is getting started."', ne: '"अगाडि बढ्ने रहस्य भनेको सुरु गर्नु हो।"', by: 'Mark Twain', byNp: 'मार्क ट्वेन' },
+  { en: '"Believe you can and you\'re halfway there."', ne: '"तपाईं सक्नुहुन्छ भन्ने विश्वास नै आधा बाटो हो।"', by: 'Theodore Roosevelt', byNp: 'थियोडोर रुजवेल्ट' },
+  { en: '"Small daily improvements are the key to staggering long-term results."', ne: '"दैनिक साना सुधारहरू नै ठूलो दीर्घकालीन नतिजाको कुञ्जी हुन्।"', by: 'Unknown', byNp: 'अज्ञात' },
+]
+
+function todayQuote() {
+  const day = Math.floor(Date.now() / 86400000)
+  return quotes[day % quotes.length]
+}
 function getStats() {
   if (typeof window === 'undefined') return { questions: 0, accuracy: 0, streak: 0 }
   return {
@@ -22,11 +41,9 @@ function saveStat(key: string, val: number) {
 // ── Quick-access items ───────────────────────────────────────────────────────
 const quickItems = [
   { icon: '🖥️', label: 'CBT Simulator', labelNp: 'CBT सिम्युलेटर', href: '/mock-test', desc: 'IOE / KU / CEE exam-day CBT practice', descNp: 'IOE / KU / CEE परीक्षाको दिनको CBT अभ्यास' },
-  { icon: '📖', label: 'Notes',          labelNp: 'नोट्स',           href: '/notes',       desc: 'High-yield Math, Physics & Chemistry',     descNp: 'High-yield गणित, भौतिक र रसायन' },
-  { icon: '📚', label: 'Past Papers',    labelNp: 'पुराना पत्रहरू', href: '/past-papers', desc: 'IOE entrance & semester papers by year',   descNp: 'IOE entrance र semester प्रश्नपत्रहरू' },
+  { icon: '🃏', label: 'Flashcards',     labelNp: 'फ्लैशकार्ड',     href: '/flashcards',  desc: '100K+ cards for IOE, KU & CEE',            descNp: 'IOE, KU र CEE का १ लाख+ कार्ड' },
   { icon: '🎯', label: 'Branch Predictor', labelNp: 'शाखा अनुमान', href: '/predictor',   desc: 'See which branches you can get',            descNp: 'कुन शाखा पाउन सकिन्छ हेर्नुहोस्' },
-  { icon: '🗂️', label: 'Syllabus',       labelNp: 'पाठ्यक्रम',      href: '/syllabus',    desc: 'IOE & KU complete entrance syllabus',       descNp: 'IOE र KU को पूर्ण प्रवेश पाठ्यक्रम' },
-  { icon: '🃏', label: 'Flashcards',     labelNp: 'फ्लैशकार्ड',     href: '/flashcards',  desc: 'Quick recall for formulas & concepts',     descNp: 'सूत्र र अवधारणाहरूको छिट्टै दोहोर्याउनुहोस्' },
+  { icon: '🗂️', label: 'Syllabus',       labelNp: 'पाठ्यक्रम',      href: '/syllabus',    desc: 'IOE, KU & CEE exam patterns + PDFs',        descNp: 'IOE, KU र CEE परीक्षा ढाँचा + PDF' },
   { icon: '🩺', label: 'Med Predictor',  labelNp: 'मेडिकल अनुमान',  href: '/med-predictor', desc: 'MECEE rank → medical colleges',           descNp: 'MECEE rank → मेडिकल कलेज' },
   { icon: '💼', label: 'Careers',         labelNp: 'करियर',          href: '/careers',       desc: 'Jobs, salaries & paths after degree',      descNp: 'डिग्री पछि जागिर, तलब र बाटो' },
 ]
@@ -115,6 +132,17 @@ export default function Home() {
 
       {/* ── Dashboard body ───────────────────────────────────────────── */}
       <div className="dashboard">
+
+        {/* ── Daily Quote ─────────────────────────────────────────────── */}
+        <Reveal>
+          <div className="quote-card">
+            <div className="quote-mark">“</div>
+            <div className="quote-text" key={todayQuote().en}>
+              {isNe ? todayQuote().ne : todayQuote().en}
+            </div>
+            <div className="quote-by">— {isNe ? todayQuote().byNp : todayQuote().by}</div>
+          </div>
+        </Reveal>
 
         {/* ── My Stats ────────────────────────────────────────────────── */}
         <Reveal>

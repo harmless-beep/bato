@@ -694,3 +694,54 @@ html[data-theme="dark"] .filter-label { color: var(--muted); }
   .page-content { padding: 28px 24px 48px; max-width: 900px; }
   .dashboard { max-width: 1100px; margin: 0 auto; }
 }
+
+/* ─── Daily Quote ─── */
+.quote-card {
+  position: relative;
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4f46e5 100%);
+  border-radius: 16px;
+  padding: 24px 22px 20px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+.quote-card::before {
+  content: "";
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,209,102,0.25) 0%, transparent 70%);
+  animation: quote-glow 6s ease-in-out infinite;
+}
+.quote-mark {
+  position: absolute;
+  top: 6px; left: 14px;
+  font-size: 56px; font-weight: 900;
+  color: rgba(255,255,255,0.15);
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+.quote-text {
+  font-size: 15.5px;
+  font-weight: 700;
+  line-height: 1.6;
+  color: #fff;
+  padding-left: 26px;
+  animation: quote-in 0.6s ease-out;
+}
+.quote-by {
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffd166;
+  text-align: right;
+}
+@keyframes quote-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes quote-glow {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
