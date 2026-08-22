@@ -6,7 +6,6 @@ Free, no-login, Nepali engineering entrance exam prep.
 
 - 📝 **Mock Test** — Timed IOE/KU entrance tests with instant score + weakness report
 - 🎯 **Branch Predictor** — Enter your score → see which IOE/KU branches you likely get
-- 📚 **Past Papers** — Browse by year, university, subject, exam type
 
 ## Tech Stack
 
