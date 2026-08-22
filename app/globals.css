@@ -1129,3 +1129,29 @@ html body {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-7px); }
 }
+
+/* ─── Admin (suggestions) ─── */
+.sug-admin-trigger {
+  border: 1px dashed var(--border); background: transparent; color: var(--muted);
+  font-size: 14px; width: 34px; height: 30px; border-radius: 999px; cursor: pointer;
+  transition: all 0.15s; opacity: 0.7;
+}
+.sug-admin-trigger:hover { opacity: 1; border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+.sug-unlock { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; }
+.sug-bad { border-color: var(--danger) !important; animation: shake 0.4s; }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+.sug-admin-bar { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.sug-admin-badge { font-size: 12px; font-weight: 800; color: var(--gold); }
+.sug-admin-actions { display: inline-flex; gap: 4px; margin-left: auto; }
+.sug-admin-btn {
+  border: 1px solid var(--border); background: var(--surface); border-radius: 8px;
+  font-size: 11px; padding: 2px 6px; cursor: pointer; opacity: 0.75; transition: all 0.15s;
+}
+.sug-admin-btn:hover { opacity: 1; transform: translateY(-1px); }
+.sug-del-btn:hover { border-color: var(--danger); }
+.sug-pinned { border-color: var(--gold) !important; box-shadow: 0 0 0 1px rgba(245,158,11,0.15), var(--shadow); }
+.sug-pin-badge { font-size: 11px; }

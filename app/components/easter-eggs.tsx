@@ -2,12 +2,14 @@
 
 import { useEffect, useRef } from 'react'
 
-// ─── 5 hidden easter eggs ───────────────────────────────────────────────
+// ─── 7 hidden easter eggs ───────────────────────────────────────────────
 // 1. 🏆 Konami code (↑↑↓↓←→←→BA)  → confetti + toast
 // 2. 🥷 Tap the logo 5× fast        → emoji rain + toast
 // 3. 🏔️ Type "bato"                 → random Nepali proverb + rain
 // 4. ❤️ Tap the footer heart 3×     → heart burst
 // 5. 🚀 Tap a countdown banner 5×   → "Bato 2.0" rain
+// 6. 🖥️ HARD: open DevTools → console hint → type bato()
+// 7. 🌻 HARD: tap the tiny gold sun in the logo 7×
 const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a']
 const PROVERBS = [
   'आफ्नै पाउमा हिँड्न सिक, अरूको काँधमा होइन।',
@@ -15,7 +17,8 @@ const PROVERBS = [
   'सिक्ने उमेर कहिल्यै सकिँदैन।',
   'मेहनतको फल मीठो हुन्छ।',
 ]
-const RAIN_EMOJI = ['🌿','❤️','⭐','📚','⚡','🌼','🍀','🏔️']
+const RAIN_EMOJI = ['🌿','❤️','⭐','📚','⚡','🌼','🍀','🏔️','🌻','☀️']
+const ALL_EGGS = 7
 
 export default function EasterEggs() {
   const konami = useRef<string[]>([])
@@ -23,13 +26,17 @@ export default function EasterEggs() {
   const logo = useRef<number[]>([])
   const heart = useRef<number[]>([])
   const banner = useRef<number[]>([])
+  const sun = useRef<number[]>([])
 
   useEffect(() => {
     const mark = (id: string) => {
+      let n = 0
       try {
         const f = JSON.parse(localStorage.getItem('bato-eggs') || '[]')
         if (!f.includes(id)) { f.push(id); localStorage.setItem('bato-eggs', JSON.stringify(f)) }
+        n = f.length
       } catch { /* noop */ }
+      if (n === ALL_EGGS) setTimeout(() => toast('🎖️ सबै ७ eggs भेट्टाउनुभयो — तपाईं नै बाटो हुनुहुन्छ!'), 1600)
     }
     let toastTimer: ReturnType<typeof setTimeout>
     const toast = (msg: string) => {
@@ -125,13 +132,34 @@ export default function EasterEggs() {
         rain(18)
         toast('🚀 बाटो 2.0 coming soon… (बाटो Ninja सदस्यलाई पहिले!)')
       }
+      // egg 7 (hard): the tiny gold sun in the logo, 7 taps
+      const sunEl = t.closest('.nav-logo-icon circle')
+      if (sunEl && sunEl.getAttribute('fill') === '#f59e0b' && rapid(sun.current, 7)) {
+        sun.current = []
+        mark('sun')
+        const r = (sunEl as SVGCircleElement).getBoundingClientRect()
+        burst(r.left + r.width / 2, r.top + r.height / 2, ['#f59e0b', '#fbbf24', '#fde68a', '#f97316'], 26)
+        rain(10)
+        toast('🌻 सूर्यमुखी! तपाईंले घाम छुनुभयो!')
+      }
     }
 
     window.addEventListener('keydown', onKey)
     document.addEventListener('click', onClick)
+
+    // egg 6 (hard): DevTools console hint → type bato()
+    console.log('%cबाटो 👀 — केही लुकेको छ… type bato() to reveal', 'color:#10b981;font-size:15px;font-weight:bold')
+    ;(window as unknown as Record<string, unknown>).bato = () => {
+      mark('console')
+      rain(26)
+      toast('🖥️ बाटो HACKER! तपाईंले code को भित्री रहस्य भेट्टाउनुभयो!')
+      return '🏔️ बाटो 2.0'
+    }
+
     return () => {
       window.removeEventListener('keydown', onKey)
       document.removeEventListener('click', onClick)
+      delete (window as unknown as Record<string, unknown>).bato
     }
   }, [])
 

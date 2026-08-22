@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useLang } from '../components/ui'
 
 type SugType = 'idea' | 'xp' | 'problem' | 'feature'
-type Sug = { id: string; type: SugType; text: string; ts: number }
+type Sug = { id: string; type: SugType; text: string; ts: number; pinned?: boolean }
 
 const TYPES: { id: SugType; icon: string; label: string; labelNp: string }[] = [
   { id: 'idea', icon: '💡', label: 'Idea', labelNp: 'विचार' },
@@ -16,6 +16,10 @@ const TYPES: { id: SugType; icon: string; label: string; labelNp: string }[] = [
 const LS = 'bato-suggestions'
 const LS_VOTES = 'bato-sug-votes'
 const MAX = 400
+// ponytail: client-side passcode = obscurity, not real auth. A static site
+// has no backend boundary; the admin is the device owner. Change the passcode
+// below. For real admin, wire a form service (Formspree) and validate server-side.
+const PASS = 'bato2083'
 
 function load(): Sug[] { try { return JSON.parse(localStorage.getItem(LS) || '[]') } catch { return [] } }
 function loadVotes(): Record<string, number> { try { return JSON.parse(localStorage.getItem(LS_VOTES) || '{}') } catch { return {} } }
@@ -39,8 +43,15 @@ export default function Suggest() {
   const [filter, setFilter] = useState<SugType | 'all'>('all')
   const [sortNew, setSortNew] = useState(false)
   const [done, setDone] = useState(false)
+  const [admin, setAdmin] = useState(false)
+  const [ask, setAsk] = useState(false)
+  const [code, setCode] = useState('')
+  const [bad, setBad] = useState(false)
 
-  useEffect(() => { setItems(load()); setVotes(loadVotes()) }, [])
+  useEffect(() => {
+    setItems(load()); setVotes(loadVotes())
+    if (localStorage.getItem('bato-admin') === '1') setAdmin(true)
+  }, [])
 
   const submit = () => {
     const t = text.trim()
@@ -59,6 +70,30 @@ export default function Suggest() {
     localStorage.setItem(LS_VOTES, JSON.stringify(next))
   }
 
+  const unlock = () => {
+    if (code.trim() === PASS) {
+      setAdmin(true); localStorage.setItem('bato-admin', '1'); setAsk(false); setCode('')
+    } else {
+      setBad(true); setTimeout(() => setBad(false), 600)
+    }
+  }
+
+  const pin = (id: string) => {
+    const next = items.map(s => s.id === id ? { ...s, pinned: !s.pinned } : s)
+    setItems(next); localStorage.setItem(LS, JSON.stringify(next))
+  }
+
+  const del = (id: string) => {
+    const next = items.filter(s => s.id !== id)
+    setItems(next); localStorage.setItem(LS, JSON.stringify(next))
+    const v = { ...votes }; delete v[id]; setVotes(v); localStorage.setItem(LS_VOTES, JSON.stringify(v))
+  }
+
+  const clearAll = () => {
+    if (!confirm(isNe ? 'सबै सुझाव मेट्ने हो? यो फिर्ता हुँदैन!' : 'Delete ALL suggestions? This cannot be undone!')) return
+    setItems([]); localStorage.setItem(LS, '[]')
+  }
+
   const exportJson = () => {
     const blob = new Blob([JSON.stringify(items, null, 2)], { type: 'application/json' })
     const a = document.createElement('a')
@@ -70,7 +105,10 @@ export default function Suggest() {
 
   const shown = useMemo(() => {
     const list = filter === 'all' ? items : items.filter(i => i.type === filter)
-    return [...list].sort((a, b) => sortNew ? b.ts - a.ts : (votes[b.id] || 0) - (votes[a.id] || 0) || b.ts - a.ts)
+    return [...list].sort((a, b) =>
+      (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) ||
+      (sortNew ? b.ts - a.ts : (votes[b.id] || 0) - (votes[a.id] || 0) || b.ts - a.ts)
+    )
   }, [items, votes, filter, sortNew])
 
   const totalVotes = Object.values(votes).reduce((a, b) => a + b, 0)
@@ -79,7 +117,10 @@ export default function Suggest() {
     <div className="page">
       <div className="topbar">
         <Link href="/" className="back-btn" aria-label="Home">←</Link>
-        <span className="nav-title">💬 {isNe ? 'सुझाव' : 'Suggestions'}</span>
+        <span className="nav-title">
+          💬 {isNe ? 'सुझाव' : 'Suggestions'}
+          {admin && <span className="sug-admin-badge">👑</span>}
+        </span>
         <div />
       </div>
       <div className="page-content">
@@ -143,7 +184,7 @@ export default function Suggest() {
             const t = TYPES.find(x => x.id === s.type)!
             const my = votes[s.id] || 0
             return (
-              <div key={s.id} className="card sug-item" style={{ padding: 12, marginBottom: 10 }}>
+              <div key={s.id} className={`card sug-item${s.pinned ? ' sug-pinned' : ''}`} style={{ padding: 12, marginBottom: 10 }}>
                 <button className={`sug-vote${my ? ' on' : ''}`} onClick={() => vote(s.id)} aria-label={isNe ? 'भोट' : 'Vote'} title={isNe ? 'भोट दिनुहोस्' : 'Upvote'}>
                   <span className="sug-vote-arrow">▲</span>
                   <span className="sug-vote-num">{my}</span>
@@ -152,6 +193,13 @@ export default function Suggest() {
                   <div className="sug-item-top">
                     <span className="sug-item-type">{t.icon} {isNe ? t.labelNp : t.label}</span>
                     <span className="sug-item-ago">{ago(s.ts)}</span>
+                    {s.pinned && <span className="sug-pin-badge">📌</span>}
+                    {admin && (
+                      <span className="sug-admin-actions">
+                        <button className="sug-admin-btn" onClick={() => pin(s.id)} title={s.pinned ? 'Unpin' : 'Pin'}>{s.pinned ? '📌' : '📍'}</button>
+                        <button className="sug-admin-btn sug-del-btn" onClick={() => del(s.id)} title="Delete">🗑️</button>
+                      </span>
+                    )}
                   </div>
                   <div className="sug-item-text">{s.text}</div>
                 </div>
@@ -168,9 +216,39 @@ export default function Suggest() {
           </div>
         )}
 
+        {/* ── Admin unlock & panel ── */}
+        <div style={{ textAlign: 'center', marginTop: 16 }}>
+          {admin ? (
+            <div className="sug-admin-bar">
+              <span className="sug-admin-badge">👑 {isNe ? 'प्रशासक' : 'Admin'}</span>
+              <button className="btn btn-outline btn-sm" onClick={clearAll}>🗑 {isNe ? 'सबै मेट्नुहोस्' : 'Clear all'}</button>
+              <button className="btn btn-outline btn-sm" onClick={() => { setAdmin(false); localStorage.removeItem('bato-admin') }}>🔒 {isNe ? 'बन्द' : 'Lock'}</button>
+            </div>
+          ) : (
+            <>
+              <button className="sug-admin-trigger" onClick={() => setAsk(!ask)} title={isNe ? 'प्रशासक' : 'Admin'}>{ask ? '✕' : '⚙️'}</button>
+              {ask && (
+                <div className="sug-unlock">
+                  <input
+                    type="password"
+                    className={`input${bad ? ' sug-bad' : ''}`}
+                    placeholder={isNe ? 'पासकोड' : 'Passcode'}
+                    value={code}
+                    onChange={e => setCode(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && unlock()}
+                    autoFocus
+                    style={{ width: 140 }}
+                  />
+                  <button className="btn btn-primary btn-sm" onClick={unlock}>{isNe ? 'खोल्नुहोस्' : 'Unlock'}</button>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+
         {/* ponytail: votes are per-device (localStorage) — static GH Pages has no shared store.
             To aggregate votes across users, point submit() at a form service (Formspree) or
-            Firebase; the board UI stays the same. */}
+            Firebase; the board UI stays the same. Admin passcode is client-side obscurity only. */}
       </div>
     </div>
   )
