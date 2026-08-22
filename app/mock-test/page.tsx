@@ -14,6 +14,7 @@ interface ExamConfig {
   icon: string
   durationMin: number
   negMark: number
+  adaptive?: boolean // KU-style: question value scales with streak (1→5)
   sections: { subject: string; count: number; label: string; labelNp: string }[]
   desc: string
   descNp: string
@@ -26,14 +27,14 @@ const EXAM_CONFIGS: ExamConfig[] = [
     nameNp: 'IOE प्रवेश परीक्षा',
     icon: '🏗️',
     durationMin: 120,
-    negMark: 0.25,
+    negMark: 0.1, // 10% of a 1-mark question (5% in recent pattern updates)
     sections: [
       { subject: 'math', count: 40, label: 'Mathematics', labelNp: 'गणित' },
       { subject: 'physics', count: 30, label: 'Physics', labelNp: 'भौतिकशास्त्र' },
       { subject: 'chemistry', count: 30, label: 'Chemistry', labelNp: 'रसायनशास्त्र' },
     ],
-    desc: '100 MCQs • 2 hours • -0.25 per wrong',
-    descNp: '१०० प्रश्न • २ घण्टा • गलतमा -०.२५',
+    desc: '100 MCQs • 2 hours • -0.1 per wrong (10%)',
+    descNp: '१०० प्रश्न • २ घण्टा • गलतमा -०.१ (१०%)',
   },
   {
     id: 'ku',
@@ -42,13 +43,14 @@ const EXAM_CONFIGS: ExamConfig[] = [
     icon: '🎓',
     durationMin: 120,
     negMark: 0,
+    adaptive: true, // marks scale with difficulty: 1→2→3→4→5 on correct streaks
     sections: [
       { subject: 'physics', count: 40, label: 'Physics', labelNp: 'भौतिकशास्त्र' },
       { subject: 'chemistry', count: 40, label: 'Chemistry', labelNp: 'रसायनशास्त्र' },
       { subject: 'math', count: 40, label: 'Mathematics', labelNp: 'गणित' },
     ],
-    desc: '120 MCQs • 2 hours • no negative marking',
-    descNp: '१२० प्रश्न • २ घण्टा • गलतमा कटौती छैन',
+    desc: '120 MCQs • 2 hours • adaptive marks (1-5 per Q)',
+    descNp: '१२० प्रश्न • २ घण्टा • adaptive अंक (१-५ प्रति प्रश्न)',
   },
   {
     id: 'cee',
@@ -88,7 +90,7 @@ export default function MockTest() {
   const [marked, setMarked] = useState<Set<number>>(new Set())
   const [current, setCurrent] = useState(0)
   const [timeLeft, setTimeLeft] = useState(0)
-  const [result, setResult] = useState<{ score: number; correct: number; wrong: number; skipped: number } | null>(null)
+  const [result, setResult] = useState<{ score: number; maxScore: number; correct: number; wrong: number; skipped: number } | null>(null)
 
   const bySubject = useMemo(() => {
     const m = new Map<string, Question[]>()
@@ -134,17 +136,32 @@ export default function MockTest() {
     return () => clearInterval(t)
   }, [phase])
 
+  // Adaptive value (KU): question i worth = 1 + correct streak before it, capped at 5.
+  // IOE/CEE (non-adaptive): every question worth 1.
+  const valueOf = useCallback((i: number): number => {
+    if (!config?.adaptive) return 1
+    if (i === 0) return 1
+    let streak = 0
+    for (let j = i - 1; j >= 0; j--) {
+      if (answers[j] !== null && answers[j] === session[j]?.correct) streak++
+      else break
+    }
+    return Math.min(1 + streak, 5)
+  }, [config, answers, session])
+
   const submitTest = useCallback(() => {
     if (!config) return
-    let correct = 0, wrong = 0, skipped = 0
+    let correct = 0, wrong = 0, skipped = 0, score = 0, maxScore = 0
     session.forEach((q, i) => {
       const a = answers[i]
+      const v = valueOf(i)
+      maxScore += v
       if (a === null) skipped++
-      else if (a === q.correct) correct++
+      else if (a === q.correct) { correct++; score += v }
       else wrong++
     })
-    const score = correct - wrong * config.negMark
-    setResult({ score: Math.max(0, score), correct, wrong, skipped })
+    if (!config.adaptive) score = Math.max(0, correct - wrong * config.negMark)
+    setResult({ score, maxScore, correct, wrong, skipped })
     setPhase('result')
     // save stats
     try {
@@ -154,7 +171,7 @@ export default function MockTest() {
       localStorage.setItem('bato-accuracy', String(Math.max(Number(localStorage.getItem('bato-accuracy') ?? 0), acc)))
       localStorage.setItem('bato-streak', String(Number(localStorage.getItem('bato-streak') ?? 0) + 1))
     } catch {}
-  }, [config, session, answers])
+  }, [config, session, answers, valueOf])
 
   const fmtTime = (s: number) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`
 
@@ -223,7 +240,14 @@ export default function MockTest() {
             <div style={{ fontSize: 13.5, lineHeight: 1.9, color: 'var(--text)' }}>
               <div>📝 {L('Total questions', 'जम्मा प्रश्न')}: <strong>{totalQ}</strong></div>
               <div>⏱️ {L('Duration', 'अवधि')}: <strong>{config.durationMin} {L('minutes', 'मिनेट')}</strong></div>
-              <div>➖ {L('Negative marking', 'गलत उत्तरमा कटौती')}: <strong>{config.negMark > 0 ? `-${config.negMark}` : L('None', 'छैन')}</strong></div>
+              {config.adaptive ? (
+                <>
+                  <div>⭐ {L('Adaptive scoring', 'Adaptive अंक')}: <strong>{L('correct streak → +1 mark, max 5/Q; wrong → back to 1', 'सही streak → +१ अंक, अधिकतम ५/प्रश्न; गलत → १ मा फर्कन्छ')}</strong></div>
+                  <div>➖ {L('No negative marking', 'गलतमा कटौती छैन')}</div>
+                </>
+              ) : (
+                <div>➖ {L('Negative marking', 'गलत उत्तरमा कटौती')}: <strong>-{config.negMark} {L('per wrong (10% of 1-mark question)', 'प्रति गलत (१ अंकको १०%)')}</strong></div>
+              )}
               <div style={{ marginTop: 8, borderTop: '1px solid var(--border)', paddingTop: 8 }}>
                 <strong>{L('How to navigate:', 'कसरी चलाउने:')}</strong>
               </div>
@@ -276,6 +300,9 @@ export default function MockTest() {
           <div className="cbt-question card" style={{ padding: 20 }}>
             <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700, marginBottom: 8 }}>
               📍 {q.topic}
+              {config.adaptive && (
+                <span style={{ marginLeft: 8, color: 'var(--primary)', fontWeight: 800 }}>⭐ {valueOf(current)} {L('mark(s)', 'अंक')}</span>
+              )}
               {marked.has(current) && <span style={{ marginLeft: 8, color: '#f59e0b' }}>🏳️ {L('Marked', 'चिन्हित')}</span>}
             </div>
             <div style={{ fontSize: 15.5, fontWeight: 700, lineHeight: 1.6, color: 'var(--text)', marginBottom: 16 }}>
@@ -353,7 +380,7 @@ export default function MockTest() {
   // ── Phase: Result ──────────────────────────────────────────────
   if (phase === 'result' && config && result) {
     const total = session.length
-    const pct = Math.round((result.score / total) * 100)
+    const pct = Math.round((result.score / result.maxScore) * 100)
     return (
       <div className="page">
         <div className="topbar">
@@ -366,10 +393,12 @@ export default function MockTest() {
             <div style={{ fontSize: 40, marginBottom: 6 }}>{pct >= 60 ? '🎉' : pct >= 40 ? '💪' : '📚'}</div>
             <div style={{ fontSize: 13, color: 'var(--muted)', fontWeight: 700 }}>{L(config.name, config.nameNp)}</div>
             <div style={{ fontSize: 42, fontWeight: 900, color: 'var(--primary)', margin: '6px 0' }}>
-              {result.score.toFixed(1)}<span style={{ fontSize: 18, color: 'var(--muted)' }}> / {total}</span>
+              {result.score.toFixed(config.adaptive ? 0 : 1)}<span style={{ fontSize: 18, color: 'var(--muted)' }}> / {result.maxScore.toFixed(config.adaptive ? 0 : 1)}</span>
             </div>
             <div style={{ fontSize: 12, color: 'var(--muted)' }}>
-              {L('Negative marking applied', 'गलत उत्तरमा कटौती लागू')}: -{config.negMark}/{L('wrong', 'गलत')}
+              {config.adaptive
+                ? L('Adaptive scoring: marks scale with correct streaks (max 5/Q)', 'Adaptive अंक: सही streak सँग अंक बढ्छ (अधिकतम ५/प्रश्न)')
+                : L('Negative marking applied', 'गलत उत्तरमा कटौती लागू') + `: -${config.negMark}/${L('wrong', 'गलत')}`}
             </div>
           </div>
 
