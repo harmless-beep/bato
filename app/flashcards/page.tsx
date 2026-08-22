@@ -11,6 +11,8 @@ export default function Flashcards() {
   const L = (en: string, ne: string) => (isNe ? ne : en)
 
   const [exam, setExam] = useState<"All" | "IOE" | "KU" | "CEE">("All")
+  const [subject, setSubject] = useState<string>("All")
+  const [sub, setSub] = useState<string>("All")
   const [query, setQuery] = useState("")
   const [idx, setIdx] = useState(0)
   const [flipped, setFlipped] = useState(false)
@@ -21,18 +23,43 @@ export default function Flashcards() {
 
   const deck = useMemo(() => {
     const q = query.trim().toLowerCase()
-    return flashcards.filter(c =>
-      (exam === "All" || c.exam === exam || c.exam === "All") &&
-      (!q || c.front.toLowerCase().includes(q) || c.back.toLowerCase().includes(q) || c.topic.toLowerCase().includes(q))
-    )
-  }, [exam, query])
+    return flashcards.filter(c => {
+      if (exam !== "All" && c.exam !== exam && c.exam !== "All") return false
+      if (subject !== "All" && c.subject !== subject) return false
+      if (sub !== "All" && c.sub !== sub) return false
+      if (q && !c.front.toLowerCase().includes(q) && !c.back.toLowerCase().includes(q) && !c.topic.toLowerCase().includes(q)) return false
+      return true
+    })
+  }, [exam, subject, sub, query])
+
+  // Subject list for this exam
+  const subjects = useMemo(() => {
+    const s = new Set<string>()
+    for (const c of flashcards) {
+      if (exam !== "All" && c.exam !== exam && c.exam !== "All") continue
+      s.add(c.subject)
+    }
+    return ["All", ...Array.from(s).sort()]
+  }, [exam])
+
+  // Sub list for this subject
+  const subs = useMemo(() => {
+    if (subject === "All") return ["All"]
+    const s = new Set<string>()
+    for (const c of flashcards) {
+      if (exam !== "All" && c.exam !== exam && c.exam !== "All") continue
+      if (c.subject !== subject) continue
+      s.add(c.sub)
+    }
+    return ["All", ...Array.from(s).sort()]
+  }, [exam, subject])
 
   const card = deck[idx] ?? deck[deck.length - 1] ?? null
   const isKnown = card ? known.includes(card.id) : false
   const knownCount = deck.filter(c => known.includes(c.id)).length
   const progress = deck.length ? Math.round((knownCount / deck.length) * 100) : 0
 
-  useEffect(() => { setFlipped(false); setIdx(0) }, [exam, query])
+  useEffect(() => { setFlipped(false); setIdx(0) }, [exam, subject, sub, query])
 
   const mark = (v: boolean) => {
     if (!card) return
@@ -56,20 +83,56 @@ export default function Flashcards() {
       </div>
       <div className="page-content">
         <div className="info-box">
-          📌 <strong>{deck.length.toLocaleString()}</strong> {L("cards — every question & note fact, separated by exam.", "कार्डहरू — हरेक प्रश्न र नोट तथ्य, परीक्षा अनुसार छुट्याइएको।")}
+          📌 <strong>{deck.length.toLocaleString()}</strong> {L("cards — formulas & facts by exam, subject & topic.", "कार्डहरू — सूत्र र तथ्य परीक्षा, विषय र विषयगत अनुसार।")}
         </div>
 
-        {/* Exam filter chips */}
-        <div style={{ display: "flex", gap: 6, marginBottom: 12, flexWrap: "wrap" }}>
+        {/* Exam filter */}
+        <div style={{ display: "flex", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
           {flashExams.map(e => {
             const cnt = e === "All" ? flashcards.length : flashcards.filter(c => c.exam === e || c.exam === "All").length
             return (
-              <button key={e} className={`chip ${exam === e ? "active" : ""}`} onClick={() => setExam(e)}>
+              <button key={e} className={`chip ${exam === e ? "active" : ""}`} onClick={() => { setExam(e); setSubject("All"); setSub("All") }}>
                 {e === "IOE" ? "🏗️" : e === "KU" ? "🎓" : e === "CEE" ? "🩺" : "📋"} {e} ({cnt.toLocaleString()})
               </button>
             )
           })}
         </div>
+
+        {/* Subject filter */}
+        <div style={{ display: "flex", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
+          {subjects.map(s => {
+            const cnt = s === "All" ? 0 : flashcards.filter(c => {
+              if (exam !== "All" && c.exam !== exam && c.exam !== "All") return false
+              return c.subject === s
+            }).length
+            return (
+              <button
+                key={s}
+                className={`chip chip-sm ${subject === s ? "active" : ""}`}
+                onClick={() => { setSubject(s); setSub("All") }}
+                style={{ fontSize: 11.5 }}
+              >
+                {s} {s !== "All" && `(${cnt})`}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Sub-subject filter */}
+        {subject !== "All" && subs.length > 1 && (
+          <div style={{ display: "flex", gap: 5, marginBottom: 10, flexWrap: "wrap" }}>
+            {subs.map(s => (
+              <button
+                key={s}
+                className={`chip chip-xs ${sub === s ? "active" : ""}`}
+                onClick={() => setSub(s)}
+                style={{ fontSize: 10.5, padding: "3px 10px" }}
+              >
+                {s === "All" ? L("All", "सबै") : s}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Search */}
         <div style={{ position: "relative", marginBottom: 14 }}>
@@ -97,12 +160,12 @@ export default function Flashcards() {
         {deck.length === 0 ? (
           <div style={{ textAlign: "center", padding: "48px 0", color: "var(--muted)" }}>
             <div style={{ fontSize: 48, marginBottom: 10 }}>🔍</div>
-            <div style={{ fontSize: 15, fontWeight: 700 }}>{L("No cards found", "कुनै कार्ड भेटिएन")}</div>
+            <div style={{ fontSize: 15, fontWeight: 700 }}>{L("No cards", "कुनै कार्ड छैन")}</div>
           </div>
         ) : card ? (
           <>
-            <div style={{ textAlign: "center", marginBottom: 10, fontSize: 12, color: "var(--muted)", fontWeight: 600 }}>
-              {idx + 1} / {deck.length} • {card.topic}
+            <div style={{ textAlign: "center", marginBottom: 10, fontSize: 11, color: "var(--muted)", fontWeight: 600 }}>
+              {idx + 1} / {deck.length} • {card.subject} {card.sub !== card.subject && `→ ${card.sub}`}
             </div>
             <div style={{ perspective: 1200, marginBottom: 14 }}>
               <div
@@ -119,9 +182,10 @@ export default function Flashcards() {
                   display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
                   padding: 28, textAlign: "center",
                 }}>
-                  <span style={{ fontSize: 13, fontWeight: 800, color: "var(--primary)", marginBottom: 10 }}>
-                    {card.exam === "IOE" ? "🏗️ IOE" : card.exam === "KU" ? "🎓 KU" : card.exam === "CEE" ? "🩺 CEE" : "📋 All"}
+                  <span style={{ fontSize: 12, fontWeight: 800, color: "var(--primary)", marginBottom: 8 }}>
+                    {card.exam === "IOE" ? "🏗️ IOE" : card.exam === "KU" ? "🎓 KU" : card.exam === "CEE" ? "🩺 CEE" : "📋 All"} • {card.subject}
                   </span>
+                  {card.sub !== card.subject && <span style={{ fontSize: 10, fontWeight: 600, color: "var(--muted)", marginBottom: 6 }}>{card.sub}</span>}
                   <div style={{ fontSize: 17, fontWeight: 800, color: "var(--text)", lineHeight: 1.5, whiteSpace: "pre-line" }}>
                     {card.front}
                   </div>
@@ -150,8 +214,8 @@ export default function Flashcards() {
 
             <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
               <button className="btn btn-outline btn-sm" style={{ flex: 1 }} onClick={() => next(-1)}>← {L("Prev", "अघिल्लो")}</button>
-              <button className="btn btn-outline btn-sm" style={{ flex: 1 }} onClick={() => mark(true)}>✅</button>
-              <button className="btn btn-outline btn-sm" style={{ flex: 1 }} onClick={() => mark(false)}>🔄</button>
+              <button className="btn btn-outline btn-sm" onClick={() => mark(true)}>✅</button>
+              <button className="btn btn-outline btn-sm" onClick={() => mark(false)}>🔄</button>
               <button className="btn btn-primary btn-sm" style={{ flex: 1 }} onClick={() => next(1)}>{L("Next", "अर्को")} →</button>
             </div>
 

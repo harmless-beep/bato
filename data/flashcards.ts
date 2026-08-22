@@ -1,13 +1,14 @@
-// Flashcards — generic facts & formulas, separated by exam (IOE / KU / CEE).
+// Flashcards — generic facts & formulas, separated by exam (IOE / KU / CEE)
+// and by subject → sub-subject (Physics → Optics, Chemistry → Organic, ...).
 // Sources: curated fact cards (flash-facts.ts) + facts split from the notes content.
-// NO question-with-options cards — these are the "things you forget".
 import { notes } from './notes'
-import { factCards, type FactCard } from './flash-facts'
+import { factCards } from './flash-facts'
 
 export interface Flashcard {
   id: string
   exam: 'IOE' | 'KU' | 'CEE' | 'All'
   subject: string
+  sub: string
   topic: string
   front: string
   back: string
@@ -37,33 +38,54 @@ function splitMd(md: string): { t: string; d: string }[] {
   return cards.filter(c => c.t.length < 80)
 }
 
+// Map note section id → subject + default sub
+const noteSubject = (id: string, title: string): { subject: string; sub: string } => {
+  if (id.startsWith('med')) return { subject: 'Biology', sub: title }
+  if (id === 'csit') return { subject: 'Computer', sub: title }
+  if (id.startsWith('sem')) return { subject: 'Bachelor', sub: title }
+  if (id === 'math') return { subject: 'Mathematics', sub: title }
+  if (id === 'physics') return { subject: 'Physics', sub: title }
+  if (id === 'chemistry') return { subject: 'Chemistry', sub: title }
+  if (id === 'english' || id === 'english-2') return { subject: 'English', sub: title }
+  if (id === 'aptitude' || id === 'aptitude-2') return { subject: 'Aptitude', sub: title }
+  if (id === 'g.k') return { subject: 'General Knowledge', sub: title }
+  if (id === 'formula-sheet') return { subject: 'Formula Sheets', sub: title }
+  return { subject: 'Other', sub: title }
+}
+
 const cards: Flashcard[] = []
 
-// 1. Curated fact cards (generic formulas, constants, definitions)
+// 1. Curated fact cards — topic "Physics — Kinematics" → subject Physics, sub Kinematics
 for (const f of factCards) {
+  const parts = f.topic.split(' — ')
+  const subject = parts[0] ?? f.topic
+  const sub = parts[1] ?? f.topic
   cards.push({
     id: `f-${f.exam}-${f.topic.replace(/[^a-z0-9]/gi, '')}-${f.front.slice(0, 24).replace(/[^a-z0-9]/gi, '')}`,
     exam: f.exam,
-    subject: f.topic.split(' — ')[0] ?? f.topic,
+    subject,
+    sub,
     topic: f.topic,
     front: f.front,
     back: f.back,
   })
 }
 
-// 2. Notes → fact cards (medical/engineering content, tagged to the right exam)
+// 2. Notes → fact cards
 for (const sec of notes) {
   const exam: Flashcard['exam'] = sec.id.startsWith('med') ? 'CEE'
     : sec.id.startsWith('sem') ? 'All'
     : sec.id === 'csit' ? 'KU'
     : 'IOE'
+  const { subject, sub } = noteSubject(sec.id, sec.title)
   for (const item of sec.items) {
     const pairs = splitMd(item.content)
     if (pairs.length === 0) {
       cards.push({
         id: `n-${sec.id}-${item.title.slice(0, 20).replace(/[^a-z0-9]/gi, '')}`,
         exam,
-        subject: sec.title,
+        subject,
+        sub: item.title,
         topic: item.title,
         front: item.title,
         back: item.content,
@@ -73,7 +95,8 @@ for (const sec of notes) {
         cards.push({
           id: `n-${sec.id}-${p.t.slice(0, 24).replace(/[^a-z0-9]/gi, '')}`,
           exam,
-          subject: sec.title,
+          subject,
+          sub: item.title,
           topic: item.title,
           front: p.t,
           back: p.d || item.content,
