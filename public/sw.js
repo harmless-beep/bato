@@ -1,5 +1,5 @@
 /* बाटो service worker — offline cache for static export */
-const CACHE = 'bato-v3'
+const CACHE = 'bato-v4'
 const BASE = '/bato'
 
 self.addEventListener('install', (e) => {
