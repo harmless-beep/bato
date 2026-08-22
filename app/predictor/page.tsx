@@ -7,7 +7,7 @@ import { cutoffs } from '@/data/cutoffs'
 
 type FeeType = 'regular' | 'fullFee'
 
-type Tier = 'safe' | 'likely' | 'reach'
+type Tier = 'safe' | 'likely' | 'reach' | 'none'
 
 const T: Record<Tier, { cls: string; en: string; ne: string }> = {
   safe:   { cls: 'tier-safe',   en: '✅ Safe',   ne: '✅ पक्का' },
