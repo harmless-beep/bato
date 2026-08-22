@@ -831,18 +831,22 @@ html[data-theme="dark"] .support-bar { border-color: rgba(255,255,255,0.1); }
 .support-modal {
   position: fixed; inset: 0; z-index: 100;
   background: rgba(0,0,0,0.65);
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
   padding: 20px;
+  overflow-y: auto;
   animation: modal-fade 0.2s ease-out;
 }
 @keyframes modal-fade { from { opacity: 0 } to { opacity: 1 } }
 .support-modal-card {
   position: relative;
+  margin: auto; /* centers when it fits, scrolls from top when it doesn't */
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 22px;
   padding: 28px 24px 22px;
   width: 100%; max-width: 340px;
+  max-height: 92vh;
+  overflow-y: auto;
   text-align: center;
   animation: modal-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -903,3 +907,4 @@ html[data-theme="dark"] .support-bar { border-color: rgba(255,255,255,0.1); }
   40% { transform: rotate(6deg) scale(1.04) }
   50% { transform: rotate(0deg) scale(1) }
 }
+
