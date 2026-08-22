@@ -358,31 +358,25 @@ export default function Home() {
         </div>
 
         {/* ── Support ──────────────────────────────────────────────────── */}
-                <Reveal delay={200}>
-                  <div className="contribute-section">
-                    <div className="contribute-icon">☕</div>
-                    <div className="contribute-body">
-                      <div className="contribute-title">
-                        {isNe ? 'हामीलाई साथ दिनुहोस्' : 'Support बाटो'}
-                      </div>
-                      <div className="contribute-sub">
-                        {isNe
-                          ? 'बाटो पूर्ण रूपमा निःशुल्क छ — तर तपाईंको साथले यसलाई जीवित राख्छ।'
-                          : 'बाटो is completely free — but your support keeps it alive.'}
-                      </div>
-                      <div style={{ margin: '16px auto 0', width: 200, background: '#fff', borderRadius: 18, padding: 10, display: 'inline-block', boxShadow: '0 6px 20px rgba(0,0,0,0.2)' }}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/bato/qr-donate.png" alt="QR" style={{ width: '100%', display: 'block', borderRadius: 10 }} />
-                      </div>
-                      <div style={{ fontSize: 11.5, color: 'rgba(255,255,255,0.7)', marginTop: 8, fontWeight: 600 }}>
-                        {isNe ? 'QR scan गरेर दान गर्नुहोस्' : 'Scan to donate'}
-                      </div>
-                      <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginTop: 4 }}>
-                        {isNe ? 'बैंक QR — तपाईंको नाम/फोन सार्वजनिक हुँदैन' : 'Bank QR — your name/phone stays private'}
-                      </div>
-                    </div>
-                  </div>
-                </Reveal>
+        <Reveal delay={120}>
+          <div className="support-bar">
+            <div className="support-icon">☕</div>
+            <div className="support-body">
+              <div className="support-title">
+                {isNe ? 'हामीलाई साथ दिनुहोस्' : 'Support बाटो'}
+              </div>
+              <div className="support-sub">
+                {isNe
+                  ? 'निःशुल्क app — QR scan गरेर दान गर्नुहोस्।'
+                  : 'Free app — scan the QR to donate.'}
+              </div>
+            </div>
+            <div className="support-qr">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/bato/qr-donate.png" alt="Donate QR" />
+            </div>
+          </div>
+        </Reveal>
 
       </div>
 
@@ -392,194 +386,7 @@ export default function Home() {
         <p style={{ marginTop: 6, color: '#94a3b8' }}>{t('footer2')}</p>
       </footer>
 
-      <style jsx>{`
-        /* ── Countdown banner ── */
-        .countdown-banner {
-          background: linear-gradient(90deg, #1e1b4b, #4f46e5);
-          color: white;
-          padding: 12px 16px;
-        }
-        .countdown-inner {
-          max-width: 800px;
-          margin: 0 auto;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          flex-wrap: wrap;
-        }
-        .countdown-icon { font-size: 18px; }
-        .countdown-label { font-size: 14px; opacity: 0.9; }
-        .countdown-days {
-          font-size: 18px;
-          font-weight: 800;
-          background: rgba(255,255,255,0.15);
-          padding: 2px 12px;
-          border-radius: 999px;
-        }
-        .countdown-date { font-size: 12px; opacity: 0.7; }
-        .countdown-cta {
-          margin-left: auto;
-          background: var(--gold);
-          color: white;
-          padding: 6px 16px;
-          border-radius: 999px;
-          font-size: 13px;
-          font-weight: 700;
-          white-space: nowrap;
-          transition: background 0.15s;
-        }
-        .countdown-cta:hover { background: #d97706; }
-
-        /* ── Dashboard layout ── */
-        .dashboard {
-          max-width: 800px;
-          margin: 0 auto;
-          padding: 24px 16px 40px;
-        }
-
-        /* ── Stats row ── */
-        .stats-row {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 12px;
-          margin-top: 12px;
-        }
-        .stat-tile {
-          background: var(--card);
-          border: 1px solid var(--border);
-          border-radius: var(--radius);
-          padding: 18px 12px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 6px;
-          box-shadow: var(--shadow);
-        }
-        .stat-tile-icon { font-size: 24px; }
-        .stat-tile-num {
-          font-size: 26px;
-          font-weight: 800;
-          color: var(--primary);
-          font-variant-numeric: tabular-nums;
-        }
-        .stat-tile-label {
-          font-size: 11px;
-          color: var(--muted);
-          text-align: center;
-          font-weight: 600;
-        }
-
-        /* ── Quick access grid ── */
-        .quick-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 12px;
-          margin-top: 12px;
-        }
-        .quick-card {
-          background: var(--card);
-          border: 1px solid var(--border);
-          border-radius: var(--radius);
-          padding: 18px 14px;
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-          box-shadow: var(--shadow);
-          transition: transform 0.15s, box-shadow 0.15s;
-          cursor: pointer;
-        }
-        .quick-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-        .quick-icon { font-size: 28px; }
-        .quick-name { font-size: 14px; font-weight: 800; color: var(--text); }
-        .quick-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
-
-        /* ── Two-col news / colleges ── */
-        .two-col { display: flex; flex-direction: column; gap: 0; }
-        .col-full { width: 100%; }
-
-        /* ── News ── */
-        .news-list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
-        .news-item {
-          background: var(--card);
-          border: 1px solid var(--border);
-          border-radius: var(--radius);
-          padding: 14px 16px;
-          box-shadow: var(--shadow);
-        }
-        .news-top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-        .news-tag {
-          font-size: 10px;
-          font-weight: 800;
-          padding: 2px 8px;
-          border-radius: 999px;
-          letter-spacing: 0.4px;
-        }
-        .news-tag-ioe  { background: #eef2ff; color: #4338ca; }
-        .news-tag-ku   { background: #f0fdf4; color: #15803d; }
-        .news-tag-cee  { background: #fffbeb; color: #b45309; }
-        .news-tag-note { background: #fdf2f8; color: #be185d; }
-        .news-date { font-size: 10px; color: var(--muted); margin-left: auto; }
-        .news-headline { font-size: 14px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
-        .news-body { font-size: 12px; color: var(--muted); line-height: 1.5; }
-
-        /* ── Colleges ── */
-        .college-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
-        .college-item {
-          background: var(--card);
-          border: 1px solid var(--border);
-          border-radius: 14px;
-          padding: 12px 14px;
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          box-shadow: var(--shadow);
-        }
-        .college-rank {
-          width: 36px; height: 36px;
-          border-radius: 10px;
-          display: flex; align-items: center; justify-content: center;
-          font-size: 13px; font-weight: 800;
-          color: white;
-          flex-shrink: 0;
-        }
-        .college-info { flex: 1; }
-        .college-name { font-size: 14px; font-weight: 800; color: var(--text); }
-        .college-program { font-size: 11px; color: var(--muted); }
-        .college-cutoff { text-align: right; flex-shrink: 0; }
-        .college-cutoff-num { font-size: 15px; font-weight: 800; color: var(--primary); }
-        .college-cutoff-label { font-size: 10px; color: var(--muted); }
-
-        /* ── Contribute ── */
-        .contribute-section {
-          background: linear-gradient(135deg, #fef3c7, #fffbeb);
-          border: 1px solid #fde68a;
-          border-radius: var(--radius);
-          padding: 20px;
-          display: flex;
-          align-items: center;
-          gap: 14px;
-          margin-top: 28px;
-        }
-        html[data-theme="dark"] .contribute-section {
-          background: linear-gradient(135deg, #2a2010, #1a1508);
-          border-color: #78350f;
-        }
-        .contribute-icon { font-size: 36px; flex-shrink: 0; }
-        .contribute-body { flex: 1; }
-        .contribute-title { font-size: 16px; font-weight: 800; color: #78350f; }
-        html[data-theme="dark"] .contribute-title { color: #fde68a; }
-        .contribute-sub { font-size: 12px; color: #92400e; margin-top: 4px; line-height: 1.5; }
-        html[data-theme="dark"] .contribute-sub { color: #a16207; }
-
-        @media (max-width: 500px) {
-          .stats-row { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-          .stat-tile { padding: 14px 8px; }
-          .stat-tile-num { font-size: 20px; }
-          .quick-grid { grid-template-columns: repeat(2, 1fr); }
-          .countdown-inner { gap: 6px; }
-          .countdown-cta { margin-left: 0; }
-        }
-      `}</style>
+      
     </div>
   )
 }
