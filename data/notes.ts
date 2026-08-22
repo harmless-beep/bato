@@ -2,14 +2,17 @@ export interface NoteSection {
   id: string
   title: string
   titleNp: string
+  icon: string
   items: { title: string; content: string }[]
 }
 
 export const notes: NoteSection[] = [
+  // ─── ENTRANCE ────────────────────────────────────────────────
   {
     id: 'math',
     title: 'Mathematics',
     titleNp: 'गणित',
+    icon: '📐',
     items: [
       {
         title: 'Differentiation — Key Formulas',
@@ -35,9 +38,9 @@ d/dx tan x = sec² x
 ∫ cos x dx = sin x + C
 
 **Integration by parts:** ∫ u dv = uv - ∫ v du
-**LIATE rule:** pick u → Logarithmic, Inverse trig, Algebraic, Trig, Exponential
+**LIATE rule:** u → Logarithmic, Inverse trig, Algebraic, Trig, Exponential
 
-**Substitution trick:** If you see f(g(x))·g'(x), let u = g(x).`
+**Substitution:** If you see f(g(x))·g'(x), let u = g(x).`
       },
       {
         title: 'Vectors — Quick Reference',
@@ -46,7 +49,6 @@ d/dx tan x = sec² x
 
 **Condition for perpendicular:** a·b = 0
 **Condition for parallel:** a×b = 0
-
 **Angle between vectors:** cos θ = (a·b) / (|a||b|)
 
 **Mnemonic:** "Dot = cos, Cross = sin" — dot gives scalar, cross gives vector.`
@@ -60,10 +62,44 @@ Sum = -b/a, Product = c/a
 **AP:** T_n = a + (n-1)d, S_n = n/2 [2a + (n-1)d]
 **GP:** T_n = ar^(n-1), S_n = a(r^n - 1)/(r - 1)
 
-**Binomial theorem:** (a+b)^n = Σ C(n,k) a^(n-k) b^k
+**Binomial:** (a+b)^n = Σ C(n,k) a^(n-k) b^k
 C(n,k) = n! / (k! (n-k)!)
 
 **Trick:** For (1+x)^n, coefficients are Pascal's triangle row n.`
+      },
+      {
+        title: 'Complex Numbers',
+        content: `**i² = -1**, i³ = -i, i⁴ = 1
+
+**Polar form:** z = r(cos θ + i sin θ) = re^(iθ)
+**De Moivre:** (cos θ + i sin θ)^n = cos(nθ) + i sin(nθ)
+
+**Modulus:** |z| = √(a² + b²)
+**Conjugate:** z̄ = a - ib,  z · z̄ = |z|²
+
+**Roots of unity:** e^(2πik/n) for k = 0,1,...,n-1
+Sum of n-th roots = 0.`
+      },
+      {
+        title: 'Coordinate Geometry',
+        content: `**Straight line:** y = mx + c,  m = (y₂-y₁)/(x₂-x₁)
+**Distance:** d = √((x₂-x₁)² + (y₂-y₁)²)
+**Midpoint:** M = ((x₁+x₂)/2, (y₁+y₂)/2)
+
+**Circle:** x² + y² + 2gx + 2fy + c = 0
+Center = (-g, -f), radius = √(g²+f²-c)
+
+**Parabola:** y² = 4ax, focus = (a,0), directrix x = -a`
+      },
+      {
+        title: 'Sequences & Progressions',
+        content: `**Arithmetic:** T_n = a + (n-1)d, S_n = n/2 [2a + (n-1)d]
+**Geometric:** T_n = ar^(n-1), S_n = a(r^n-1)/(r-1), S∞ = a/(1-r) if |r|<1
+
+**Harmonic:** H_n = 1 / (1/a + (n-1)d)
+**AM-GM-HM:** AM × HM = GM²
+
+**Trick:** In an AP of 3 numbers → a-d, a, a+d. In GP of 3 → a/r, a, ar.`
       },
     ]
   },
@@ -71,10 +107,11 @@ C(n,k) = n! / (k! (n-k)!)
     id: 'physics',
     title: 'Physics',
     titleNp: 'भौतिकशास्त्र',
+    icon: '⚡',
     items: [
       {
-        title: 'Kinematics — Equations of Motion',
-        content: `**SUVAT equations (constant a):**
+        title: 'Kinematics — SUVAT Equations',
+        content: `**SUVAT (constant a):**
 v = u + at
 s = ut + ½at²
 v² = u² + 2as
@@ -85,60 +122,92 @@ Range: R = u² sin(2θ) / g
 Max height: H = u² sin²θ / (2g)
 Time of flight: T = 2u sinθ / g
 
-**Key trick:** Range is same for θ and 90°-θ. Max range at 45°.`
+**Trick:** Range same for θ and 90°-θ. Max range at θ=45°.`
       },
       {
         title: 'Newton\'s Laws — Free Body Diagrams',
-        content: `**1st Law:** Object at rest stays at rest, in motion stays in motion unless acted on by net force.
+        content: `**1st Law:** Object at rest stays at rest unless net force acts.
 **2nd Law:** F = ma (net force = mass × acceleration)
-**3rd Law:** Every action has equal and opposite reaction.
+**3rd Law:** Action = equal & opposite reaction.
 
 **FBD tips:**
-1. Draw all forces (gravity, normal, tension, friction, applied)
-2. Resolve into components along direction of motion
-3. Sum forces = ma
+1. Draw all forces (gravity, normal, tension, friction)
+2. Resolve into components
+3. ΣF = ma
 
 **Friction:** f ≤ μN
-Static: f_s ≤ μ_s N
-Kinetic: f_k = μ_k N
-
-**Mnemonic:** "F=ma" — everything in mechanics comes back to this.`
+Static: f_s ≤ μ_s N,  Kinetic: f_k = μ_k N`
       },
       {
-        title: 'Optics — Lens & Mirror Formula',
+        title: 'Optics — Mirror & Lens',
         content: `**Mirror formula:** 1/f = 1/u + 1/v
 **Lens formula:** 1/f = 1/v - 1/u
-(Sign convention: CARTESIAN — real is positive)
+(Cartesian sign convention: real is positive)
 
 **Magnification:** m = -v/u (mirror), m = v/u (lens)
 **Power:** P = 1/f (in meters → diopters)
 
-**Snell's law:** n₁ sin θ₁ = n₂ sin θ₂
+**Snell\'s law:** n₁ sin θ₁ = n₂ sin θ₂
 **Critical angle:** sin θ_c = n₂/n₁
-**Lens maker formula:** 1/f = (n-1)(1/R₁ - 1/R₂)
 
-**Trick:** For thin lens problems, always draw the 3 rays:
-1. Parallel to axis → through focus
-2. Through center → undeviated
-3. Through focus → parallel to axis`
+**Trick:** For thin lens, always draw the 3 standard rays.`
       },
       {
         title: 'Thermodynamics — Gas Laws',
-        content: `**Boyle's Law:** P₁V₁ = P₂V₂ (constant T)
-**Charles' Law:** V₁/T₁ = V₂/T₂ (constant P)
-**Ideal gas law:** PV = nRT
+        content: `**Boyle\'s Law:** P₁V₁ = P₂V₂ (constant T)
+**Charles\' Law:** V₁/T₁ = V₂/T₂ (constant P)
+**Ideal gas:** PV = nRT
 
 **1st Law:** ΔU = Q - W
 **2nd Law:** Entropy of isolated system always increases
-**Efficiency:** η = 1 - T_C/T_H (Carnot)
+**Carnot efficiency:** η = 1 - T_C/T_H
 
 **Processes:**
-Isobaric: P constant, W = PΔV
-Isochoric: V constant, W = 0
-Isothermal: T constant, ΔU = 0
-Adiabatic: Q = 0, PV^γ = constant
+Isobaric: P const, W = PΔV
+Isochoric: V const, W = 0
+Isothermal: ΔU = 0, W = nRT ln(V₂/V₁)
+Adiabatic: Q = 0, PV^γ = const`
+      },
+      {
+        title: 'Wave & SHM',
+        content: `**Wave equation:** v = fλ
+**Period:** T = 1/f,  ω = 2πf
 
-**Mnemonic:** "PAI" — Pressure constant → isobaric, Volume constant → isochoric, Temperature constant → isothermal.`
+**SHM:**
+x = A cos(ωt + φ)
+v = -Aω sin(ωt + φ)
+a = -Aω² cos(ωt + φ)
+
+**Simple pendulum:** T = 2π√(L/g)
+**Spring:** T = 2π√(m/k)
+
+**Doppler effect:** f' = f × (v ± v_o)/(v ∓ v_s)`
+      },
+      {
+        title: 'Electricity — Circuits',
+        content: `**Ohm\'s Law:** V = IR
+**Power:** P = VI = I²R = V²/R
+
+**Resistors in series:** R = R₁ + R₂ + ...
+**Resistors in parallel:** 1/R = 1/R₁ + 1/R₂ + ...
+
+**Kirchhoff\'s Voltage Law:** ΣV = 0 around any loop
+**Kirchhoff\'s Current Law:** ΣI at node = 0
+
+**Capacitor:** Q = CV,  Energy = ½CV²
+**RC time constant:** τ = RC`
+      },
+      {
+        title: 'Modern Physics',
+        content: `**Photoelectric:** E = hf - φ,  K_max = hf - φ
+**de Broglie:** λ = h/p = h/(mv)
+**Heisenberg:** Δx Δp ≥ h/4π
+
+**Bohr model:** E_n = -13.6/n² eV (hydrogen)
+**Radioactive decay:** N = N₀ e^(-λt)
+Half-life: t½ = ln2/λ
+
+**Mass-energy:** E = mc²`
       },
     ]
   },
@@ -146,69 +215,89 @@ Adiabatic: Q = 0, PV^γ = constant
     id: 'chemistry',
     title: 'Chemistry',
     titleNp: 'रसायनशास्त्र',
+    icon: '🧪',
     items: [
       {
         title: 'Atomic Structure — Orbitals',
         content: `**Quantum numbers:**
-n = principal (1, 2, 3...)
+n = principal (1,2,3...)
 l = azimuthal (0 to n-1): s=0, p=1, d=2, f=3
 m_l = magnetic (-l to +l)
 m_s = spin (±½)
 
-**Hund's rule:** Each orbital in subshell gets one electron before pairing.
+**Hund\'s rule:** Each orbital in subshell gets one electron before pairing.
 **Aufbau:** Fill lowest energy first.
-**Pauli:** No two electrons have same 4 quantum numbers.
+**Pauli exclusion:** No two electrons have same 4 quantum numbers.
 
-**Max electrons:** s=2, p=6, d=10, f=14
-**Mnemonic:** "SPDF" — Sharp, Principal, Diffuse, Fundamental.`
+**Max electrons:** s=2, p=6, d=10, f=14`
       },
       {
         title: 'Periodic Table — Trends',
         content: `**Across a period (left→right):**
-Atomic radius ↓ (more protons pull electrons in)
-Ionization energy ↑ (harder to remove electron)
-Electronegativity ↑ (want more electrons)
+Atomic radius ↓, Ionization energy ↑, Electronegativity ↑
 
 **Down a group:**
-Atomic radius ↑ (more shells)
-Ionization energy ↓ (outer electrons farther)
-Electronegativity ↓ (less attraction)
+Atomic radius ↑, Ionization energy ↓, Electronegativity ↓
 
-**Order of electronegativity:** F > O > N > Cl > Br > I > S > C > P > H
+**Electronegativity order:**
+F > O > N > Cl > Br > I > S > C > P > H > metals
 
-**Mnemonic:** "FONClBrISCH" — Fluorine is king. Highest EN = F. `
+**Trick:** Atomic size ≈ distance from nucleus to valence shell. More protons (→ right) pull tighter = smaller radius.`
       },
       {
         title: 'Organic Chemistry — Functional Groups',
-        content: `**Priority order (IUPAC):**
-COOH > CHO > OH > C=C > C≡C > R (alkyl)
+        content: `**IUPAC priority:** COOH > CHO > OH > C=C > C≡C > R
 
 **Alkane:** C_nH_{2n+2} (single bonds)
 **Alkene:** C_nH_{2n} (double bond)
 **Alkyne:** C_nH_{2n-2} (triple bond)
+**Alcohol:** -OH, **Aldehyde:** -CHO, **Ketone:** -CO-
+**Carboxylic acid:** -COOH, **Ester:** -COO-
 
-**Common reactions:**
-Substitution: alkane + halogen → alkyl halide + HX (UV light)
-Addition: alkene + H₂ → alkane (Ni catalyst)
-Elimination: alcohol → alkene + H₂O (conc. H₂SO₄)
-
-**Trick:** Saturated = single bonds only. Unsaturated = has double/triple bonds. More unsaturation = more reactive.`
+**Substitution:** alkane + halogen → alkyl halide + HX (UV)
+**Addition:** alkene + H₂ → alkane (Ni catalyst)`
       },
       {
-        title: 'Electrochemistry — Nernst Equation',
-        content: `**Standard cell potential:** E°_cell = E°_cathode - E°_anode
-
-**Nernst equation:** E = E° - (RT/nF) ln Q
+        title: 'Electrochemistry — Nernst',
+        content: `**Standard cell:** E°_cell = E°_cathode - E°_anode
+**Nernst:** E = E° - (RT/nF) ln Q
 At 25°C: E = E° - (0.059/n) log Q
 
-**Faraday's laws:**
-1st: Mass deposited ∝ charge passed (m = ZQ)
-2nd: Same charge → mass ∝ equivalent weight
+**Faraday\'s 1st Law:** m = (Q/M) × (valency/F)
+**Faraday\'s 2nd Law:** same Q → m ∝ equivalent weight
 
 **Electrochemical series:**
 Li > K > Ca > Na > Mg > Al > Zn > Fe > Ni > Sn > Pb > H > Cu > Ag > Au
 
-**Mnemonic:** "Lick Potassium Cats Naughty? Mg Al Zn Fe Ni Sn Pb H Cu Ag Au" — top = most reactive.`
+**Trick:** Top = most reactive (anode material). Bottom = least reactive (cathode).`
+      },
+      {
+        title: 'Equilibrium & Kp/Kc',
+        content: `**Equilibrium constant:**
+K_c = [products]^coeff / [reactants]^coeff
+K_p = K_c(RT)^Δn
+
+**Le Chatelier:** Stress a system at equilibrium → system shifts to counteract.
+
+**Factors:** Concentration ↑ → shift toward opposite side
+Temperature ↑ → endothermic forward; exothermic reverse
+Pressure ↑ (gases) → shift toward fewer moles of gas
+
+**pH:** pH = -log[H⁺]
+pOH = -log[OH⁻],  pH + pOH = 14`
+      },
+      {
+        title: 'Stoichiometry — moles',
+        content: `**Mole:** 1 mol = 6.022×10²³ particles (Avogadro)
+**Molar mass** = g/mol (numerically = atomic mass)
+
+**Molarity:** M = mol solute / L solution
+**Molality:** m = mol solute / kg solvent
+
+** dilution:** M₁V₁ = M₂V₂
+**% yield:** (actual/theoretical) × 100
+
+**Empirical formula:** divide masses by atomic mass → ratio → multiply to integer`
       },
     ]
   },
@@ -216,84 +305,496 @@ Li > K > Ca > Na > Mg > Al > Zn > Fe > Ni > Sn > Pb > H > Cu > Ag > Au
     id: 'english',
     title: 'English',
     titleNp: 'अङ्ग्रेजी',
+    icon: '📖',
     items: [
       {
-        title: 'Grammar — Tenses Quick Ref',
-        content: `**Present:** She studies. / She is studying. / She has studied.
-**Past:** She studied. / She was studying. / She had studied.
-**Future:** She will study. / She will be studying. / She will have studied.
+        title: 'Grammar — Tenses Master Ref',
+        content: `**Present:** studies / is studying / has studied / has been studying
+**Past:** studied / was studying / had studied / had been studying
+**Future:** will study / will be studying / will have studied
 
-**Trick:** For IOE English, subject-verb agreement is the #1 tested area.
-Rule: Singular subject → singular verb. "The list of items IS ready." (subject = list)
+**Subject-verb agreement (#1 tested at IOE):**
+Singular subject → singular verb
+"The list of items IS ready." (subject = list, NOT items)
 
-**Common trap:** "Neither of them ARE" ✗ → "Neither of them IS" ✓ (neither = singular)
-**Mnemonic:** "Each, either, neither, anyone, everyone" are ALL singular.`
+**Always singular:** each, either, neither, anyone, everyone, nobody, somebody, one
+**Always plural:** both, few, many, several
+**Pair as plural:** scissors, trousers, shorts`
       },
       {
-        title: 'Vocabulary — Root Words',
-        content: `**bene-** = good → benefit, benevolent
-**mal-** = bad → malice, malfunction
-**syn-** = together → syntax, synonym
-**anti-** = against → antibody, antipathy
-**auto-** = self → automobile, autobiography
-**tele-** = far → telephone, television
-**bio-** = life → biology, biography
-**chrono-** = time → chronicle, chronology
-
-**Mnemonic:** "Bene good, Mal bad, Syn same, Anti mad" — pair the roots with feelings.`
+        title: 'Vocabulary — Word Roots',
+        content: `**bene-** = good → benefit, benevolent, benefactor
+**mal-** = bad → malice, malfunction, malnourished
+**syn-** = together → syntax, synonym, synthesis
+**anti-** = against → antibody, antipathy, antiseptic
+**auto-** = self → automobile, autopsy, automatic
+**tele-** = far → telephone, telescope, telepathy
+**bio-** = life → biology, biography, biodiversity
+**chrono-** = time → chronicle, chronology, synchronize
+**morph-** = shape → amorphous, metamorphosis`
       },
       {
         title: 'Reading Comprehension Strategy',
-        content: `**Step 1:** Skim the question first (don't read passage blind).
-**Step 2:** Scan passage for keywords from the question.
-**Step 3:** Read only that section carefully.
-**Step 4:** Eliminate obviously wrong options first.
+        content: `**Step 1:** Read questions FIRST → note keywords
+**Step 2:** Skim passage — read intro + first line of each paragraph
+**Step 3:** Locate keywords in text → read that section
+**Step 4:** Eliminate obviously wrong answers first
 
-**Trick:** The correct answer is usually a paraphrase, NOT the exact words from the text. If an option copies a sentence word-for-word, it's often a distractor.
+**Key trick:** Correct answer is usually a PARAPHRASE, not exact text.
+If an option matches the passage word-for-word → often a TRAP.
 
-**Time saver:** Do vocabulary + grammar questions first (fast), comprehension last.`
+**Speed:** Do vocabulary + grammar first (30 sec each), save RC for last.`
+      },
+      {
+        title: 'Phrasal Verbs — High-Freq',
+        content: `**Turn:** turn down (reject), turn up (appear), turn out (result), turn into (become)
+**Put:** put off (delay), put up with (tolerate), put forward (propose), put across (explain)
+**Get:** get over (recover), get along (manage), get away (escape), get through (succeed)
+**Break:** break down (fail), break up (end), break into (enter), break out (start)
+
+**Trick:** In IOE, phrasal verbs test PREPOSITION meaning — know the preposition, not just the verb.`
       },
     ]
   },
   {
     id: 'aptitude',
-    title: 'Engineering Aptitude',
-    titleNp: 'Engineering Aptitude',
+    title: 'Aptitude',
+    titleNp: 'Aptitude',
+    icon: '🧠',
     items: [
       {
-        title: 'Logical Reasoning — Number Series',
-        content: `**Arithmetic:** 2, 5, 8, 11, ? → +3 each → 14
-**Geometric:** 3, 6, 12, 24, ? → ×2 → 48
-**Square:** 1, 4, 9, 16, ? → n² → 25
-**Fibonacci:** 1, 1, 2, 3, 5, ? → sum of prev two → 8
+        title: 'Number Series — D-R-S-F Method',
+        content: `**D**ifference: 2, 5, 8, 11, ? → +3 each → 14
+**R**atio: 3, 6, 12, 24, ? → ×2 each → 48
+**S**quare: 1, 4, 9, 16, ? → n² → 25
+**F**ibonacci: 1, 1, 2, 3, 5, ? → sum prev two → 8
 
-**Trick:** Always check difference first, then ratio, then squares/cubes. 90% of series are one of these.
+**Order to check:** Difference → Ratio → Square → Cube → Fibonacci
 
-**Mnemonic:** "D-R-S-F" — Difference, Ratio, Square, Fibonacci. Check in that order.`
+**Trick:** If difference isn't constant, check second difference (for quadratic sequences).`
       },
       {
         title: 'Units & Conversions',
         content: `**Length:** 1 m = 100 cm = 1000 mm; 1 km = 1000 m
 **Mass:** 1 kg = 1000 g; 1 tonne = 1000 kg
 **Time:** 1 hr = 60 min = 3600 s
-**Pressure:** 1 atm = 760 mmHg = 101.325 kPa
+**Pressure:** 1 atm = 760 mmHg = 101.325 kPa = 1.01325 bar
 **Energy:** 1 cal = 4.184 J; 1 kWh = 3.6 × 10⁶ J
 
-**Trick:** For unit conversion, multiply by (target/base) as a fraction = 1.
-Example: 5 km → m: 5 km × (1000 m / 1 km) = 5000 m. The "km" cancels.
-
-**Mnemonic:** "King Henry Died By Drinking Chocolate Milk" — k, h, da, b, d, c, m (metric prefixes).`
+**Dimensional analysis:** [M^a L^b T^c]
+Convert by multiplying by (target/base) = 1 so units cancel.`
       },
       {
-        title: 'Estimation & Approximation',
-        content: `IOE often tests quick estimation, not exact calc.
+        title: 'Percentage & Ratio',
+        content: `**% change:** (new - old)/old × 100
+**Successive %:** 20% then 10% → multiply by 1.20 × 1.10 = 1.32 = 32% increase
 
-**Example:** 198 × 52 ≈ 200 × 50 = 10,000 (actual 10,296 — close enough for MCQ).
+**Ratio:** a:b means a/b. If a:b = 3:4 and a = 15, b = 20
+**Alligation:** To mix two ingredients at price P₁ and P₂ to get price Pₘ:
+Ratio = |P₂ - Pₘ| : |P₁ - Pₘ|
 
-**Rule:** Round to 1-2 significant figures, compute, pick nearest option.
-**Trick:** If options are 9800, 10200, 15000, 20000 → you only need rough magnitude, not precision.
+**Trick:** 1/N as % = 100/N.  1/7 ≈ 14.3%, 1/8 = 12.5%, 1/9 ≈ 11.1%.`
+      },
+      {
+        title: 'Profit & Loss',
+        content: `**Gain %:** (SP - CP)/CP × 100
+**Loss %:** (CP - SP)/CP × 100
+**SP = CP × (1 ± gain%/100)**
 
-**Time saver:** In MCQ, estimate first → eliminate 2 wrong options → only calculate if 2 remain close.`
+**Discount:** SP = MP × (1 - d/100)
+Two successive discounts d₁, d₂: effective = 1 - (1-d₁)(1-d₂)
+
+**Trick:** If gain% = loss% on equal cost price → NET LOSS = x²/100% where x = common %.`
+      },
+    ]
+  },
+
+  // ─── BACHELOR SEMESTER WISE ──────────────────────────────────
+  {
+    id: 'sem1',
+    title: 'Semester I',
+    titleNp: 'सेमेस्टर I',
+    icon: '1️⃣',
+    items: [
+      {
+        title: 'Engineering Mathematics I',
+        content: `**Calculus:**
+Derivative: d/dx x^n = nx^(n-1), chain rule, product rule, quotient rule
+Integration: ∫ x^n dx = x^(n+1)/(n+1)+C, by parts, substitution
+
+**2D Coordinate Geometry:**
+Straight line: y = mx + c, point-slope, two-point form
+Circle: x²+y²+2gx+2fy+c=0, center (-g,-f), r=√(g²+f²-c)
+Parabola: y²=4ax, ellipse: x²/a²+y²/b²=1, hyperbola: x²/a²-y²/b²=1
+
+**3D Geometry:**
+Direction ratios, direction cosines
+Line: (x-x₁)/a = (y-y₁)/b = (z-z₁)/c
+Plane: ax+by+cz+d=0, angle between planes, shortest distance`
+      },
+      {
+        title: 'Engineering Physics I',
+        content: `**Waves & Oscillations:**
+SHM: x=Acos(ωt+φ), v=-Aωsin(ωt+φ), T=2π√(m/k)
+Damped: Damping force F=-bv, logarithmic decrement
+Forced: Resonance when ω_driving = ω_natural
+
+**Optics:**
+Interference: path diff = mλ (constructive), (m+½)λ (destructive)
+Young's double slit: β = λD/d
+Diffraction: single slit min at a sinθ = mλ
+Newton's rings: r²_n = nλR
+
+**Modern Physics:**
+Photoelectric: E=hf-φ, de Broglie: λ=h/mv
+Heisenberg: ΔxΔp ≥ ℏ/2`
+      },
+      {
+        title: 'Engineering Chemistry I',
+        content: `**Atomic & Molecular Structure:**
+Quantum numbers, orbital shapes (s spherical, p dumbbell)
+Hybridization: sp³ (tetrahedral), sp² (trigonal), sp (linear)
+VSEPR: lone pair → LP-LP > LP-BP > BP-BP repulsion
+
+**Electrochemistry:**
+Nernst: E=E°-(0.059/n)logQ at 25°C
+Batteries: Leclanche (dry), lead-acid, Li-ion
+Corrosion: rusting Fe → Fe₂O₃·nH₂O, prevention by galvanizing
+
+**Water Treatment:**
+Hardness: temporary (bicarbonates) → boil; permanent (CaCl₂, MgSO₄) → washing soda
+Softening: ion exchange, reverse osmosis`
+      },
+      {
+        title: 'Computer Programming (C)',
+        content: `**Data types:** int, float, double, char, printf/scanf
+**Operators:** arithmetic, relational, logical, bitwise, ++/--
+**Control flow:** if-else, switch, while, for, do-while
+
+**Arrays:** int a[10]; // 10 elements, 0-indexed
+**Functions:** returnType name(params) { }
+**Recursion:** function calls itself, needs base case
+
+**Pointers:** int *p; p = &x; // p holds address of x
+**Structures:** struct Student { char name[50]; int roll; };`
+      },
+      {
+        title: 'Engineering Drawing I',
+        content: `**Drawing instruments:** T-square, set squares, compass, divider, scale
+**Line types:** continuous, dashed, chain, alternating
+
+**Orthographic projections:**
+1st angle: object in 1st quadrant (EU standard)
+3rd angle: object in 3rd quadrant (US standard) — commonly used in Nepal
+
+**Sections:** full section, half section, sectional views
+**Standard conventions:** M — metric thread, Ø — diameter, R — radius, □ — square`
+
+      },
+    ]
+  },
+  {
+    id: 'sem2',
+    title: 'Semester II',
+    titleNp: 'सेमेस्टर II',
+    icon: '2️⃣',
+    items: [
+      {
+        title: 'Engineering Mathematics II',
+        content: `**Integral Calculus:**
+Double integrals: ∫∫ f(x,y) dxdy, change of order
+Triple integrals, Jacobian
+Applications: area, volume, centroid, moment of inertia
+
+**Differential Equations:**
+1st order: separable, linear (IF method), exact
+2nd order: homogeneous with constant coeff
+Particular integral: trial method for RHS polynomial, exponential, sin/cos
+
+**Laplace Transform:**
+L{e^(at)} = 1/(s-a), L{sin(at)} = a/(s²+a²)
+L{y'} = sY - y(0), L{y''} = s²Y - sy(0) - y'(0)
+Inverse LT via partial fractions`
+      },
+      {
+        title: 'Engineering Physics II',
+        content: `**Electrostatics:**
+Coulomb: F = kq₁q₂/r²
+E-field: E = F/q₀, E = kq/r² (point charge)
+Gauss's law: Φ = Q_enclosed/ε₀
+Capacitor: C = ε₀A/d (parallel plate), C = Q/V
+
+**Magnetism:**
+Biot-Savart: dB = (μ₀/4π) I dl × r̂/r²
+Ampere's law: ∮B·dl = μ₀I_enc
+Force on conductor: F = BIL sinθ
+
+**Electromagnetic Induction:**
+Faraday: ε = -dΦ/dt
+Lenz's law: induced current opposes change
+Inductance: ε = -L dI/dt, energy = ½LI²`
+      },
+      {
+        title: 'Engineering Chemistry II',
+        content: `**Organic Reactions:**
+Nucleophilic substitution: SN1 (tertiary carbocation) vs SN2 (backside attack)
+Elimination: E1 vs E2 — bulky base favors E2
+Addition: electrophilic addition to alkenes
+
+**Polymer Chemistry:**
+Addition: polyethylene, PVC, PTFE (chain reaction)
+Condensation: nylon-6,6, polyester (removes H₂O)
+Thermoplastic vs thermosetting
+
+**Spectroscopy:**
+UV-Vis: π→π*, n→π* transitions
+IR: O-H, N-H (broad), C=O (sharp ~1700 cm⁻¹), C-H stretch
+NMR: chemical shift δ, integration, splitting (n+1 rule)`
+      },
+      {
+        title: 'Basic Electrical Engineering',
+        content: `**Circuit Analysis:**
+Kirchhoff's laws, node voltage, mesh current
+Thevenin: V_th = open circuit voltage, R_th = deactivate independent sources
+Norton: I_N = short circuit current, R_N = R_th
+Maximum power transfer when R_L = R_th
+
+**AC Circuits:**
+X_L = ωL, X_C = 1/ωC, Z = √(R² + (X_L-X_C)²)
+Phasor representation, power factor = cosφ = P/S
+Resonance: X_L = X_C, f_r = 1/(2π√LC)`
+
+      },
+      {
+        title: 'Basic Electronics Engineering',
+        content: `**Semiconductors:**
+Intrinsic: n = p = n_i; Doped: n-type (P donor), p-type (B acceptor)
+Diode: forward bias V_D ≈ 0.7V (Si), 0.3V (Ge)
+Zener diode: V_Z stable in reverse breakdown
+
+**Transistor (BJT):**
+Active region: V_BE ≈ 0.7V, I_C = β I_B, I_E = I_B + I_C
+Modes: cutoff (OFF), active (amplifier), saturation (ON)
+
+**Op-Amp:**
+V_out = A_v (V+ - V-), ideal A_v → ∞
+Inverting: V_out = -(R_f/R₁) V_in
+Non-inverting: V_out = (1+R_f/R₁) V_in
+Golden rules: no current into inputs, V+ = V-`
+      },
+    ]
+  },
+  {
+    id: 'sem3',
+    title: 'Semester III',
+    titleNp: 'सेमेस्टर III',
+    icon: '3️⃣',
+    items: [
+      {
+        title: 'Engineering Mathematics III',
+        content: `**Fourier Series:**
+f(x) = a₀/2 + Σ(aₙcos(nx) + bₙsin(nx))
+aₙ = (1/π)∫ f(x)cos(nx)dx over period
+Even: bₙ=0; Odd: aₙ=0
+
+**Partial Differential Equations:**
+Wave: ∂²u/∂t² = c² ∂²u/∂x²
+Heat: ∂u/∂t = α ∂²u/∂x²
+Method of separation of variables, D'Alembert's solution
+
+**Complex Analysis:**
+Cauchy-Riemann: uₓ=vᵧ, uᵧ=-vₓ
+Cauchy integral theorem: ∮ f(z) dz = 0 if f' exists
+Taylor series, Laurent series, Residue theorem: ∮f(z)dz = 2πi ΣResidues`
+      },
+      {
+        title: 'Probability & Statistics',
+        content: `**Probability:**
+P(A∪B) = P(A)+P(B)-P(A∩B)
+Bayes' theorem: P(A|B) = P(B|A)P(A)/P(B)
+**Distributions:**
+Binomial: P(X=r) = C(n,r) p^r (1-p)^(n-r)
+Poisson: P(X=r) = (λ^r e^-λ)/r!
+Normal: Z = (X-μ)/σ, use Z-tables
+
+**Statistics:**
+Mean, median, mode, variance σ² = E(X²) - [E(X)]²
+Standard deviation σ = √σ²
+Central limit theorem: sample mean ≈ normal for large n`
+      },
+      {
+        title: 'Strength of Materials',
+        content: `**Stress & Strain:**
+σ = F/A, ε = δ/L, E = σ/ε (Young's modulus)
+Axial loading: δ = FL/AE
+Thermal stress: σ = EαΔT (constrained)
+
+**Shear & Torsion:**
+Shear: τ = V/A, γ = τ/G
+Torsion: τ/J = T/r = Gθ/L
+Polar moment of inertia: J = Σr²dA
+
+**Bending:**
+Bending stress: σ = My/I, I = bh³/12 (rectangular)
+Beam deflection: use superposition or moment-area method`
+      },
+      {
+        title: 'Fluid Mechanics',
+        content: `**Fluid Properties:**
+Density ρ = m/V, viscosity μ, surface tension γ
+Buoyancy: F_b = ρgV_dispaced (Archimedes)
+
+**Fluid Statics:**
+Pressure: P = ρgh (hydrostatic)
+Manometer, barometer, pressure gauges
+
+**Fluid Dynamics:**
+Continuity: A₁v₁ = A₂v₂ (conservation of mass)
+Bernoulli: P/ρg + v²/2g + z = constant
+Energy equation: head loss h_f = fLQ²/(2dA²)
+Reynolds number: Re = ρvD/μ = vD/ν (laminar if <2000)`
+      },
+      {
+        title: 'Engineering Geology I',
+        content: `**Minerals:**
+Silicates (90% of crust): olivine, pyroxene, amphibole, mica, feldspar, quartz
+Physical properties: streak, cleavage (1,2,3 directions), fracture
+
+**Rocks:**
+Igneous: intrusive (granite, gabbro) vs extrusive (basalt, andesite)
+Sedimentary: clastic (sandstone), chemical (limestone), organic (coal)
+Metamorphic: foliated (schist, gneiss) vs non-foliated (marble, quartzite)
+
+**Structural Geology:**
+Dip and strike of geological planes
+Folds: anticline (arch up), syncline (trough down)
+Faults: normal (extension), reverse/thrust (compression), strike-slip`
+      },
+    ]
+  },
+  {
+    id: 'sem4',
+    title: 'Semester IV',
+    titleNp: 'सेमेस्टर IV',
+    icon: '4️⃣',
+    items: [
+      {
+        title: 'Numerical Methods',
+        content: `**Solution of Equations:**
+Bisection: root in [a,b] → c=(a+b)/2, replace half containing root
+Newton-Raphson: x_{n+1} = x_n - f(x_n)/f'(x_n) (fast convergence)
+
+**Interpolation:**
+Lagrange: P(x) = Σ yᵢ Lᵢ(x), Lᵢ = Πⱼ≠ᵢ (x-xⱼ)/(xᵢ-xⱼ)
+Newton's divided difference
+
+**Numerical Integration:**
+Trapezoidal: ∫≈(h/2)[f₀+2f₁+...+2f_{n-1}+f_n]
+Simpson's 1/3: requires even n, ∫≈(h/3)[f₀+4f₁+2f₂+4f₃+...+f_n]
+
+**ODE:** Euler's method (simple), RK4 (accurate)`
+      },
+      {
+        title: 'Theory of Structures I',
+        content: `**Statically Determinate Beams:**
+Shear force F(x) = dM/dx, Bending moment M(x) = ∫F dx
+Point load: SF jumps by P, BM jumps by P×lever arm
+UDL: SF linear, BM quadratic (parabolic)
+
+**Analysis of Pin-jointed Trusses:**
+Method of joints: resolve at each joint (2 eq per joint)
+Method of sections: cut through ≤3 members, take moments
+Zero-force members: 2 members meet at joint → no external force → both zero force
+
+**Stress & Strain:**
+Direct stress σ = P/A
+Bending stress σ = My/I`
+      },
+      {
+        title: 'Hydraulics',
+        content: `**Flow in Pipes:**
+Darcy-Weisbach: h_f = fLQ²/(2gd⁵)
+Minor losses: h_m = K(v²/2g) for fittings, contractions
+Series pipes: same flow Q, total head loss = sum
+Parallel pipes: same head loss, Q splits proportionally
+
+**Open Channel Flow:**
+Manning's: V = (1/n) R^{2/3} S^{1/2} (R=hydraulic radius)
+Specific energy: E = y + v²/2g
+Critical flow: Fr=1, minimum energy for given discharge
+Hydraulic jump: supercritical →subcritical, energy dissipation`
+      },
+      {
+        title: 'Surveying I',
+        content: `**Chain Surveying:**
+Chaining: ranging rods, direct/indirect ranging
+Offsets: perpendicular offsets from chain line to features
+Errors: cumulative (stretching, sag) ±, compensating ±
+
+**Compass Surveying:**
+Bearing: true/magnetic, whole-circle vs quadrantal
+Local attraction: check at intermediate stations
+Dip: angle between horizontal and earth's field
+
+**Leveling:**
+Rise and fall method, Height of instrument method
+Temporary adjustments: level, focus, bubble
+Compound leveling: back sight + fore sight on same point = ∑BS - ∑FS`
+      },
+    ]
+  },
+  {
+    id: 'sem5',
+    title: 'Semester V+',
+    titleNp: 'सेमेस्टर V+',
+    icon: '5️⃣',
+    items: [
+      {
+        title: 'Structural Analysis',
+        content: `**Indeterminate Structures:**
+Fixed beam: 3 unknowns (M_A, M_B, V_A) — statically indeterminate to 1° for simply supported
+Moment distribution method: stiffness, distribution factor, carry-over factor
+Slope-deflection equations: M_AB = (2EI/L)(2θ_A+θ_B-3ψ)
+
+**Energy Methods:**
+Strain energy: U = ∫ M²/(2EI) dx for bending
+Castigliano's theorem: ∂U/∂F = deflection
+Virtual work: δU = 0 for equilibrium
+
+**Matrix Methods:**
+Stiffness method: [K]{δ} = {F}
+Assemble element matrices → global → apply BCs → solve`
+      },
+      {
+        title: 'Foundation Engineering',
+        content: `**Soil Mechanics:**
+Index properties: G_s, w (moisture), e (voids ratio), S (saturation)
+IS classification: GW, GP, GM, SW, SP, SM, SC, CL, ML, OL, CH, MH, OH, PT
+
+**Bearing Capacity (Terzaghi):**
+q_u = cN_c + qN_q + ½γBN_γ
+Net safe bearing: (q_u - q)/FS
+Settlement: elastic (immediate) + consolidation (time-dependent)
+
+**Foundation Types:**
+Shallow: spread footing, strip, raft (use when D/B ≤ 1)
+Deep: pile (end-bearing + friction), well (caisson)`
+      },
+      {
+        title: 'Highway Engineering',
+        content: `**Geometric Design:**
+Sight distance: SSD = 0.278 V t + V²/(254f) (braking)
+Horizontal curve: R = V²/(127(e+f)), superelevation e = V²/(127R)
+Transition curve: clothoid (spiral)
+Vertical curve: parabolic summit/sag, L = A·SSD²/(abs(ΔA))
+
+**Pavement Design:**
+Flexible: layers — granular subgrade, WBM, BM, AC (RHA)
+Rigid: plain cement concrete, load transfer at joints
+ESAL: equivalent standard axle load for design period
+
+**Highway Materials:**
+CBR test for subgrade, aggregate crushing value, Los Angeles abrasion`
       },
     ]
   },
