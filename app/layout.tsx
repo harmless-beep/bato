@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { LangProvider } from './components/ui'
 import EasterEggs from './components/easter-eggs'
+import Companion from './components/companion'
 
 export const metadata: Metadata = {
   title: 'बाटो — IOE/KU Engineering Prep',
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <LangProvider>
           {children}
           <EasterEggs />
+          <Companion />
         </LangProvider>
       </body>
     </html>

@@ -95,6 +95,9 @@ export default function MockTest() {
   const [startSection, setStartSection] = useState(0)
   const [wrongIds, setWrongIds] = useState<{ id: number; chosen: number }[]>([])
   const [wrongIdx, setWrongIdx] = useState(0)
+  const [admin, setAdmin] = useState(false)
+
+  useEffect(() => { if (localStorage.getItem('bato-admin') === '1') setAdmin(true) }, [])
 
   const bySubject = useMemo(() => {
     const m = new Map<string, Question[]>()
@@ -186,6 +189,7 @@ export default function MockTest() {
     if (!config.adaptive) score = Math.max(0, correct - wrong * config.negMark)
     setResult({ score, maxScore, correct, wrong, skipped })
     setPhase('result')
+    try { window.dispatchEvent(new CustomEvent('bato-mood', { detail: 'party' })) } catch {}
     // save stats
     try {
       const prev = Number(localStorage.getItem('bato-questions') ?? 0)
@@ -417,11 +421,13 @@ export default function MockTest() {
                   key={oi}
                   onClick={() => {
                     setAnswers(prev => { const n = [...prev]; n[current] = oi; return n })
+                    try { window.dispatchEvent(new CustomEvent('bato-mood', { detail: oi === q.correct ? 'happy' : 'sad' })) } catch {}
                   }}
-                  className={`cbt-option ${answers[current] === oi ? 'selected' : ''}`}
+                  className={`cbt-option ${answers[current] === oi ? 'selected' : ''}${admin && oi === q.correct ? ' admin-correct' : ''}`}
                 >
                   <span className="cbt-opt-letter">{String.fromCharCode(65 + oi)}</span>
                   <span>{opt}</span>
+                  {admin && oi === q.correct && <span className="cbt-admin-check">✓</span>}
                 </button>
               ))}
             </div>

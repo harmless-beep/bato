@@ -1154,3 +1154,69 @@ html body {
 .sug-del-btn:hover { border-color: var(--danger); }
 .sug-pinned { border-color: var(--gold) !important; box-shadow: 0 0 0 1px rgba(245,158,11,0.15), var(--shadow); }
 .sug-pin-badge { font-size: 11px; }
+
+/* ─── Companion buddy (overlay pet) ─── */
+.companion {
+  position: fixed; left: 12px; bottom: 12px; z-index: 9000;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  cursor: pointer; user-select: none; -webkit-user-select: none;
+}
+.companion-pet {
+  font-size: 44px; line-height: 1;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+  animation: pet-bounce 3.4s ease-in-out infinite;
+  transition: transform 0.15s;
+}
+.companion-pet:hover { transform: scale(1.15); }
+.companion-pet.happy { animation: pet-jump 0.55s ease; }
+.companion-pet.sad { animation: pet-droop 0.55s ease; filter: grayscale(0.45) drop-shadow(0 4px 10px rgba(0,0,0,0.3)); }
+.companion-pet.party { animation: pet-spin 0.9s ease; }
+.companion-name {
+  font-size: 9px; font-weight: 800; color: var(--muted);
+  background: var(--card); border: 1px solid var(--border);
+  padding: 1px 8px; border-radius: 999px; opacity: 0.85;
+}
+.companion-bubble {
+  position: absolute; bottom: 64px; left: 50%; transform: translateX(-50%);
+  background: var(--card); color: var(--text); border: 1px solid var(--border);
+  font-size: 11.5px; font-weight: 700; line-height: 1.45;
+  padding: 7px 12px; border-radius: 12px; box-shadow: var(--shadow-lg);
+  max-width: 200px; text-align: center; white-space: normal; z-index: 9001;
+  animation: bubble-pop 0.2s ease;
+}
+.companion-bubble::after {
+  content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%);
+  border: 6px solid transparent; border-top-color: var(--border);
+}
+@keyframes pet-bounce { 0%, 88%, 100% { transform: translateY(0); } 94% { transform: translateY(-7px); } }
+@keyframes pet-jump {
+  0% { transform: scale(1) translateY(0); }
+  35% { transform: scale(1.25) translateY(-16px); }
+  65% { transform: scale(0.92) translateY(0); }
+  100% { transform: scale(1); }
+}
+@keyframes pet-droop {
+  0% { transform: rotate(0); }
+  45% { transform: rotate(-10deg) translateY(5px); }
+  100% { transform: rotate(0); }
+}
+@keyframes pet-spin {
+  0% { transform: rotate(0) scale(1); }
+  100% { transform: rotate(360deg) scale(1.2); }
+}
+@keyframes bubble-pop { from { transform: translateX(-50%) scale(0.7); opacity: 0; } to { transform: translateX(-50%) scale(1); opacity: 1; } }
+
+/* ─── CBT admin: correct answer visible ─── */
+.cbt-option.admin-correct { border-color: var(--success); background: rgba(16,185,129,0.1); }
+.cbt-admin-check {
+  margin-left: auto; font-size: 15px; font-weight: 900; color: var(--success);
+  animation: pet-jump 0.4s ease;
+}
+
+/* ─── Suggest: admin vote controls ─── */
+.sug-unvote {
+  width: 30px; height: 20px; border: 1px solid var(--border); background: var(--surface);
+  border-radius: 7px; color: var(--muted); font-size: 13px; line-height: 1; cursor: pointer;
+  transition: all 0.15s;
+}
+.sug-unvote:hover { border-color: var(--danger); color: var(--danger); }

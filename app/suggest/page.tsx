@@ -81,9 +81,21 @@ export default function Suggest() {
   }
 
   const vote = (id: string) => {
-    const next = { ...votes, [id]: votes[id] ? 0 : 1 }
+    // admin can vote as many times as they like; normal users toggle 0/1
+    const next = { ...votes, [id]: admin ? (votes[id] || 0) + 1 : (votes[id] ? 0 : 1) }
     setVotes(next)
     localStorage.setItem(LS_VOTES, JSON.stringify(next))
+  }
+
+  const unvote = (id: string) => {
+    const next = { ...votes, [id]: Math.max(0, (votes[id] || 0) - 1) }
+    setVotes(next)
+    localStorage.setItem(LS_VOTES, JSON.stringify(next))
+  }
+
+  const resetVotes = () => {
+    setVotes({})
+    localStorage.setItem(LS_VOTES, '{}')
   }
 
   const unlock = () => {
@@ -201,10 +213,13 @@ export default function Suggest() {
             const my = votes[s.id] || 0
             return (
               <div key={s.id} className={`card sug-item${s.pinned ? ' sug-pinned' : ''}`} style={{ padding: 12, marginBottom: 10 }}>
-                <button className={`sug-vote${my ? ' on' : ''}`} onClick={() => vote(s.id)} aria-label={isNe ? 'भोट' : 'Vote'} title={isNe ? 'भोट दिनुहोस्' : 'Upvote'}>
-                  <span className="sug-vote-arrow">▲</span>
-                  <span className="sug-vote-num">{my}</span>
-                </button>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, flexShrink: 0 }}>
+                  <button className={`sug-vote${my ? ' on' : ''}`} onClick={() => vote(s.id)} aria-label={isNe ? 'भोट' : 'Vote'} title={isNe ? 'भोट दिनुहोस्' : 'Upvote'}>
+                    <span className="sug-vote-arrow">▲</span>
+                    <span className="sug-vote-num">{my}</span>
+                  </button>
+                  {admin && <button className="sug-unvote" onClick={() => unvote(s.id)} title={isNe ? 'भोट घटाउनुहोस्' : 'Remove vote'}>−</button>}
+                </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div className="sug-item-top">
                     <span className="sug-item-type">{t.icon} {isNe ? t.labelNp : t.label}</span>
@@ -237,6 +252,7 @@ export default function Suggest() {
           {admin ? (
             <div className="sug-admin-bar">
               <span className="sug-admin-badge">👑 {isNe ? 'प्रशासक' : 'Admin'}</span>
+              <button className="btn btn-outline btn-sm" onClick={resetVotes}>♻ {isNe ? 'भोट रिसेट' : 'Reset votes'}</button>
               <button className="btn btn-outline btn-sm" onClick={clearAll}>🗑 {isNe ? 'सबै मेट्नुहोस्' : 'Clear all'}</button>
               <button className="btn btn-outline btn-sm" onClick={() => { setAdmin(false); localStorage.removeItem('bato-admin') }}>🔒 {isNe ? 'बन्द' : 'Lock'}</button>
             </div>
