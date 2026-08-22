@@ -86,18 +86,6 @@ export default function Home() {
     setMounted(true)
   }, [])
 
-  // demo: seed some data on first visit so counters look alive
-  useEffect(() => {
-    if (!mounted) return
-    if (!localStorage.getItem('bato-seeded')) {
-      saveStat('bato-questions', 847)
-      saveStat('bato-accuracy', 72)
-      saveStat('bato-streak', 12)
-      localStorage.setItem('bato-seeded', '1')
-      setStats({ questions: 847, accuracy: 72, streak: 12 })
-    }
-  }, [mounted])
-
   return (
     <div>
       <TopBar />

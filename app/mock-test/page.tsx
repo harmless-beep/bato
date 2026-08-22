@@ -184,6 +184,10 @@ export default function MockTest() {
       const acc = session.length ? Math.round((correct / (correct + wrong || 1)) * 100) : 0
       localStorage.setItem('bato-accuracy', String(Math.max(Number(localStorage.getItem('bato-accuracy') ?? 0), acc)))
       localStorage.setItem('bato-streak', String(Number(localStorage.getItem('bato-streak') ?? 0) + 1))
+      // attempt history (last 10)
+      const hist = JSON.parse(localStorage.getItem('bato-attempts') ?? '[]')
+      hist.push({ exam: config.id, score, maxScore, correct, wrong, skipped, ts: Date.now() })
+      localStorage.setItem('bato-attempts', JSON.stringify(hist.slice(-10)))
     } catch {}
   }, [config, session, answers, valueOf])
 
@@ -457,6 +461,15 @@ export default function MockTest() {
                 ? L('Adaptive scoring: marks scale with correct streaks (max 5/Q)', 'Adaptive अंक: सही streak सँग अंक बढ्छ (अधिकतम ५/प्रश्न)')
                 : L('Negative marking applied', 'गलत उत्तरमा कटौती लागू') + `: -${config.negMark}/${L('wrong', 'गलत')}`}
             </div>
+            <a
+              href={`https://wa.me/?text=${encodeURIComponent(`🎯 बाटो (Bato) — ${config.name} mock test\nMy score: ${result.score.toFixed(config.adaptive ? 0 : 1)} / ${result.maxScore.toFixed(config.adaptive ? 0 : 1)} (${pct}%)\nCorrect: ${result.correct} • Wrong: ${result.wrong} • Skipped: ${result.skipped}\nTry it: harmless-beep.github.io/bato`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-outline btn-sm"
+              style={{ marginTop: 14, width: '100%' }}
+            >
+              📲 {L('Share score on WhatsApp', 'WhatsApp मा score share गर्नुहोस्')}
+            </a>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginBottom: 16 }}>
