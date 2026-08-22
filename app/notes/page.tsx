@@ -118,6 +118,23 @@ export default function Notes() {
           </button>
         </div>
 
+        {mode === 'bachelor' && (
+          <Link href="/past-papers" style={{ textDecoration: 'none' }}>
+            <div className="card" style={{ padding: 14, marginBottom: 14, display: 'flex', alignItems: 'center', gap: 12, border: '1.5px solid var(--primary)' }}>
+              <span style={{ fontSize: 26 }}>📄</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--text)' }}>
+                  {isNe ? 'Bachelor: पुराना प्रश्नपत्रहरू' : 'Bachelor: Past Papers'}
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>
+                  {isNe ? 'Semester-wise IOE papers (Math I-III, Physics, Chemistry) →' : 'Semester-wise IOE papers (Math I–III, Physics, Chemistry) →'}
+                </div>
+              </div>
+              <span style={{ fontSize: 18, color: 'var(--primary)' }}>→</span>
+            </div>
+          </Link>
+        )}
+
         {/* Search */}
         <div style={{ position: 'relative', marginBottom: 14 }}>
           <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', opacity: 0.5, fontSize: 14 }}>🔍</span>

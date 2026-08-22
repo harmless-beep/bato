@@ -44,7 +44,16 @@ const topCampuses = [
   { name: 'Thapathali Campus', nameNp: 'थपाथली क्याम्पस',   cutoff: 'Rank 75',       cutoffNp: 'रैंक ७५',   program: 'Computer Eng.',  programNp: 'कम्प्युटर इन्जिनियरिङ', color: '#7c3aed' },
   { name: 'WRC Pokhara',       nameNp: 'पश्चिमाञ्चल पोखरा', cutoff: 'Rank 164',      cutoffNp: 'रैंक १६४',  program: 'Computer Eng.',  programNp: 'कम्प्युटर इन्जिनियरिङ', color: '#0891b2' },
   { name: 'ERC Dharan',         nameNp: 'पूर्वाञ्चल धरान',   cutoff: 'Rank 384',      cutoffNp: 'रैंक ३८४',  program: 'Computer Eng.',  programNp: 'कम्प्युटर इन्जिनियरिङ', color: '#059669' },
-  { name: 'Pulchowk Campus',   nameNp: 'पुल्चोक क्याम्पस',   cutoff: 'Rank 84',       cutoffNp: 'रैंक ८४',   program: 'Electronics',    programNp: 'इलेक्ट्रोनिक्स',         color: '#2563eb' },
+  { name: 'Pulchowk Campus',   nameNp: 'पुल्चोक क्याम्पस',   cutoff: 'Rank 84',       cutoffNp: 'रैंक ८४',  program: 'Electronics',    programNp: 'इलेक्ट्रोनिक्स',         color: '#2563eb' },
+]
+
+// ── Top medical colleges (CEE 2082, compiled) ───────────────────────────────
+const topMed = [
+  { name: 'IOM, Maharajgunj',   type: 'Govt',   program: 'MBBS', cutoff: '~60',  color: '#059669' },
+  { name: 'BPKIHS, Dharan',     type: 'Govt',   program: 'MBBS', cutoff: '~100', color: '#10b981' },
+  { name: 'PAHS, Lalitpur',     type: 'Govt',   program: 'MBBS', cutoff: '~90',  color: '#14b8a6' },
+  { name: 'KMC, Duwakot',       type: 'Private', program: 'MBBS', cutoff: '~200', color: '#f59e0b' },
+  { name: 'Manipal, Pokhara',   type: 'Private', program: 'MBBS', cutoff: '~300', color: '#f97316' },
 ]
 
 export default function Home() {
@@ -75,17 +84,30 @@ export default function Home() {
     <div>
       <TopBar />
 
-      {/* ── Countdown Banner ─────────────────────────────────────────── */}
-      <div className="countdown-banner">
+      {/* ── Countdown Banners ───────────────────────────────────────── */}
+      <div className="countdown-banner" style={{ background: 'linear-gradient(135deg, #1e1b4b, #4f46e5)' }}>
         <div className="countdown-inner">
-          <span className="countdown-icon">⏱️</span>
+          <span className="countdown-icon">🏗️</span>
           <span className="countdown-label">
             {isNe ? 'IOE 2083 प्रवेश परीक्षा:' : 'IOE 2083 Entrance Exam:'}
           </span>
           <span className="countdown-days">~198 {isNe ? 'दिन बाँकी' : 'days left'}</span>
-          <span className="countdown-date">{isNe ? '〜 चैत २०८३' : '~ Chaitra 2083'}</span>
+          <span className="countdown-date">{isNe ? '〜 भदौ २०८३' : '~ Bhadra 2083'}</span>
           <Link href="/mock-test" className="countdown-cta">
             {isNe ? 'अभ्यास सुरु गर्नुहोस् →' : 'Start Practicing →'}
+          </Link>
+        </div>
+      </div>
+      <div className="countdown-banner" style={{ background: 'linear-gradient(135deg, #064e3b, #059669)' }}>
+        <div className="countdown-inner">
+          <span className="countdown-icon">🩺</span>
+          <span className="countdown-label">
+            {isNe ? 'CEE 2083 (MECEE-BL) परीक्षा:' : 'CEE 2083 (MECEE-BL) Exam:'}
+          </span>
+          <span className="countdown-days">~55 {isNe ? 'दिन बाँकी' : 'days left'}</span>
+          <span className="countdown-date">{isNe ? '~ असोज २०८३' : '~ Ashoj 2083'}</span>
+          <Link href="/med-predictor" className="countdown-cta">
+            {isNe ? 'मेडिकल हेर्नुहोस् →' : 'Check Medical →'}
           </Link>
         </div>
       </div>
@@ -189,6 +211,35 @@ export default function Home() {
               </div>
               <Link href="/predictor" className="btn btn-outline btn-sm" style={{ marginTop: 14, display: 'inline-flex' }}>
                 {isNe ? 'सबै क्याम्पस हेर्नुहोस् →' : 'View All Campuses →'}
+              </Link>
+            </div>
+          </Reveal>
+
+          {/* Top Medical Colleges */}
+          <Reveal delay={200}>
+            <div className="col-full">
+              <div className="section-header" style={{ marginTop: 32 }}>
+                <div className="section-title">{isNe ? 'शीर्ष मेडिकल कलेजहरू (CEE 2082)' : 'Top Medical Colleges (CEE 2082)'}</div>
+              </div>
+              <div className="college-list">
+                {topMed.map((c, i) => (
+                  <div key={i} className="college-item">
+                    <div className="college-rank" style={{ background: c.color }}>
+                      #{i + 1}
+                    </div>
+                    <div className="college-info">
+                      <div className="college-name">{c.name}</div>
+                      <div className="college-program">{c.program} • {c.type}</div>
+                    </div>
+                    <div className="college-cutoff">
+                      <div className="college-cutoff-num">{c.cutoff}</div>
+                      <div className="college-cutoff-label">{isNe ? 'रैंक' : 'Rank'}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <Link href="/med-predictor" className="btn btn-outline btn-sm" style={{ marginTop: 14, display: 'inline-flex' }}>
+                {isNe ? 'मेडिकल Predictor हेर्नुहोस् →' : 'Try Med Predictor →'}
               </Link>
             </div>
           </Reveal>
