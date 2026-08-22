@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import Link from 'next/link'
 
 export type Lang = 'en' | 'ne'
@@ -139,7 +140,7 @@ export function SupportButton() {
       >
         ☕
       </button>
-      {open && (
+      {open && typeof document !== 'undefined' && createPortal(
         <div className="support-modal" onClick={() => setOpen(false)}>
           <div className="support-modal-card" onClick={e => e.stopPropagation()}>
             <button className="support-close" onClick={() => setOpen(false)} aria-label="Close">✕</button>
@@ -165,7 +166,8 @@ export function SupportButton() {
               {isNe ? 'बन्द गर्नुहोस्' : 'Close'}
             </button>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   )
