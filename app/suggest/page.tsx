@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useLang } from '../components/ui'
 
@@ -51,6 +51,22 @@ export default function Suggest() {
   useEffect(() => {
     setItems(load()); setVotes(loadVotes())
     if (localStorage.getItem('bato-admin') === '1') setAdmin(true)
+  }, [])
+
+  // owner secret: ↑ ↓ ↓ ↑ reveals the admin unlock (no visible button)
+  const arrowBuf = useRef<string[]>([])
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return
+      arrowBuf.current.push(e.key)
+      if (arrowBuf.current.length > 4) arrowBuf.current.shift()
+      if (arrowBuf.current.join(',') === 'ArrowUp,ArrowDown,ArrowDown,ArrowUp') {
+        arrowBuf.current = []
+        setAsk(true)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
   }, [])
 
   const submit = () => {
@@ -225,26 +241,22 @@ export default function Suggest() {
               <button className="btn btn-outline btn-sm" onClick={() => { setAdmin(false); localStorage.removeItem('bato-admin') }}>🔒 {isNe ? 'बन्द' : 'Lock'}</button>
             </div>
           ) : (
-            <>
-              <button className="sug-admin-trigger" onClick={() => setAsk(!ask)}>
-                {ask ? '✕ ' : '⚙️ '}{isNe ? 'प्रशासक' : 'Admin'}
-              </button>
-              {ask && (
-                <div className="sug-unlock">
-                  <input
-                    type="password"
-                    className={`input${bad ? ' sug-bad' : ''}`}
-                    placeholder={isNe ? 'पासकोड' : 'Passcode'}
-                    value={code}
-                    onChange={e => setCode(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && unlock()}
-                    autoFocus
-                    style={{ width: 140 }}
-                  />
-                  <button className="btn btn-primary btn-sm" onClick={unlock}>{isNe ? 'खोल्नुहोस्' : 'Unlock'}</button>
-                </div>
-              )}
-            </>
+            ask && (
+              <div className="sug-unlock">
+                <button className="sug-unlock-close" onClick={() => setAsk(false)} aria-label="Close">✕</button>
+                <input
+                  type="password"
+                  className={`input${bad ? ' sug-bad' : ''}`}
+                  placeholder={isNe ? 'पासकोड' : 'Passcode'}
+                  value={code}
+                  onChange={e => setCode(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && unlock()}
+                  autoFocus
+                  style={{ width: 140 }}
+                />
+                <button className="btn btn-primary btn-sm" onClick={unlock}>{isNe ? 'खोल्नुहोस्' : 'Unlock'}</button>
+              </div>
+            )
           )}
         </div>
 
