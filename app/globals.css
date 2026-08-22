@@ -975,3 +975,6 @@ html[data-theme="dark"] .support-bar { border-color: rgba(255,255,255,0.1); }
   /* quick grid: 6 cards -> even 3x2 */
   .quick-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
 }
+
+/* ─── Study calendar: cap cell size on desktop ─── */
+.cal-grid { max-width: 300px; }

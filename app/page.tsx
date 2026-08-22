@@ -150,6 +150,25 @@ export default function Home() {
                 <div className="quote-by">— {isNe ? todayQuote().byNp : todayQuote().by}</div>
               </div>
             </Reveal>
+
+            {/* ── Latest Updates (left column, under quote) ─────────────── */}
+            <Reveal delay={100}>
+              <div className="section-header" style={{ marginTop: 26 }}>
+                <div className="section-title">{isNe ? 'ताजा अपडेट' : 'Latest Updates'}</div>
+              </div>
+              <div className="news-list">
+                {news.map((n, i) => (
+                  <div key={i} className="news-item">
+                    <div className="news-top">
+                      <span className={`news-tag news-tag-${n.tag.toLowerCase()}`}>{isNe ? n.tagNp : n.tag}</span>
+                      <span className="news-date">{isNe ? n.dateNp : n.date}</span>
+                    </div>
+                    <div className="news-headline">{isNe ? n.headlineNp : n.headline}</div>
+                    <div className="news-body">{isNe ? n.bodyNp : n.body}</div>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
           </div>
           <div className="hero-side">
             {/* ── My Stats ──────────────────────────────────────────────── */}
@@ -209,7 +228,7 @@ export default function Home() {
                   cells.push({ date: d, inRange: d >= start && d <= cur })
                 }
                 return (
-                  <>
+                  <div className="cal-grid">
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4, marginBottom: 4 }}>
                       {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => (
                         <div key={i} style={{ fontSize: 9, fontWeight: 800, color: 'var(--muted)', textAlign: 'center' }}>{d}</div>
@@ -254,7 +273,7 @@ export default function Home() {
                         </span>
                       )}
                     </div>
-                  </>
+                  </div>
                 )
               })()}
             </div>
@@ -283,27 +302,6 @@ export default function Home() {
 
         {/* ── Two-column: News + Colleges ─────────────────────────────── */}
         <div className="two-col">
-          {/* Latest Updates */}
-          <Reveal delay={100}>
-            <div className="col-full">
-              <div className="section-header" style={{ marginTop: 32 }}>
-                <div className="section-title">{isNe ? 'ताजा अपडेट' : 'Latest Updates'}</div>
-              </div>
-              <div className="news-list">
-                {news.map((n, i) => (
-                  <div key={i} className="news-item">
-                    <div className="news-top">
-                      <span className={`news-tag news-tag-${n.tag.toLowerCase()}`}>{isNe ? n.tagNp : n.tag}</span>
-                      <span className="news-date">{isNe ? n.dateNp : n.date}</span>
-                    </div>
-                    <div className="news-headline">{isNe ? n.headlineNp : n.headline}</div>
-                    <div className="news-body">{isNe ? n.bodyNp : n.body}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Reveal>
-
           {/* Top Colleges */}
           <Reveal delay={160}>
             <div className="col-full">
