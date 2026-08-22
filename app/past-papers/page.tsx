@@ -35,41 +35,23 @@ const src = {
   ioe_tracker:'https://ioe-entrance.bibeksubedi0001.com.np',
 }
 
-const subjectPdf = (subject: string, semester?: number): string => {
-  const s = subject.toLowerCase()
-  if (s.includes('math')) {
-    if (semester === 1) return src.math1
-    if (semester === 2) return src.math2
-    if (semester === 3) return src.math3
-    return src.math1
-  }
-  if (s.includes('physics')) return src.physics
-  if (s.includes('chemistry') || s.includes('chem')) return src.chem
-  if (s.includes('computer')) return src.computer
-  if (s.includes('electrical')) return src.electrical
-  if (s.includes('electronics')) return src.electronics
-  if (s.includes('mechanical')) return src.mechanical
-  if (s.includes('drawing')) return src.drawing
-  return src.ioe_cutoff
-}
-
 const papers: PastPaper[] = [
-  { id: 'ioe-2082-ent-math', year: 2082, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ', pdfUrl: src.math1 },
-  { id: 'ioe-2082-ent-phy', year: 2082, university: 'IOE', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ', pdfUrl: src.physics },
-  { id: 'ioe-2082-ent-che', year: 2082, university: 'IOE', exam: 'Entrance', subject: 'Chemistry', subjectNp: 'रसायनशास्त्र', type: 'MCQ', pdfUrl: src.chem },
-  { id: 'ioe-2081-ent-math', year: 2081, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ', pdfUrl: src.math1 },
-  { id: 'ioe-2081-ent-phy', year: 2081, university: 'IOE', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ', pdfUrl: src.physics },
-  { id: 'ioe-2081-ent-che', year: 2081, university: 'IOE', exam: 'Entrance', subject: 'Chemistry', subjectNp: 'रसायनशास्त्र', type: 'MCQ', pdfUrl: src.chem },
-  { id: 'ioe-2080-ent-math', year: 2080, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ', pdfUrl: src.math1 },
-  { id: 'ioe-2080-ent-phy', year: 2080, university: 'IOE', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ', pdfUrl: src.physics },
-  { id: 'ioe-2080-ent-che', year: 2080, university: 'IOE', exam: 'Entrance', subject: 'Chemistry', subjectNp: 'रसायनशास्त्र', type: 'MCQ', pdfUrl: src.chem },
-  { id: 'ioe-2079-ent-math', year: 2079, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ', pdfUrl: src.math1 },
-  { id: 'ioe-2079-ent-phy', year: 2079, university: 'IOE', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ', pdfUrl: src.physics },
-  { id: 'ioe-2079-ent-che', year: 2079, university: 'IOE', exam: 'Entrance', subject: 'Chemistry', subjectNp: 'रसायनशास्त्र', type: 'MCQ', pdfUrl: src.chem },
-  { id: 'ioe-2078-ent-math', year: 2078, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ', pdfUrl: src.math1 },
-  { id: 'ioe-2078-ent-phy', year: 2078, university: 'IOE', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ', pdfUrl: src.physics },
-  { id: 'ioe-2077-ent-math', year: 2077, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ', pdfUrl: src.math1 },
-  { id: 'ioe-2076-ent-math', year: 2076, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ', pdfUrl: src.math1 },
+  { id: 'ioe-2082-ent-math', year: 2082, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
+  { id: 'ioe-2082-ent-phy', year: 2082, university: 'IOE', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ' },
+  { id: 'ioe-2082-ent-che', year: 2082, university: 'IOE', exam: 'Entrance', subject: 'Chemistry', subjectNp: 'रसायनशास्त्र', type: 'MCQ' },
+  { id: 'ioe-2081-ent-math', year: 2081, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
+  { id: 'ioe-2081-ent-phy', year: 2081, university: 'IOE', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ' },
+  { id: 'ioe-2081-ent-che', year: 2081, university: 'IOE', exam: 'Entrance', subject: 'Chemistry', subjectNp: 'रसायनशास्त्र', type: 'MCQ' },
+  { id: 'ioe-2080-ent-math', year: 2080, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
+  { id: 'ioe-2080-ent-phy', year: 2080, university: 'IOE', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ' },
+  { id: 'ioe-2080-ent-che', year: 2080, university: 'IOE', exam: 'Entrance', subject: 'Chemistry', subjectNp: 'रसायनशास्त्र', type: 'MCQ' },
+  { id: 'ioe-2079-ent-math', year: 2079, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
+  { id: 'ioe-2079-ent-phy', year: 2079, university: 'IOE', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ' },
+  { id: 'ioe-2079-ent-che', year: 2079, university: 'IOE', exam: 'Entrance', subject: 'Chemistry', subjectNp: 'रसायनशास्त्र', type: 'MCQ' },
+  { id: 'ioe-2078-ent-math', year: 2078, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
+  { id: 'ioe-2078-ent-phy', year: 2078, university: 'IOE', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ' },
+  { id: 'ioe-2077-ent-math', year: 2077, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
+  { id: 'ioe-2076-ent-math', year: 2076, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
   { id: 'ioe-sem1-m1-2082', year: 2082, university: 'IOE', exam: 'Semester', semester: 1, subject: 'Engineering Mathematics I', subjectNp: 'इन्जिनियरिङ गणित I', type: 'Full', pdfUrl: src.math1 },
   { id: 'ioe-sem1-m1-2081', year: 2081, university: 'IOE', exam: 'Semester', semester: 1, subject: 'Engineering Mathematics I', subjectNp: 'इन्जिनियरिङ गणित I', type: 'Full', pdfUrl: src.math1 },
   { id: 'ioe-sem1-m1-2080', year: 2080, university: 'IOE', exam: 'Semester', semester: 1, subject: 'Engineering Mathematics I', subjectNp: 'इन्जिनियरिङ गणित I', type: 'Full', pdfUrl: src.math1 },
@@ -85,8 +67,8 @@ const papers: PastPaper[] = [
   { id: 'ku-2081-math', year: 2081, university: 'KU', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
   { id: 'ku-2080-math', year: 2080, university: 'KU', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
   // Medical (IOM / MECEE)
-  { id: 'med-2082-phy', year: 2082, university: 'Medical', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ', pdfUrl: src.physics },
-  { id: 'med-2082-che', year: 2082, university: 'Medical', exam: 'Entrance', subject: 'Chemistry', subjectNp: 'रसायनशास्त्र', type: 'MCQ', pdfUrl: src.chem },
+  { id: 'med-2082-phy', year: 2082, university: 'Medical', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ' },
+  { id: 'med-2082-che', year: 2082, university: 'Medical', exam: 'Entrance', subject: 'Chemistry', subjectNp: 'रसायनशास्त्र', type: 'MCQ' },
   { id: 'med-2082-bio', year: 2082, university: 'Medical', exam: 'Entrance', subject: 'Biology', subjectNp: 'जीवविज्ञान', type: 'MCQ' },
   { id: 'med-2081-bio', year: 2081, university: 'Medical', exam: 'Entrance', subject: 'Biology', subjectNp: 'जीवविज्ञान', type: 'MCQ' },
   { id: 'med-2081-bot', year: 2081, university: 'Medical', exam: 'Entrance', subject: 'Botany', subjectNp: 'वनस्पतिशास्त्र', type: 'MCQ' },
@@ -94,9 +76,9 @@ const papers: PastPaper[] = [
 ]
 
 const years = [2082, 2081, 2080, 2079, 2078, 2077, 2076, 2075]
-const examTypes = ['All', 'Entrance', 'Semester']
-const universities = ['All', 'IOE', 'KU', 'Medical']
-const subjects = ['All', 'Mathematics', 'Physics', 'Chemistry', 'Biology', 'Botany', 'Zoology',
+const examTypes = ['Entrance', 'Semester']
+const universities = ['IOE', 'KU', 'Medical']
+const subjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'Botany', 'Zoology',
   'Engineering Mathematics I', 'Engineering Mathematics II', 'Engineering Mathematics III',
   'Engineering Physics', 'Engineering Chemistry', 'Computer Programming']
 
@@ -114,9 +96,9 @@ export default function PastPapers() {
 
   const filtered = papers.filter(p => {
     if (selectedYear && p.year !== selectedYear) return false
-    if (selectedExam && selectedExam !== 'All' && p.exam !== selectedExam) return false
-    if (selectedUni && selectedUni !== 'All' && p.university !== selectedUni) return false
-    if (selectedSubject && selectedSubject !== 'All' && p.subject !== selectedSubject) return false
+    if (selectedExam && p.exam !== selectedExam) return false
+    if (selectedUni && p.university !== selectedUni) return false
+    if (selectedSubject && p.subject !== selectedSubject) return false
     return true
   })
 
@@ -132,8 +114,8 @@ export default function PastPapers() {
         <div className="info-box">
           📌 <strong>{isNe ? 'परीक्षा सामग्री' : 'Exam Resources'}</strong> —{' '}
           {isNe
-            ? 'प्रत्येक subject ले त्यो subject को actual past paper PDF खोल्छ।'
-            : 'Each paper links to a subject-relevant PDF — Math → Math, Physics → Physics, etc.'}
+            ? 'Entrance papers → Mock Test अभ्यास; Semester (bachelor) papers → PDF।'
+            : 'Entrance papers → practice with Mock Test; Semester (bachelor) papers → PDF.'}
         </div>
 
         <div style={{ marginBottom: 12 }}>
@@ -149,7 +131,7 @@ export default function PastPapers() {
           <div className="filter-label">{isNe ? 'विश्वविद्यालय' : 'University'}</div>
           <div className="chip-row">
             {universities.map(u => (
-              <button key={u} className={`chip ${(selectedUni === u) || (u === 'All' && !selectedUni) ? 'active' : ''}`} onClick={() => setSelectedUni(u === 'All' ? null : u)}>{u}</button>
+              <button key={u} className={`chip ${selectedUni === u ? 'active' : ''}`} onClick={() => toggle(setSelectedUni, u, selectedUni)}>{u}</button>
             ))}
           </div>
         </div>
@@ -158,7 +140,7 @@ export default function PastPapers() {
           <div className="filter-label">{isNe ? 'परीक्षा प्रकार' : 'Exam Type'}</div>
           <div className="chip-row">
             {examTypes.map(e => (
-              <button key={e} className={`chip ${(selectedExam === e) || (e === 'All' && !selectedExam) ? 'active' : ''}`} onClick={() => setSelectedExam(e === 'All' ? null : e)}>{e}</button>
+              <button key={e} className={`chip ${selectedExam === e ? 'active' : ''}`} onClick={() => toggle(setSelectedExam, e, selectedExam)}>{e}</button>
             ))}
           </div>
         </div>
@@ -167,7 +149,7 @@ export default function PastPapers() {
           <div className="filter-label">{isNe ? 'विषय' : 'Subject'}</div>
           <div className="chip-row">
             {subjects.map(s => (
-              <button key={s} className={`chip ${(selectedSubject === s) || (s === 'All' && !selectedSubject) ? 'active' : ''}`} onClick={() => setSelectedSubject(s === 'All' ? null : s)}>{s}</button>
+              <button key={s} className={`chip ${selectedSubject === s ? 'active' : ''}`} onClick={() => toggle(setSelectedSubject, s, selectedSubject)}>{s}</button>
             ))}
           </div>
         </div>
@@ -196,15 +178,25 @@ export default function PastPapers() {
                   {p.university} • {p.exam}{p.semester ? ` Sem ${p.semester}` : ''} • {p.type}
                 </div>
               </div>
-              <a
-                href={p.pdfUrl || subjectPdf(p.subject, p.semester)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-primary btn-sm"
-                style={{ textDecoration: 'none', display: 'inline-block' }}
-              >
-                📥 PDF
-              </a>
+              {p.pdfUrl ? (
+                <a
+                  href={p.pdfUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary btn-sm"
+                  style={{ textDecoration: 'none', display: 'inline-block' }}
+                >
+                  📥 PDF
+                </a>
+              ) : p.exam === 'Entrance' ? (
+                <Link
+                  href="/mock-test"
+                  className="btn btn-outline btn-sm"
+                  style={{ textDecoration: 'none', display: 'inline-block' }}
+                >
+                  📝 {isNe ? 'Mock Test' : 'Mock Test'}
+                </Link>
+              ) : null}
             </div>
           ))
         )}
