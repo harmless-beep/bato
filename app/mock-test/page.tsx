@@ -52,6 +52,22 @@ export default function MockTest() {
   const [answers, setAnswers] = useState<(number | null)[]>([])
   const [timeLeft, setTimeLeft] = useState(600)
   const [started, setStarted] = useState(false)
+  const [bookmarks, setBookmarks] = useState<Set<number>>(new Set())
+  const [showBookmarked, setShowBookmarked] = useState(false)
+
+  useEffect(() => {
+    try { const s = localStorage.getItem('bato-bookmarks'); if (s) setBookmarks(new Set(JSON.parse(s))) } catch {}
+  }, [])
+
+  const toggleBookmark = (id: number) => {
+    setBookmarks(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      try { localStorage.setItem('bato-bookmarks', JSON.stringify([...next])) } catch {}
+      return next
+    })
+  }
 
   const subjectQs = questions.filter(q => q.subject === selectedSubject)
   const total = subjectQs.length
@@ -180,7 +196,16 @@ export default function MockTest() {
           </div>
 
           <div className="question-card">
-            <div className="question-num">Q{currentQ + 1}</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <div className="question-num" style={{ margin: 0 }}>Q{currentQ + 1}</div>
+              <button
+                onClick={() => toggleBookmark(subjectQs[currentQ].id)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18, padding: 0, lineHeight: 1 }}
+                title={bookmarks.has(subjectQs[currentQ].id) ? (lang === 'ne' ? 'बुकमार्क हटाउनुहोस्' : 'Remove bookmark') : (lang === 'ne' ? 'बुकमार्क गर्नुहोस्' : 'Bookmark this question')}
+              >
+                {bookmarks.has(subjectQs[currentQ].id) ? '★' : '☆'}
+              </button>
+            </div>
             <div className="question-text">{q.text}</div>
             <div className="options">
               {q.options.map((opt, i) => (
@@ -221,7 +246,7 @@ export default function MockTest() {
           </div>
 
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 18, justifyContent: 'center' }}>
-            {subjectQs.map((_, i) => (
+            {subjectQs.map((qu, i) => (
               <button
                 key={i}
                 onClick={() => setCurrentQ(i)}
@@ -229,7 +254,7 @@ export default function MockTest() {
                   width: 34, height: 34, borderRadius: 10,
                   fontSize: 13, fontWeight: 700,
                   border: i === currentQ ? '2px solid var(--primary)' : '2px solid transparent',
-                  background: answers[i] !== null ? 'var(--primary)' : 'var(--surface-2)',
+                  background: answers[i] !== null ? (bookmarks.has(qu.id) ? 'var(--gold)' : 'var(--primary)') : (bookmarks.has(qu.id) ? 'rgba(251,191,36,0.25)' : 'var(--surface-2)'),
                   color: answers[i] !== null ? 'white' : 'var(--text)',
                   cursor: 'pointer'
                 }}
@@ -238,6 +263,33 @@ export default function MockTest() {
               </button>
             ))}
           </div>
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 8 }}>
+            <button
+              className={`chip ${showBookmarked ? 'active' : ''}`}
+              onClick={() => setShowBookmarked(b => !b)}
+              style={{ fontSize: 11, padding: '3px 10px' }}
+            >
+              {showBookmarked ? '★' : '☆'} {lang === 'ne' ? 'बुकमार्क' : 'Bookmarked'} ({bookmarks.size})
+            </button>
+          </div>
+          {showBookmarked && (
+            <div style={{ marginTop: 8, textAlign: 'center' }}>
+              <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 6 }}>
+                {lang === 'ne' ? 'थिचेर क्विजमा जानुहोस्' : 'Tap to jump to question'}
+              </div>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
+                {subjectQs.filter(qu => bookmarks.has(qu.id)).map(qu => (
+                  <button
+                    key={qu.id}
+                    onClick={() => { setCurrentQ(subjectQs.indexOf(qu)); setShowBookmarked(false) }}
+                    style={{ padding: '3px 10px', borderRadius: 8, border: '1.5px solid var(--gold)', background: 'rgba(251,191,36,0.15)', color: 'var(--gold)', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
+                  >
+                    Q{subjectQs.indexOf(qu) + 1}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           <div style={{ textAlign: 'center', fontSize: 11, color: 'var(--muted)', marginTop: 8 }}>
             {answered}/{total} {D.answered[lang === 'ne' ? 1 : 0]}
           </div>

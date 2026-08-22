@@ -7,7 +7,7 @@ import { useLang } from '../components/ui'
 interface PastPaper {
   id: string
   year: number
-  university: 'IOE' | 'KU'
+  university: 'IOE' | 'KU' | 'Medical'
   exam: 'Entrance' | 'Semester'
   semester?: number
   subject: string
@@ -84,12 +84,19 @@ const papers: PastPaper[] = [
   { id: 'ku-2082-phy', year: 2082, university: 'KU', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ' },
   { id: 'ku-2081-math', year: 2081, university: 'KU', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
   { id: 'ku-2080-math', year: 2080, university: 'KU', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
+  // Medical (IOM / MECEE)
+  { id: 'med-2082-phy', year: 2082, university: 'Medical', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ', pdfUrl: src.physics },
+  { id: 'med-2082-che', year: 2082, university: 'Medical', exam: 'Entrance', subject: 'Chemistry', subjectNp: 'रसायनशास्त्र', type: 'MCQ', pdfUrl: src.chem },
+  { id: 'med-2082-bio', year: 2082, university: 'Medical', exam: 'Entrance', subject: 'Biology', subjectNp: 'जीवविज्ञान', type: 'MCQ' },
+  { id: 'med-2081-bio', year: 2081, university: 'Medical', exam: 'Entrance', subject: 'Biology', subjectNp: 'जीवविज्ञान', type: 'MCQ' },
+  { id: 'med-2081-bot', year: 2081, university: 'Medical', exam: 'Entrance', subject: 'Botany', subjectNp: 'वनस्पतिशास्त्र', type: 'MCQ' },
+  { id: 'med-2081-zo', year: 2081, university: 'Medical', exam: 'Entrance', subject: 'Zoology', subjectNp: 'प्राणीशास्त्र', type: 'MCQ' },
 ]
 
 const years = [2082, 2081, 2080, 2079, 2078, 2077, 2076, 2075]
 const examTypes = ['All', 'Entrance', 'Semester']
-const universities = ['All', 'IOE', 'KU']
-const subjects = ['All', 'Mathematics', 'Physics', 'Chemistry',
+const universities = ['All', 'IOE', 'KU', 'Medical']
+const subjects = ['All', 'Mathematics', 'Physics', 'Chemistry', 'Biology', 'Botany', 'Zoology',
   'Engineering Mathematics I', 'Engineering Mathematics II', 'Engineering Mathematics III',
   'Engineering Physics', 'Engineering Chemistry', 'Computer Programming']
 

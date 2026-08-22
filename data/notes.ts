@@ -798,4 +798,238 @@ CBR test for subgrade, aggregate crushing value, Los Angeles abrasion`
       },
     ]
   },
+
+  // ─── MEDICAL ENTRANCE ────────────────────────────────────────────
+  {
+    id: 'med-phy',
+    icon: '🔬',
+    title: 'Medical Physics',
+    titleNp: 'मेडिकल भौतिकी',
+    items: [
+      {
+        title: 'Optics — Refraction & Lenses',
+        content: `**Snell's Law:** n₁ sin θ₁ = n₂ sin θ₂
+**Critical angle:** sin θc = n₂/n₁ (n₁ > n₂)
+**Total internal reflection** when θ₁ > θc — used in endoscopes and fiber optics.
+
+**Lens Formula:** 1/f = 1/v + 1/u
+**Power of lens:** P = 1/f (in metres, dioptres)
+**Magnification:** m = v/u = h'/h
+
+**Optical instruments:**
+- Simple microscope: M = 1 + D/f (D = 25 cm near point)
+- Compound microscope: M = (L/fₒ)(D/fₑ)
+- Astronomical telescope: M = fₒ/fₑ (normal adjustment)
+
+**Human eye:** aqueous humor (n≈1.33), lens (n≈1.42), vitreous humor (n≈1.34). Near point 25 cm, far point infinity.`
+      },
+      {
+        title: 'Modern Physics — Atomic Models',
+        content: `**Bohr Model (hydrogen):**
+- Radius: rₙ = ε₀h²n²/(πme²) = 0.053n² Å
+- Energy: Eₙ = -13.6/n² eV
+- Transitions: ΔE = 13.6(1/n₁² - 1/n₂²) eV
+
+**de Broglie wavelength:** λ = h/p = h/(mv)
+**Heisenberg:** Δx·Δp ≥ ℏ/2; ΔE·Δt ≥ ℏ/2
+
+**Photoelectric effect:** KEₘₐₓ = hf - φ; stopping potential Vₛ = hf/e - φ/e
+**X-rays:** λmin = hc/(eV); continuous + characteristic spectrum
+**Radioactivity:** N = N₀e⁻ᵑᵗ, t½ = ln2/λ, A = λN, decay in Becquerel (Bq)`
+
+      },
+      {
+        title: 'Modern Physics — Nuclear Physics',
+        content: `**Binding energy:** E = Δmc² (Δm = mass defect)
+**Einstein mass-energy:** E = mc² (1 MeV ≈ 0.0016 amu)
+
+**Nuclear reactions:** Q-value = (mᵣₑₐcₜₐₙₜₛ - mₚᵣₒdᵤcₜₛ)c²
+**Fission:** ²³⁵U + n → ¹⁴¹Ba + ⁹²Kr + 3n + ~200 MeV
+**Fusion:** D + T → ⁴He + n + 17.6 MeV (occurs at ~10⁸ K)
+
+**Alpha decay:** emits ²⁴He nucleus, helium-like spectrum
+**Beta decay:** n → p + e⁻ + v̄ₑ (β⁻) or p → n + e⁺ + vₑ (β⁺)
+**Gamma decay:** no mass/charge change, just de-excitation
+
+**Medical uses:** ⁶⁰Co γ-rays (cancer therapy), ¹³¹I (thyroid), ⁹⁹ᵐTc (imaging)`
+      },
+      {
+        title: 'Error Analysis & Measurements',
+        content: `**Types of errors:**
+- Random: repeated measurements, reduced by taking many trials
+- Systematic: instrument bias (zero error, calibration), eliminated by recalibration
+- Gross: blunders, outlier rejection via Chauvenet's criterion
+
+**Absolute error:** Δx = |x - xₙ|
+**Mean absolute error:** Δxₘ = Σ|xᵢ - x̄|/n
+**Standard deviation:** σ = √(Σ(xᵢ - x̄)²/n)
+
+**Propagation of errors:**
+- Addition: Δz = Δx + Δy
+- Multiplication: Δz/z = √((Δx/x)² + (Δy/y)²)
+- For powers: Δz/z = n(Δx/x)
+
+**Significant figures:** result rounded to the least precise operand. 95% confidence interval from σ/√n.`
+      },
+      {
+        title: 'Waves, Sound & Doppler Effect',
+        content: `**Wave equation:** v = fλ, period T = 1/f
+**Standing waves (string):** fₙ = n(v/2L), n = 1,2,3…
+**Open organ pipe:** fₙ = nv/2L; Closed: fₙ = nv/4L
+
+**Doppler effect:** f' = f(v ± vₒ)/(v ∓ vₛ)
+- Source moving toward observer: denominator minus
+- Observer moving toward source: numerator plus
+- Medical: echocardiography uses Doppler shift to measure blood velocity (~40–200 cm/s)
+
+**Intensity level:** β (dB) = 10 log₁₀(I/I₀), I₀ = 10⁻¹² W/m²
+**Ultrasound imaging:** piezoelectric transducer, frequency 1–15 MHz, depth resolution ~λ/2`
+      },
+    ]
+  },
+
+  {
+    id: 'med-chem',
+    icon: '💊',
+    title: 'Medical Chemistry',
+    titleNp: 'मेडिकल रसायन',
+    items: [
+      {
+        title: 'Biochemistry — Carbohydrates',
+        content: `**Monosaccharides:**
+- Aldoses: glyceraldehyde (3C), glucose (6C, aldohexose, Haworth: C₁ OH ↓ = β-D-glucose)
+- Ketoses: dihydroxyacetone (3C), fructose (6C, ketohexose)
+- Glucose oxidation: forms gluconic acid (aldhehyde→carboxyl), or glucuronic acid (aldehyde→COOH via sorbitol pathway)
+
+**Disaccharides:**
+- Maltose: α-1,4; glucose + glucose (from starch)
+- Sucrose: α-1,2β; glucose + fructose (table sugar)
+- Lactose: β-1,4; glucose + galactose (milk sugar); deficient in lactase → lactose intolerance
+
+**Polysaccharides:**
+- Starch: amylose (α-1,4 linear) + amylopectin (α-1,4 + α-1,6 branched)
+- Glycogen: highly branched (α-1,6 every ~10 residues), liver & muscle storage
+- Cellulose: β-1,4 (humans lack cellulase → dietary fibre)`
+
+      },
+      {
+        title: 'Biochemistry — Amino Acids & Proteins',
+        content: `**20 Standard AAs:** classified by R-group polarity:
+- Nonpolar (hydrophobic): Ala, Val, Leu, Ile, Met, Trp, Phe, Pro
+- Polar uncharged: Ser, Thr, Asn, Gln, Tyr, Cys
+- Acidic (negative): Asp, Glu (side chain pKa ~4)
+- Basic (positive): Lys, Arg, His (pKa ~6)
+
+**Peptide bond:** amide linkage (–NH–CO–), planarity + partial double bond character prevents free rotation → secondary structure
+
+**Protein structure levels:**
+1° — amino acid sequence
+2° — α-helix (H-bond, 3.6 residues/turn), β-sheet (parallel/antiparallel)
+3° — 3D folding (hydrophobic core, disulfide bonds)
+4° — subunit assembly (e.g., haemoglobin: 2α + 2β)
+
+**Enzyme kinetics:** Michaelis-Menten: v = Vₘₐₓ[S]/(Kₘ + [S]); Lineweaver-Burk: 1/v = (Kₘ/Vₘₐₓ)(1/[S]) + 1/Vₘₐₓ`
+      },
+      {
+        title: 'Organic Chemistry — Reaction Mechanisms',
+        content: `**Electrophilic substitution (EAS):** benzene → nitrobenzene: HNO₃/H₂SO₄ (nitration); Friedel-Crafts alkylation: RCl/AlCl₃
+**Nucleophilic substitution:** SN1 (carbocation intermediate, rate = k[substrate]) vs SN2 (backside attack, Walden inversion, rate = k[substrate][nucleophile])
+
+**Elimination:** E1 (carbocation, regioselectivity Zaitsev) vs E2 (bimolecular, anti-periplanar geometry required)
+**Addition to alkenes:** Markovnikov (H to more H, Br to less H); peroxide effect (anti-Markovnikov, HBr only)
+
+**Oxidation:**
+- KMnO₄/H⁺: alkane→CO₂, 1° alcohol→carboxylic acid, 2°→ketone
+- PCC (CH₂Cl₂): 1° alcohol→aldehyde, 2°→ketone (mild, stops)
+
+**Reduction:** NaBH₄ (mild, reduces aldehydes/ketones); LiAlH₄ (strong, reduces esters)`,
+      },
+      {
+        title: 'Periodic Properties — Trends & Exceptions',
+        content: `**Atomic radius:** decreases across period (↑Z pulls e⁻ in), increases down group (↑n)
+**Ionization energy:** increases across period; decreases down group; exceptions: Group 13 > Group 12 (d¹⁰ shielding), Group 16 > Group 15 (half-filled stability)
+**Electron affinity:** most negative at ~Group 17; Group 18 has positive EA
+**Electronegativity:** F (3.98) > O (3.44) > N (3.04) > Cl (3.16); Pauling scale
+**Lanthanide contraction:** 4f electrons poorly shield → Zr/Hf similar size, explains Hf position in periodic table
+
+**Diagonal relationship:** Li↔Mg, Be↔Al, B↔Si (similar charge density → similar properties)
+**Inert pair effect:** heavier Group 13/14 elements prefer +3/+2 oxidation states (ns² not participation)`
+
+      },
+      {
+        title: 'Organic Chemistry — Functional Groups & Spectroscopy',
+        content: `**IR absorption (key peaks):**
+- O–H: 3200–3600 cm⁻¹ (broad, H-bonded in alcohols)
+- N–H: 3300–3500 cm⁻¹
+- C=O: 1700–1750 cm⁻¹ (conjugation → lower)
+- C≡N: 2250 cm⁻¹; C≡C: 2100–2260 cm⁻¹
+- C–H sp³: 2850–2950; sp²: 3000–3100; sp: 3300 cm⁻¹
+
+**¹H NMR:**
+- Chemical shift δ (ppm from TMS): O–H/N–H 0.5–5, Ar–H 6.5–8, CHO ~9–10, COOH 10–13
+- Integration gives H count; splitting (n+1 rule) gives adjacent H count
+- NMR used to identify drug metabolites and structure of pharmaceutical compounds`
+      },
+    ]
+  },
+
+  {
+    id: 'med-bio',
+    icon: '🧬',
+    title: 'Medical Biology',
+    titleNp: 'मेडिकल जीव विज्ञान',
+    items: [
+      {
+        title: 'Cell Biology — Organelles & Membrane Transport',
+        content: `**Cell membrane:** phospholipid bilayer + proteins (fluid mosaic model), cholesterol regulates fluidity
+**Transport:** simple diffusion (O₂, CO₂); facilitated diffusion (GLUT transporters); active transport (Na⁺/K⁺-ATPase: 3 Na⁺ out, 2 K⁺ in per ATP); co-transport (SGLT1: Na⁺ + glucose symport in intestine)
+
+**Mitochondria:** double membrane; inner membrane: ETC + ATP synthase (oxidative phosphorylation); matrix: TCA cycle, LDH (lactate dehydrogenase for anaerobic glycolysis)
+
+**ER & Golgi:** rough ER (ribosomes, protein synthesis for export); smooth ER (lipid synthesis, detox); Golgi (glycosylation, sorting, vesicle formation)
+
+**Lysosome:** hydrolytic enzymes (acidic pH ~5), pH gradient via V-ATPase; engulfed pathogens fuse with phagosome`,
+      },
+      {
+        title: 'Cell Biology — Cell Cycle & Mitosis',
+        content: `**Cell cycle:** G₁ (growth, 12h) → S (DNA synthesis, 6–8h) → G₂ (preparation, 4–6h) → M (mitosis, 1–2h)
+**G₀:** quiescent state (neurons, muscle cells — irreversibly differentiated)
+**Restriction point:** late G₁, after which cell is committed to divide (pRB checkpoint)
+
+**Mitosis phases:** prophase (chromatin condenses) → metaphase (chromosomes align at equator, spindle fibres attached) → anaphase (sister chromatids separate) → telophase (nuclear envelope reforms) → cytokinesis (cleavage furrow in animal cells, cell plate in plant cells)
+
+**Meiosis:** two successive divisions → 4 haploid cells; crossing over (prophase I, chiasmata) + independent assortment (metaphase I) → genetic diversity; errors → Down syndrome (trisomy 21), Turner (XO), Klinefelter (XXY)`,
+      },
+      {
+        title: 'Genetics — Mendelian & Molecular Genetics',
+        content: `**Mendel's Laws:**
+1. Law of dominance: one allele masks the other in heterozygote
+2. Law of segregation: alleles separate during gamete formation (meiosis)
+3. Law of independent assortment: genes on different chromosomes assort independently
+
+**Extensions:** incomplete dominance (snapdragon, F₁ roan = pink), codominance (MN blood groups), multiple alleles (ABO: Iᴬ, Iᴮ, i; Bombay phenotype = no H antigen), pleiotropy (phenylketonuria affects multiple traits)
+
+**DNA structure:** antiparallel double helix, antiparallel strands (5'→3'), sugar-phosphate backbone; major/minor groove allows protein recognition
+**Replication:** semi-conservative (Meselson-Stahl experiment); DNA polymerase III (5'→3' synthesis, requires primer); leading strand (continuous) vs lagging strand (Okazaki fragments, ligase seals)`
+      },
+      {
+        title: 'Human Physiology — Cardiovascular System',
+        content: `**Cardiac cycle:** systole (~0.3s) + diastole (~0.5s) at 72 bpm
+- Phase 1: isovolumetric contraction → Phase 2: ejection → Phase 3: isovolumetric relaxation → Phase 4: filling
+**ECG:** P wave (atrial depolarisation), QRS (ventricular depolarisation), T wave (repolarisation); prolonged QT → arrhythmia risk
+
+**Blood flow:** aortic pressure ~120/80 mmHg; capillary hydrostatic pressure ~35 mmHg (arterial end) → 15 mmHg (venous end); net filtration pressure = (capillary HP - IF HP) - (capillary OP + IF OP) ≈ +10 mmHg at arterial end → fluid reabsorption at venous end
+
+**Haemoglobin:** 4 subunits (2α, 2β); oxygen dissociation curve (sigmoid); Bohr effect (↓pH/↑CO₂ → ↓O₂ affinity); 2,3-BPG stabilises T-state; foetal Hb (γ-chains, higher O₂ affinity)`,
+      },
+      {
+        title: 'Human Physiology — Nervous & Respiratory Systems',
+        content: `**Neuron:** resting potential (-70mV) maintained by Na⁺/K⁺-ATPase (3Na⁺ out/2K⁺ in); action potential: depolarisation (Na⁺ channels open) → overshoot → repolarisation (K⁺ channels open); refractory period prevents backward propagation
+
+**Synapse:** chemical transmission (acetylcholine at NMJ): Ca²⁺ influx → vesicle fusion → ACh binds receptor → end-plate potential → muscle fibre AP; myasthenia gravis: autoantibodies against ACh receptors
+
+**Respiration:** ventilation = tidal volume (500mL) × respiratory rate (12/min) = 6L/min; Boyle's law drives inspiration (diaphragm contracts → ↑thoracic volume → ↓intrathoracic pressure); gas exchange by diffusion across alveolar epithelium (PO₂: 100 mmHg in alveoli, 40 mmHg in blood)`
+      },
+    ]
+  },
 ]
