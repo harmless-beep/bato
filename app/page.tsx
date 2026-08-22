@@ -170,7 +170,7 @@ export default function Home() {
         </div>
 
         {/* ── Streak calendar (last 7 weeks) ─────────────────────────── */}
-        {mounted && stats.days.length > 0 && (
+        {mounted && (
           <Reveal>
             <div className="card" style={{ padding: 14, marginBottom: 22 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
@@ -196,28 +196,52 @@ export default function Home() {
                   cells.push({ date: d, inRange: d >= start && d <= cur })
                 }
                 return (
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4 }}>
-                    {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => (
-                      <div key={i} style={{ fontSize: 9, fontWeight: 800, color: 'var(--muted)', textAlign: 'center' }}>{d}</div>
-                    ))}
-                    {cells.map((c, i) => {
-                      const key = c.date.toISOString().slice(0, 10)
-                      const studied = daySet.has(key)
-                      const isToday = key === new Date().toISOString().slice(0, 10)
-                      return (
-                        <div
-                          key={i}
-                          title={key}
-                          style={{
-                            aspectRatio: '1', borderRadius: 5,
-                            background: studied ? 'var(--primary)' : c.inRange ? 'var(--bg)' : 'transparent',
-                            border: isToday ? '2px solid var(--gold, #f59e0b)' : c.inRange ? '1px solid var(--border)' : 'none',
-                            opacity: c.inRange ? 1 : 0,
-                          }}
-                        />
-                      )
-                    })}
-                  </div>
+                  <>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4, marginBottom: 4 }}>
+                      {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => (
+                        <div key={i} style={{ fontSize: 9, fontWeight: 800, color: 'var(--muted)', textAlign: 'center' }}>{d}</div>
+                      ))}
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4 }}>
+                      {cells.map((c, i) => {
+                        const key = c.date.toISOString().slice(0, 10)
+                        const studied = daySet.has(key)
+                        const isToday = key === new Date().toISOString().slice(0, 10)
+                        return (
+                          <div
+                            key={i}
+                            title={key}
+                            style={{
+                              aspectRatio: '1', borderRadius: 6,
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              fontSize: 10, fontWeight: 700,
+                              background: studied ? 'var(--primary)' : c.inRange ? 'var(--card)' : 'transparent',
+                              color: studied ? '#fff' : 'var(--muted)',
+                              border: isToday ? '2px solid var(--gold, #f59e0b)' : c.inRange ? '1px solid var(--border)' : 'none',
+                              opacity: c.inRange ? 1 : 0,
+                            }}
+                          >
+                            {c.inRange ? c.date.getDate() : ''}
+                          </div>
+                        )
+                      })}
+                    </div>
+                    <div style={{ display: 'flex', gap: 14, marginTop: 10, fontSize: 10.5, color: 'var(--muted)', fontWeight: 600, flexWrap: 'wrap' }}>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                        <span style={{ width: 12, height: 12, borderRadius: 3, background: 'var(--primary)', display: 'inline-block' }} />
+                        {isNe ? 'पढिएको दिन' : 'Studied'}
+                      </span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                        <span style={{ width: 12, height: 12, borderRadius: 3, border: '2px solid var(--gold, #f59e0b)', display: 'inline-block' }} />
+                        {isNe ? 'आज' : 'Today'}
+                      </span>
+                      {stats.days.length === 0 && (
+                        <span style={{ color: 'var(--primary)', fontWeight: 700 }}>
+                          💡 {isNe ? 'Mock test दिनुहोस् — यहाँ बल्न थाल्छ।' : 'Complete a mock test — this lights up.'}
+                        </span>
+                      )}
+                    </div>
+                  </>
                 )
               })()}
             </div>
