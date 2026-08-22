@@ -1,5 +1,5 @@
 /* बाटो service worker — offline cache for static export */
-const CACHE = 'bato-v1'
+const CACHE = 'bato-v3'
 const BASE = '/bato'
 
 self.addEventListener('install', (e) => {
@@ -18,6 +18,21 @@ self.addEventListener('fetch', (e) => {
   // Only handle same-origin GET under /bato/
   if (e.request.method !== 'GET' || url.origin !== location.origin || !url.pathname.startsWith(BASE)) return
 
+  // Navigation (HTML): network-first so users always get the latest build
+  if (e.request.mode === 'navigate') {
+    e.respondWith(
+      fetch(e.request)
+        .then(res => {
+          const clone = res.clone()
+          caches.open(CACHE).then(c => c.put(e.request, clone))
+          return res
+        })
+        .catch(() => caches.match(e.request))
+    )
+    return
+  }
+
+  // Static assets: cache-first with background refresh
   e.respondWith(
     caches.match(e.request).then(cached => {
       const network = fetch(e.request)

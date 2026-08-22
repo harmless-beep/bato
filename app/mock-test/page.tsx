@@ -93,7 +93,7 @@ export default function MockTest() {
   const [timeLeft, setTimeLeft] = useState(0)
   const [result, setResult] = useState<{ score: number; maxScore: number; correct: number; wrong: number; skipped: number } | null>(null)
   const [startSection, setStartSection] = useState(0)
-  const [wrongIds, setWrongIds] = useState<number[]>([])
+  const [wrongIds, setWrongIds] = useState<{ id: number; chosen: number }[]>([])
   const [wrongIdx, setWrongIdx] = useState(0)
 
   const bySubject = useMemo(() => {
@@ -202,12 +202,13 @@ export default function MockTest() {
       const hist = JSON.parse(localStorage.getItem('bato-attempts') ?? '[]')
       hist.push({ exam: config.id, score, maxScore, correct, wrong, skipped, ts: Date.now() })
       localStorage.setItem('bato-attempts', JSON.stringify(hist.slice(-10)))
-      // wrong-answer bank: collect missed question ids (max 200)
-      const wrongSet = new Set<number>(JSON.parse(localStorage.getItem('bato-wrong') ?? '[]'))
+      // wrong-answer bank: collect missed questions WITH the user's choice (max 200)
+      const wrongArr = JSON.parse(localStorage.getItem('bato-wrong') ?? '[]') as { id: number; chosen: number }[]
+      const wrongMap = new Map(wrongArr.map(w => [w.id, w]))
       session.forEach((q, i) => {
-        if (answers[i] !== null && answers[i] !== q.correct) wrongSet.add(q.id)
+        if (answers[i] !== null && answers[i] !== q.correct) wrongMap.set(q.id, { id: q.id, chosen: answers[i]! })
       })
-      localStorage.setItem('bato-wrong', JSON.stringify(Array.from(wrongSet).slice(-200)))
+      localStorage.setItem('bato-wrong', JSON.stringify(Array.from(wrongMap.values()).slice(-200)))
     } catch {}
   }, [config, session, answers, valueOf])
 
@@ -480,7 +481,7 @@ export default function MockTest() {
 
   // ── Phase: Wrong Answer Review ─────────────────────────────────
   if (phase === 'wrong') {
-    const wrongQs = wrongIds.map(id => questions.find(q => q.id === id)).filter(Boolean) as Question[]
+    const wrongQs = wrongIds.map(w => ({ q: questions.find(x => x.id === w.id)!, chosen: w.chosen })).filter(x => x.q)
     const wq = wrongQs[wrongIdx]
     return (
       <div className="page">
@@ -504,32 +505,37 @@ export default function MockTest() {
           ) : wq ? (
             <div className="card" style={{ padding: 20 }}>
               <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700, marginBottom: 6 }}>
-                📍 {wq.topic} • {wq.subject}
+                📍 {wq.q.topic} • {wq.q.subject}
               </div>
               <div style={{ fontSize: 15.5, fontWeight: 700, lineHeight: 1.6, color: 'var(--text)', marginBottom: 14 }}>
-                {wrongIdx + 1}. {wq.text}
+                {wrongIdx + 1}. {wq.q.text}
               </div>
-              {wq.mol && <Molecule name={wq.mol} />}
+              {wq.q.mol && <Molecule name={wq.q.mol} />}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {wq.options.map((opt, oi) => (
-                  <div
-                    key={oi}
-                    style={{
-                      display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', borderRadius: 10,
-                      background: oi === wq.correct ? 'rgba(16,185,129,0.12)' : 'var(--bg)',
-                      border: oi === wq.correct ? '1.5px solid #10b981' : '1.5px solid var(--border)',
-                      fontSize: 14, fontWeight: 600, color: 'var(--text)',
-                    }}
-                  >
-                    <span className="cbt-opt-letter">{String.fromCharCode(65 + oi)}</span>
-                    <span style={{ flex: 1 }}>{opt}</span>
-                    {oi === wq.correct && <span style={{ fontSize: 12, fontWeight: 800, color: '#10b981' }}>✓ {L('Correct', 'सही')}</span>}
-                  </div>
-                ))}
+                {wq.q.options.map((opt, oi) => {
+                  const isCorrect = oi === wq.q.correct
+                  const isChosen = oi === wq.chosen
+                  return (
+                    <div
+                      key={oi}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', borderRadius: 10,
+                        background: isCorrect ? 'rgba(16,185,129,0.12)' : isChosen ? 'rgba(239,68,68,0.12)' : 'var(--bg)',
+                        border: isCorrect ? '1.5px solid #10b981' : isChosen ? '1.5px solid #ef4444' : '1.5px solid var(--border)',
+                        fontSize: 14, fontWeight: 600, color: 'var(--text)',
+                      }}
+                    >
+                      <span className="cbt-opt-letter">{String.fromCharCode(65 + oi)}</span>
+                      <span style={{ flex: 1 }}>{opt}</span>
+                      {isChosen && <span style={{ fontSize: 12, fontWeight: 800, color: '#ef4444' }}>✗ {L('Your answer', 'तपाईंको उत्तर')}</span>}
+                      {isCorrect && <span style={{ fontSize: 12, fontWeight: 800, color: '#10b981' }}>✓ {L('Correct', 'सही')}</span>}
+                    </div>
+                  )
+                })}
               </div>
-              {wq.explanation && (
+              {wq.q.explanation && (
                 <div style={{ marginTop: 14, fontSize: 13, lineHeight: 1.7, color: 'var(--muted)', background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 10, padding: 12 }}>
-                  💡 {wq.explanation}
+                  💡 {wq.q.explanation}
                 </div>
               )}
               <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
