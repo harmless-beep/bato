@@ -193,8 +193,9 @@ export default function MockTest() {
       const acc = session.length ? Math.round((correct / (correct + wrong || 1)) * 100) : 0
       localStorage.setItem('bato-accuracy', String(Math.max(Number(localStorage.getItem('bato-accuracy') ?? 0), acc)))
       localStorage.setItem('bato-streak', String(Number(localStorage.getItem('bato-streak') ?? 0) + 1))
-      // study day
-      const today = new Date().toISOString().slice(0, 10)
+      // study day (local date — Nepal UTC+5:45 must not shift the day)
+      const d = new Date()
+      const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
       const days: string[] = JSON.parse(localStorage.getItem('bato-days') ?? '[]')
       if (!days.includes(today)) days.push(today)
       localStorage.setItem('bato-days', JSON.stringify(days))

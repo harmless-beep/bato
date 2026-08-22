@@ -34,15 +34,24 @@ function getStats() {
   try { days = JSON.parse(localStorage.getItem('bato-days') ?? '[]') } catch {}
   if (days.length) {
     const daySet = new Set(days)
-    const today = new Date().toISOString().slice(0, 10)
+    const today = localDay(new Date())
     // if today not studied yet, start counting from yesterday
-    let cursor = new Date(daySet.has(today) ? today : Date.now() - 86400000)
-    while (daySet.has(cursor.toISOString().slice(0, 10))) {
+    let cursor = new Date()
+    if (!daySet.has(today)) cursor.setDate(cursor.getDate() - 1)
+    while (daySet.has(localDay(cursor))) {
       streak++
-      cursor = new Date(cursor.getTime() - 86400000)
+      cursor.setDate(cursor.getDate() - 1)
     }
   }
   return { questions, accuracy, streak, days }
+}
+
+// Local YYYY-MM-DD (avoids UTC offset shifting study days in Nepal, UTC+5:45)
+function localDay(d: Date): string {
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
 }
 
 // ── Quick-access items ───────────────────────────────────────────────────────
@@ -204,9 +213,9 @@ export default function Home() {
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4 }}>
                       {cells.map((c, i) => {
-                        const key = c.date.toISOString().slice(0, 10)
+                        const key = localDay(c.date)
                         const studied = daySet.has(key)
-                        const isToday = key === new Date().toISOString().slice(0, 10)
+                        const isToday = key === localDay(new Date())
                         return (
                           <div
                             key={i}
