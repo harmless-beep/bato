@@ -3,25 +3,17 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useLang } from '../components/ui'
+import SuggestionForm, { SUG_TYPES, SUG_LS } from '../components/suggestion-form'
 
-type SugType = 'idea' | 'xp' | 'problem' | 'feature'
+type SugType = string
 type Sug = { id: string; type: SugType; text: string; ts: number; pinned?: boolean }
-
-const TYPES: { id: SugType; icon: string; label: string; labelNp: string }[] = [
-  { id: 'idea', icon: '💡', label: 'Idea', labelNp: 'विचार' },
-  { id: 'xp', icon: '🧪', label: 'My Experience', labelNp: 'मेरो अनुभव' },
-  { id: 'problem', icon: '🚧', label: 'Problem', labelNp: 'समस्या' },
-  { id: 'feature', icon: '✨', label: 'Feature Wish', labelNp: 'नयाँ सुविधा' },
-]
-const LS = 'bato-suggestions'
 const LS_VOTES = 'bato-sug-votes'
-const MAX = 400
 // ponytail: client-side passcode = obscurity, not real auth. A static site
 // has no backend boundary; the admin is the device owner. Change the passcode
 // below. For real admin, wire a form service (Formspree) and validate server-side.
 const PASS = 'bato2083'
 
-function load(): Sug[] { try { return JSON.parse(localStorage.getItem(LS) || '[]') } catch { return [] } }
+function load(): Sug[] { try { return JSON.parse(localStorage.getItem(SUG_LS) || '[]') } catch { return [] } }
 function loadVotes(): Record<string, number> { try { return JSON.parse(localStorage.getItem(LS_VOTES) || '{}') } catch { return {} } }
 
 function ago(ts: number): string {
@@ -38,11 +30,8 @@ export default function Suggest() {
 
   const [items, setItems] = useState<Sug[]>([])
   const [votes, setVotes] = useState<Record<string, number>>({})
-  const [type, setType] = useState<SugType>('idea')
-  const [text, setText] = useState('')
   const [filter, setFilter] = useState<SugType | 'all'>('all')
   const [sortNew, setSortNew] = useState(false)
-  const [done, setDone] = useState(false)
   const [admin, setAdmin] = useState(false)
   const [ask, setAsk] = useState(false)
   const [code, setCode] = useState('')
@@ -68,17 +57,6 @@ export default function Suggest() {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
-
-  const submit = () => {
-    const t = text.trim()
-    if (!t) return
-    const sug: Sug = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), type, text: t, ts: Date.now() }
-    const next = [sug, ...items]
-    setItems(next)
-    localStorage.setItem(LS, JSON.stringify(next))
-    setText(''); setDone(true)
-    setTimeout(() => setDone(false), 2600)
-  }
 
   const vote = (id: string) => {
     // admin can vote as many times as they like; normal users toggle 0/1
@@ -108,18 +86,18 @@ export default function Suggest() {
 
   const pin = (id: string) => {
     const next = items.map(s => s.id === id ? { ...s, pinned: !s.pinned } : s)
-    setItems(next); localStorage.setItem(LS, JSON.stringify(next))
+    setItems(next); localStorage.setItem(SUG_LS, JSON.stringify(next))
   }
 
   const del = (id: string) => {
     const next = items.filter(s => s.id !== id)
-    setItems(next); localStorage.setItem(LS, JSON.stringify(next))
+    setItems(next); localStorage.setItem(SUG_LS, JSON.stringify(next))
     const v = { ...votes }; delete v[id]; setVotes(v); localStorage.setItem(LS_VOTES, JSON.stringify(v))
   }
 
   const clearAll = () => {
     if (!confirm(isNe ? 'सबै सुझाव मेट्ने हो? यो फिर्ता हुँदैन!' : 'Delete ALL suggestions? This cannot be undone!')) return
-    setItems([]); localStorage.setItem(LS, '[]')
+    setItems([]); localStorage.setItem(SUG_LS, '[]')
   }
 
   const exportJson = () => {
@@ -160,36 +138,16 @@ export default function Suggest() {
             : 'Share ideas, experiences, problems or feature wishes. The most-liked ones get built first.'}
         </div>
 
-        {/* ── Submit form ── */}
+        {/* ── Submit form (shared component) ── */}
         <div className="card sug-form" style={{ padding: 16, marginBottom: 18 }}>
-          <div className="sug-chips" role="radiogroup" aria-label="Suggestion type">
-            {TYPES.map(t => (
-              <button key={t.id} className={`chip${type === t.id ? ' active' : ''}`} onClick={() => setType(t.id)} aria-checked={type === t.id} role="radio">
-                {t.icon} {isNe ? t.labelNp : t.label}
-              </button>
-            ))}
-          </div>
-          <textarea
-            className="input sug-input"
-            placeholder={isNe ? 'के भन्न चाहनुहुन्छ? (जस्तै: Physics मा numerical को practice चाहियो…)' : 'What would you like to say? (e.g. I need more numerical practice in Physics…)'}
-            value={text}
-            maxLength={MAX}
-            onChange={e => setText(e.target.value)}
-            rows={4}
-          />
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginTop: 10, flexWrap: 'wrap' }}>
-            <span className="sug-count">{text.length}/{MAX}</span>
-            <button className="btn btn-primary btn-sm" onClick={submit} disabled={!text.trim()}>
-              {done ? '✓ ' + (isNe ? 'थपियो!' : 'Submitted!') : '🚀 ' + (isNe ? 'सुझाव पठाउनुहोस्' : 'Submit suggestion')}
-            </button>
-          </div>
+          <SuggestionForm onSubmitted={() => setItems(load())} />
         </div>
 
         {/* ── Board ── */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 12, flexWrap: 'wrap' }}>
           <div className="sug-chips">
             <button className={`chip${filter === 'all' ? ' active' : ''}`} onClick={() => setFilter('all')}>{isNe ? 'सबै' : 'All'} ({items.length})</button>
-            {TYPES.map(t => (
+            {SUG_TYPES.map(t => (
               <button key={t.id} className={`chip${filter === t.id ? ' active' : ''}`} onClick={() => setFilter(t.id)}>{t.icon}</button>
             ))}
           </div>
@@ -209,7 +167,7 @@ export default function Suggest() {
           </div>
         ) : (
           shown.map(s => {
-            const t = TYPES.find(x => x.id === s.type)!
+            const t = SUG_TYPES.find(x => x.id === s.type)!
             const my = votes[s.id] || 0
             return (
               <div key={s.id} className={`card sug-item${s.pinned ? ' sug-pinned' : ''}`} style={{ padding: 12, marginBottom: 10 }}>

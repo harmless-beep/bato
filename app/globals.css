@@ -1280,3 +1280,52 @@ html body {
   font-size: 23px; line-height: 1; z-index: 2; pointer-events: none;
   animation: pet-jump 0.4s ease;
 }
+
+/* ─── Suggest FAB (bottom-right overlay) ─── */
+.sug-fab {
+  position: fixed; right: 16px; bottom: 16px; z-index: 9000;
+  width: 56px; height: 56px; border: none; border-radius: 999px;
+  background: linear-gradient(135deg, var(--primary), var(--violet));
+  color: #fff; font-size: 25px; line-height: 1; cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  animation: fab-pulse 2.8s ease-out infinite;
+  transition: transform 0.15s;
+}
+.sug-fab:hover { transform: scale(1.1) translateY(-2px); }
+@keyframes fab-pulse {
+  0% { box-shadow: 0 8px 24px rgba(0,0,0,0.3), 0 0 0 0 rgba(255,255,255,0.45); }
+  70% { box-shadow: 0 8px 24px rgba(0,0,0,0.3), 0 0 0 18px rgba(255,255,255,0); }
+  100% { box-shadow: 0 8px 24px rgba(0,0,0,0.3), 0 0 0 0 rgba(255,255,255,0); }
+}
+.sug-fab-backdrop {
+  position: fixed; inset: 0; z-index: 9500; background: rgba(0,0,0,0.45);
+  display: flex; align-items: flex-end; justify-content: flex-end; padding: 16px;
+}
+.sug-fab-panel {
+  position: relative; width: min(370px, 92vw);
+  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+  padding: 16px; box-shadow: var(--shadow-lg);
+  animation: fab-pop 0.25s ease;
+}
+@keyframes fab-pop { from { transform: translateY(24px) scale(0.94); opacity: 0; } to { transform: none; opacity: 1; } }
+.sug-fab-close {
+  position: absolute; top: 8px; right: 10px; border: none; background: transparent;
+  color: var(--muted); font-size: 15px; cursor: pointer; z-index: 2;
+}
+.sug-fab-close:hover { color: var(--danger); }
+.sug-fab-title { font-size: 15px; font-weight: 900; color: var(--text); margin-bottom: 10px; padding-right: 26px; }
+.sug-fab-link { display: block; text-align: center; margin-top: 12px; font-size: 12px; font-weight: 800; color: var(--primary); }
+.sug-fab-link:hover { text-decoration: underline; }
+
+/* shared suggestion form row */
+.sug-submit-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+
+/* ─── companion: accessory sits ON the pet ─── */
+.companion-pet-wrap { position: relative; display: flex; }
+.companion-acc {
+  position: absolute; top: -3px; left: 50%; transform: translateX(-50%);
+  font-size: 26px; line-height: 1; z-index: 3; pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35));
+  animation: acc-drop 0.3s ease;
+}
+@keyframes acc-drop { from { transform: translateX(-50%) translateY(-8px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
