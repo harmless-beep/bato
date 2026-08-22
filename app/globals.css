@@ -762,3 +762,16 @@ html[data-theme="dark"] .filter-label { color: var(--muted); }
   .stat-tile-num { font-size: 28px; }
   .news-list { gap: 10px; }
 }
+
+/* CBT section banner */
+.cbt-section-banner {
+  background: linear-gradient(135deg, var(--primary), #6366f1);
+  color: white;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  display: inline-block;
+}

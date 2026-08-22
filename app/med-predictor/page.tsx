@@ -24,6 +24,12 @@ export default function MedPredictor() {
       })
     : []
 
+  const statusMeta: Record<'scholarship' | 'paying' | 'no', { en: string; ne: string; cls: string }> = {
+    scholarship: { en: 'Scholarship', ne: 'स्कॉलरशिप', cls: 'tier-safe' },
+    paying: { en: 'Paying', ne: 'Paying', cls: 'tier-likely' },
+    no: { en: 'Not likely', ne: 'भेटिएन', cls: 'tier-reach' },
+  }
+
   return (
     <div className="page">
       <div className="topbar">
@@ -33,34 +39,38 @@ export default function MedPredictor() {
       </div>
 
       <div className="page-content">
-        <div className="info-box">
-          📌 {isNe
-            ? 'MECEE-BL (2082) को rank छिराउनुहोस् — कुन medical college पाउन सकिन्छ हेर्नुहोस्।'
-            : 'Enter your MECEE-BL (2082) rank to see which medical colleges you can get.'}
-        </div>
+        <div className="predictor-hero" style={{ background: 'linear-gradient(135deg, #064e3b, #059669)' }}>
+          <div className="ph-title">🩺 {isNe ? 'तपाईंको MECEE rank ले कुन college पाउनुहुन्छ?' : 'Which medical college can your CEE rank get?'}</div>
+          <div className="ph-sub">
+            {isNe
+              ? 'MECEE-BL (२०८२) को आफ्नो rank राख्नुहोस्। कम rank = राम्रो। Scholarship र Paying छुट्टै।'
+              : 'Enter your MECEE-BL (2082) rank. Lower rank = better. Scholarship and paying seats are separate.'}
+          </div>
 
-        <div className="card" style={{ padding: 20, marginBottom: 16 }}>
-          <div className="filter-label" style={{ marginBottom: 8 }}>{isNe ? 'तपाईंको MECEE Rank' : 'Your MECEE Rank'}</div>
-          <input
-            type="number"
-            min="1"
-            className="input"
-            placeholder={isNe ? 'जस्तै: 150' : 'e.g. 150'}
-            value={rank}
-            onChange={e => setRank(e.target.value)}
-            style={{ width: '100%', boxSizing: 'border-box' }}
-          />
-          {valid && (
-            <div style={{ marginTop: 14, fontSize: 13, lineHeight: 1.6 }}>
-              <span style={{ fontWeight: 800, color: 'var(--text)' }}>{isNe ? 'तपाईंको स्थिति: ' : 'Your position: '}</span>
-              <span style={{ color: band?.color ?? 'var(--muted)', fontWeight: 700 }}>{band?.label ?? (r > 10000 ? (isNe ? 'List बाहिर' : 'Outside list') : '—')}</span>
+          <div className="ph-row">
+            <div className="score-input-wrap">
+              <input
+                type="number"
+                placeholder={isNe ? 'जस्तै: 150' : 'e.g. 150'}
+                value={rank}
+                min={1}
+                onChange={e => setRank(e.target.value)}
+              />
+              <span className="unit">{isNe ? 'rank' : 'rank'}</span>
             </div>
-          )}
+            <button className="btn btn-gold" onClick={() => {}}>{isNe ? 'हेर्नुहोस्' : 'Predict'}</button>
+          </div>
+
+          <div style={{ display: 'flex', gap: 8, marginTop: 14, flexWrap: 'wrap' }}>
+            <span className="tier-badge tier-safe">✅ {isNe ? 'स्कॉलरशिप (govt college)' : 'Scholarship (govt college)'}</span>
+            <span className="tier-badge tier-likely">🎯 {isNe ? 'Paying (private)' : 'Paying (private)'}</span>
+            <span className="tier-badge tier-reach">🔥 {isNe ? 'सीमाभन्दा बाहिर' : 'Out of reach'}</span>
+          </div>
         </div>
 
         {valid && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 }}>
-            <div className="card" style={{ padding: 14, display: 'flex', gap: 12, alignItems: 'center' }}>
+          <>
+            <div className="card" style={{ padding: 14, marginBottom: 12, display: 'flex', gap: 12, alignItems: 'center' }}>
               <div style={{ fontSize: 28 }}>📊</div>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)' }}>
@@ -75,39 +85,43 @@ export default function MedPredictor() {
                 <div style={{ fontSize: 18, fontWeight: 900, color: band?.color ?? 'var(--primary)' }}>{r}</div>
               </div>
             </div>
-            <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--muted)' }}>
+
+            <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--muted)', marginBottom: 10 }}>
               {isNe ? `Rank ${r} मा — ${result.filter(x => x.status !== 'no').length} वटा college` : `At rank ${r} — ${result.filter(x => x.status !== 'no').length} colleges`}
             </div>
-            {result.map(c => (
-              <div
-                key={c.id}
-                className="card"
-                style={{
-                  padding: 14,
-                  border: c.status === 'scholarship' ? '1.5px solid #10b981' : c.status === 'paying' ? '1.5px solid #f59e0b' : '1px solid var(--border)',
-                  opacity: c.status === 'no' ? 0.5 : 1,
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
-                  <div style={{ minWidth: 0 }}>
-                    <div style={{ fontWeight: 800, fontSize: 13.5, color: 'var(--text)' }}>{c.college}</div>
-                    <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 2 }}>
-                      {c.type} • {c.mbbsSeats} {isNe ? 'सिट' : 'seats'} • {c.feeNote}
-                    </div>
+
+            {result.map((c, i) => (
+              <div key={c.id} className="branch-result" style={{ opacity: c.status === 'no' ? 0.5 : 1 }}>
+                <div className={`branch-rank ${c.status === 'no' ? 'rank-other' : c.status === 'scholarship' ? 'rank-1' : 'rank-2'}`}>
+                  {i + 1}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="branch-name" style={{ fontSize: 14 }}>{c.college}</div>
+                  <div className="branch-college">
+                    {c.type} • {c.mbbsSeats} {isNe ? 'सिट' : 'seats'} • {c.feeNote}
                   </div>
-                  <span
-                    style={{
-                      flexShrink: 0, fontSize: 11, fontWeight: 800, padding: '4px 10px', borderRadius: 8,
-                      background: c.status === 'scholarship' ? '#10b981' : c.status === 'paying' ? '#f59e0b' : 'var(--border)',
-                      color: c.status === 'no' ? 'var(--muted)' : 'white',
-                    }}
-                  >
-                    {c.status === 'scholarship' ? (isNe ? 'स्कॉलरशिप' : 'Scholarship') : c.status === 'paying' ? (isNe ? 'Paying' : 'Paying') : (isNe ? 'भेटिएन' : 'Not likely')}
-                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+                    <div className="meter" style={{ flex: 1, maxWidth: 140 }}>
+                      <div
+                        className="meter-fill"
+                        style={{
+                          width: `${Math.max(8, 100 - (c.cutoffs.scholarship ?? 3000) / 60)}%`,
+                          background: c.status === 'scholarship' ? 'var(--success)' : c.status === 'paying' ? 'var(--gold)' : 'var(--muted)',
+                        }}
+                      />
+                    </div>
+                    <span className={`tier-badge ${statusMeta[c.status as 'scholarship' | 'paying' | 'no'].cls}`}>
+                      {isNe ? statusMeta[c.status as 'scholarship' | 'paying' | 'no'].ne : statusMeta[c.status as 'scholarship' | 'paying' | 'no'].en}
+                    </span>
+                  </div>
+                </div>
+                <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                  <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600 }}>{isNe ? 'तपाईं' : 'You'}</div>
+                  <div style={{ fontSize: 15, fontWeight: 900, color: 'var(--primary)' }}>{r}</div>
                 </div>
               </div>
             ))}
-          </div>
+          </>
         )}
 
         <div className="info-box" style={{ marginTop: 12 }}>

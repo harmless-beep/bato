@@ -10,15 +10,15 @@ const quotes = [
   { en: '"The expert in anything was once a beginner."', ne: '"हरेक विज्ञ कहिल्यै सुरुवातकर्ता थिए।"', by: 'Helen Hayes', byNp: 'हेलेन हेज' },
   { en: '"Success is the sum of small efforts, repeated day in and day out."', ne: '"सफलता भनेको साना प्रयासहरूको योग हो, दिनहुँ दोहोर्याइएको।"', by: 'Robert Collier', byNp: 'रोबर्ट कोलियर' },
   { en: '"Don\'t watch the clock; do what it does. Keep going."', ne: '"घडी नहेर्नुहोस्; घडीले जे गर्छ त्यही गर्नुहोस्। अगाडि बढिरहनुहोस्।"', by: 'Sam Levenson', byNp: 'साम लेभेन्सन' },
-  { en: '"The harder you work for something, the greater you\'ll feel when you achieve it."', ne: '"जति मेहनत गर्नुहुन्छ, उपलब्धि त्यति नै ठूलो लाग्छ।"', by: 'Unknown', byNp: 'अज्ञात' },
+  { en: '"The harder you work for something, the greater you\'ll feel when you achieve it."', ne: '"जति मेहनत गर्नुहुन्छ, उपलब्धि त्यति नै ठूलो लाग्छ।"', by: 'Anonymous', byNp: 'अनाम' },
   { en: '"Dream big. Start small. Act now."', ne: '"ठूलो सपना। सानो सुरुवात। अहिले नै काम।"', by: 'Robin Sharma', byNp: 'रोबिन शर्मा' },
   { en: '"It always seems impossible until it\'s done."', ne: '"सकिएपछि मात्र सम्भव लाग्छ।"', by: 'Nelson Mandela', byNp: 'नेल्सन मन्डेला' },
-  { en: '"Push yourself, because no one else is going to do it for you."', ne: '"आफैलाई धकेल्नुहोस्, किनकि अरू कसैले तपाईंको लागि गर्दैन।"', by: 'Unknown', byNp: 'अज्ञात' },
-  { en: '"Your only limit is your mind."', ne: '"तपाईंको एक मात्र सीमा तपाईंको दिमाग हो।"', by: 'Unknown', byNp: 'अज्ञात' },
+  { en: '"Push yourself, because no one else is going to do it for you."', ne: '"आफैलाई धकेल्नुहोस्, किनकि अरू कसैले तपाईंको लागि गर्दैन।"', by: 'Anonymous', byNp: 'अनाम' },
+  { en: '"Your only limit is your mind."', ne: '"तपाईंको एक मात्र सीमा तपाईंको दिमाग हो।"', by: 'Anonymous', byNp: 'अनाम' },
   { en: '"Study while others are sleeping; work while others are loafing."', ne: '"अरू सुत्दा पढ्नुहोस्; अरू अल्छी गर्दा काम गर्नुहोस्।"', by: 'William A. Ward', byNp: 'विलियम वार्ड' },
   { en: '"The secret of getting ahead is getting started."', ne: '"अगाडि बढ्ने रहस्य भनेको सुरु गर्नु हो।"', by: 'Mark Twain', byNp: 'मार्क ट्वेन' },
   { en: '"Believe you can and you\'re halfway there."', ne: '"तपाईं सक्नुहुन्छ भन्ने विश्वास नै आधा बाटो हो।"', by: 'Theodore Roosevelt', byNp: 'थियोडोर रुजवेल्ट' },
-  { en: '"Small daily improvements are the key to staggering long-term results."', ne: '"दैनिक साना सुधारहरू नै ठूलो दीर्घकालीन नतिजाको कुञ्जी हुन्।"', by: 'Unknown', byNp: 'अज्ञात' },
+  { en: '"Small daily improvements are the key to staggering long-term results."', ne: '"दैनिक साना सुधारहरू नै ठूलो दीर्घकालीन नतिजाको कुञ्जी हुन्।"', by: 'Anonymous', byNp: 'अनाम' },
 ]
 
 function todayQuote() {

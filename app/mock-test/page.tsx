@@ -103,15 +103,24 @@ export default function MockTest() {
   }, [])
 
   const buildSession = useCallback((cfg: ExamConfig): Question[] => {
+    // Fresh random per start — every click gives a different order.
+    const rng = () => Math.floor(Math.random() * 1e9)
     const out: Question[] = []
     for (const sec of cfg.sections) {
       const pool = bySubject.get(sec.subject) ?? []
-      const picked = pool.length >= sec.count
-        ? shuffle(pool).slice(0, sec.count)
-        : shuffle([...pool, ...pool]).slice(0, sec.count) // recycle if pool short
-      out.push(...picked)
+      if (pool.length >= sec.count) {
+        out.push(...shuffle(pool).slice(0, sec.count))
+      } else {
+        // Recycle with a per-start offset so repeats differ between attempts
+        const offset = rng() % pool.length
+        const cycled: Question[] = []
+        for (let i = 0; i < sec.count; i++) {
+          cycled.push(pool[(offset + i) % pool.length])
+        }
+        out.push(...shuffle(cycled))
+      }
     }
-    return shuffle(out)
+    return out // sections stay grouped, like the real exam paper
   }, [bySubject])
 
   const startTest = (cfg: ExamConfig) => {
@@ -273,6 +282,17 @@ export default function MockTest() {
   // ── Phase: Test ────────────────────────────────────────────────
   if (phase === 'test' && config) {
     const q = session[current]
+    const subjLabel = (s: string) => {
+      const map: Record<string, [string, string]> = {
+        math: ['📐 Mathematics', '📐 गणित'],
+        physics: ['⚡ Physics', '⚡ भौतिकशास्त्र'],
+        chemistry: ['🧪 Chemistry', '🧪 रसायनशास्त्र'],
+        biology: ['🧬 Biology', '🧬 जीवविज्ञान'],
+      }
+      return map[s] ?? [s, s]
+    }
+    const [subjEn, subjNe] = subjLabel(q.subject)
+    const showSection = current === 0 || session[current - 1]?.subject !== q.subject
     return (
       <div className="cbt-wrap">
         {/* Top bar: timer + progress */}
@@ -299,6 +319,11 @@ export default function MockTest() {
         <div className="cbt-body">
           {/* Question */}
           <div className="cbt-question card" style={{ padding: 20 }}>
+            {showSection && (
+              <div className="cbt-section-banner">
+                {subjEn} • {L('Section', 'सेक्सन')}
+              </div>
+            )}
             <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700, marginBottom: 8 }}>
               📍 {q.topic}
               {config.adaptive && (

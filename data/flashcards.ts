@@ -3,6 +3,7 @@
 // Sources: curated fact cards (flash-facts.ts) + facts split from the notes content.
 import { notes } from './notes'
 import { factCards } from './flash-facts'
+import { bulkCards } from './flash-bulk'
 
 export interface Flashcard {
   id: string
@@ -54,6 +55,19 @@ const noteSubject = (id: string, title: string): { subject: string; sub: string 
 }
 
 const cards: Flashcard[] = []
+
+// 0. Bulk hand-curated cards (2,200+ formulas & facts)
+for (const b of bulkCards) {
+  cards.push({
+    id: `b-${b.exam}-${b.subject}-${b.sub}-${b.front.slice(0, 24).replace(/[^a-z0-9]/gi, '')}-${Math.random().toString(36).slice(2, 8)}`,
+    exam: b.exam,
+    subject: b.subject,
+    sub: b.sub,
+    topic: b.sub,
+    front: b.front,
+    back: b.back,
+  })
+}
 
 // 1. Curated fact cards — topic "Physics — Kinematics" → subject Physics, sub Kinematics
 for (const f of factCards) {
