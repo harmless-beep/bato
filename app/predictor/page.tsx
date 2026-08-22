@@ -3,34 +3,9 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useLang } from '../components/ui'
+import { cutoffs } from '@/data/cutoffs'
 
-interface BranchEntry {
-  branch: string
-  branchNp: string
-  college: string
-  collegeNp: string
-  ioeCutoff: number
-  seats: number
-  color: string
-}
-
-const cutoffData: BranchEntry[] = [
-  { branch: 'Computer Engineering', branchNp: 'कम्प्युटर इन्जिनियरिङ', college: 'IOE Pulchowk Campus', collegeNp: 'IOE पुल्चोक', ioeCutoff: 163, seats: 48, color: '#4f46e5' },
-  { branch: 'Electronics & Communication', branchNp: 'इलेक्ट्रोनिक्स', college: 'IOE Pulchowk Campus', collegeNp: 'IOE पुल्चोक', ioeCutoff: 155, seats: 48, color: '#7c3aed' },
-  { branch: 'Electrical Engineering', branchNp: 'इलेक्ट्रिकल इन्जिनियरिङ', college: 'IOE Pulchowk Campus', collegeNp: 'IOE पुल्चोक', ioeCutoff: 148, seats: 48, color: '#2563eb' },
-  { branch: 'Mechanical Engineering', branchNp: 'मेकानिकल इन्जिनियरिङ', college: 'IOE Pulchowk Campus', collegeNp: 'IOE पुल्चोक', ioeCutoff: 140, seats: 48, color: '#0891b2' },
-  { branch: 'Civil Engineering', branchNp: 'सिभिल इन्जिनियरिङ', college: 'IOE Pulchowk Campus', collegeNp: 'IOE पुल्चोक', ioeCutoff: 125, seats: 96, color: '#059669' },
-  { branch: 'Computer Engineering', branchNp: 'कम्प्युटर इन्जिनियरिङ', college: 'Kathford College', collegeNp: 'काथफोर्ड कलेज', ioeCutoff: 115, seats: 48, color: '#4f46e5' },
-  { branch: 'Electronics & Communication', branchNp: 'इलेक्ट्रोनिक्स', college: 'Kathford College', collegeNp: 'काथफोर्ड कलेज', ioeCutoff: 108, seats: 48, color: '#7c3aed' },
-  { branch: 'Electrical Engineering', branchNp: 'इलेक्ट्रिकल', college: 'Himalaya College of Engineering', collegeNp: 'हिमालय कलेज', ioeCutoff: 105, seats: 48, color: '#2563eb' },
-  { branch: 'Computer Engineering', branchNp: 'कम्प्युटर इन्जिनियरिङ', college: 'PCPS College', collegeNp: 'PCPS कलेज', ioeCutoff: 100, seats: 48, color: '#4f46e5' },
-  { branch: 'Civil Engineering', branchNp: 'सिभिल इन्जिनियरिङ', college: 'Nepal Engineering College', collegeNp: 'नेपाल इन्जिनियरिङ कलेज', ioeCutoff: 95, seats: 48, color: '#059669' },
-  { branch: 'Mechanical Engineering', branchNp: 'मेकानिकल', college: 'Nepal Engineering College', collegeNp: 'नेपाल इन्जिनियरिङ कलेज', ioeCutoff: 92, seats: 48, color: '#0891b2' },
-  { branch: 'Electrical Engineering', branchNp: 'इलेक्ट्रिकल', college: 'Cosmos College', collegeNp: 'कस्मोस कलेज', ioeCutoff: 88, seats: 48, color: '#2563eb' },
-  { branch: 'Computer Engineering', branchNp: 'कम्प्युटर इन्जिनियरिङ', college: 'Nobel College', collegeNp: 'नोबेल कलेज', ioeCutoff: 85, seats: 48, color: '#4f46e5' },
-  { branch: 'Civil Engineering', branchNp: 'सिभिल इन्जिनियरिङ', college: 'Janakpur Engineering College', collegeNp: 'जनकपुर इन्जिनियरिङ कलेज', ioeCutoff: 72, seats: 48, color: '#059669' },
-  { branch: 'Computer Engineering', branchNp: 'कम्प्युटर इन्जिनियरिङ', college: 'Sagarmatha College', collegeNp: 'सगरमाथा कलेज', ioeCutoff: 70, seats: 48, color: '#4f46e5' },
-]
+type FeeType = 'regular' | 'fullFee'
 
 type Tier = 'safe' | 'likely' | 'reach'
 
@@ -40,24 +15,37 @@ const T: Record<Tier, { cls: string; en: string; ne: string }> = {
   reach:  { cls: 'tier-reach',  en: '🔥 Reach', ne: '🔥 चुनौती' },
 }
 
-export default function Predictor() {
-  const { t, lang } = useLang()
-  const isNe = lang === 'ne'
-  const [score, setScore] = useState('')
-  const [result, setResult] = useState<{ entry: BranchEntry; tier: Tier; margin: number }[] | null>(null)
+const campuses = ['All', 'Pulchowk', 'Thapathali', 'WRC', 'ERC', 'Chitwan'] as const
 
-  const handlePredict = () => {
-    const s = parseInt(score)
-    if (isNaN(s) || s < 0 || s > 200) return
-    const scored = cutoffData
-      .map(entry => {
-        const margin = s - entry.ioeCutoff
-        const tier: Tier = margin >= 5 ? 'safe' : margin >= 0 ? 'likely' : 'reach'
-        return { entry, tier, margin }
+function tierFor(margin: number): Tier {
+  // margin = cutoffRank - yourRank; positive means you're better (lower rank)
+  if (margin >= 80) return 'safe'
+  if (margin >= 0) return 'likely'
+  if (margin >= -120) return 'reach'
+  return 'none'
+}
+
+export default function Predictor() {
+  const { lang } = useLang()
+  const isNe = lang === 'ne'
+  const [rank, setRank] = useState('')
+  const [fee, setFee] = useState<FeeType>('regular')
+  const [campus, setCampus] = useState<typeof campuses[number]>('All')
+  const [result, setResult] = useState<{ c: typeof cutoffs[number]; tier: Tier; margin: number }[] | null>(null)
+
+  const predict = () => {
+    const r = parseInt(rank)
+    if (isNaN(r) || r < 1 || r > 9000) return
+    const rows = cutoffs
+      .filter(c => campus === 'All' || c.campus === campus)
+      .map(c => {
+        const cutoff = fee === 'regular' ? c.regular : c.fullFee
+        const margin = cutoff - r
+        return { c, tier: tierFor(margin), margin }
       })
-      .filter(r => r.margin >= -5)
-      .sort((a, b) => b.entry.ioeCutoff - a.entry.ioeCutoff)
-    setResult(scored)
+      .filter(r => r.tier !== 'none')
+      .sort((a, b) => b.margin - a.margin)
+    setResult(rows)
   }
 
   const getRank = (i: number) => (i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : 'rank-other')
@@ -68,87 +56,81 @@ export default function Predictor() {
         <Link href="/"><button className="back-btn">←</button></Link>
         <div style={{ flex: 1 }}>
           <div className="page-title">🎯 {isNe ? 'Branch Predictor' : 'Branch Predictor'}</div>
-          <div className="page-sub">🏛️ IOE {isNe ? 'कटअफ' : 'Cutoffs'} • 2079–2080</div>
+          <div className="page-sub">🏛️ IOE • 2082 cutoffs</div>
         </div>
       </div>
 
       <div className="page-content">
-        {/* Input hero */}
         <div className="predictor-hero">
-          <div className="ph-title">🎯 {isNe ? 'तपाईंको score ले कुन branch पाउनुहुन्छ?' : 'Which branch can you get?'}</div>
+          <div className="ph-title">🎯 {isNe ? 'आफ्नो rank ले कुन campus/branch पाउनुहुन्छ?' : 'Which campus & branch can your rank get?'}</div>
           <div className="ph-sub">
             {isNe
-              ? 'IOE entrance exam मा तपाईंले पाउने अनुमानित score (200 मध्ये) राख्नुहोस्। Historical cutoffs को आधारमा तुरुन्तै अनुमान हेर्नुहोस्।'
-              : 'Enter your expected IOE entrance score (out of 200). Get instant predictions based on historical cutoffs.'}
+              ? 'IOE entrance को आफ्नो rank (२०८२ cutoff अनुसार) राख्नुहोस्। कम rank = राम्रो। Regular र Full Fee छुट्टै हुन्छन्।'
+              : 'Enter your IOE entrance rank (lower rank = better). Regular and Full Fee seats are separate.'}
           </div>
+
           <div className="ph-row">
             <div className="score-input-wrap">
               <input
                 type="number"
-                placeholder={isNe ? 'जस्तै: 140' : 'e.g. 140'}
-                value={score}
-                min={0}
-                max={200}
-                onChange={e => setScore(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handlePredict()}
+                placeholder={isNe ? 'जस्तै: 350' : 'e.g. 350'}
+                value={rank}
+                min={1}
+                max={9000}
+                onChange={e => setRank(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && predict()}
               />
-              <span className="unit">/ 200</span>
+              <span className="unit">{isNe ? 'rank' : 'rank'}</span>
             </div>
-            <button className="btn btn-gold" onClick={handlePredict}>
-              {isNe ? 'Predict गर्नुहोस्' : 'Predict My Branch'}
-            </button>
+            <button className="btn btn-gold" onClick={predict}>{isNe ? 'Predict गर्नुहोस्' : 'Predict'}</button>
           </div>
-          {/* Legend */}
-          <div style={{ display: 'flex', gap: 8, marginTop: 16, flexWrap: 'wrap' }}>
-            <span className="tier-badge tier-safe">{isNe ? '✅ पक्का (cutoff +5 माथि)' : '✅ Safe (+5 above)'}</span>
-            <span className="tier-badge tier-likely">{isNe ? '🎯 सम्भव (cutoff वरपर)' : '🎯 Likely (around cutoff)'}</span>
-            <span className="tier-badge tier-reach">{isNe ? '🔥 चुनौती (cutoff -5 सम्म)' : '🔥 Reach (up to -5)'}</span>
+
+          <div className="filter-grid">
+            <div>
+              <div className="filter-label">{isNe ? 'Fee type' : 'Fee type'}</div>
+              <div className="chip-row">
+                <button className={`chip ${fee === 'regular' ? 'active' : ''}`} onClick={() => setFee('regular')}>{isNe ? 'Regular (सस्तो)' : 'Regular'}</button>
+                <button className={`chip ${fee === 'fullFee' ? 'active' : ''}`} onClick={() => setFee('fullFee')}>{isNe ? 'Full Fee (महँगो)' : 'Full Fee'}</button>
+              </div>
+            </div>
+            <div>
+              <div className="filter-label">{isNe ? 'Campus' : 'Campus'}</div>
+              <div className="chip-row">
+                {campuses.map(c => (
+                  <button key={c} className={`chip ${campus === c ? 'active' : ''}`} onClick={() => setCampus(c)}>{c === 'All' ? (isNe ? 'सबै' : 'All') : c}</button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: 8, marginTop: 14, flexWrap: 'wrap' }}>
+            <span className="tier-badge tier-safe">{isNe ? '✅ पक्का (80+ rank फरक)' : '✅ Safe (80+ margin)'}</span>
+            <span className="tier-badge tier-likely">{isNe ? '🎯 सम्भव (cutoff भन्दा माथि)' : '🎯 Likely (above cutoff)'}</span>
+            <span className="tier-badge tier-reach">{isNe ? '🔥 चुनौती (120 सम्म तल)' : '🔥 Reach (up to 120 below)'}</span>
           </div>
         </div>
 
-        {/* Results */}
         {result && (
           <>
             <div className="info-box">
-              <strong>{isNe ? `Score ${score} को आधारमा:` : `Based on a score of ${score}:`}</strong>{' '}
-              {isNe
-                ? `${result.length} वटा branches तपाईंको दायरामा छन्। यो अनुमान मात्र हो — actual cutoffs वर्षैसाथ फेरिन्छन्।`
-                : `${result.length} branches fall in your range. This is an estimate — actual cutoffs change yearly.`}
+              <strong>{isNe ? `Rank ${rank} (${fee === 'regular' ? 'Regular' : 'Full Fee'}${campus !== 'All' ? `, ${campus}` : ''}) को आधारमा:` : `Rank ${rank} (${fee}${campus !== 'All' ? `, ${campus}` : ''}):`}</strong>{' '}
+              {isNe ? `${result.length} वटा options तपाईंको दायरामा छन्।` : `${result.length} options fall in your range.`}
             </div>
-
             {result.length === 0 ? (
-              <div className="warn-box">
-                😞 {isNe
-                  ? 'यो score ले हालका कटअफहरू भन्दा कम छ। तल सबैभन्दा सजिलो branches हेर्नुहोस्।'
-                  : 'This score is below current cutoffs. Check the closest options below.'}
-              </div>
+              <div className="warn-box">😞 {isNe ? 'यो rank ले हालका cutoff भन्दा धेरै तल छ।' : 'This rank is below current cutoffs.'}</div>
             ) : (
               result.map((r, i) => (
-                <div key={`${r.entry.branch}-${r.entry.college}`} className="branch-result">
+                <div key={`${r.c.campus}-${r.c.program}`} className="branch-result">
                   <div className={`branch-rank ${getRank(i)}`}>{i + 1}</div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div className="branch-name" style={{ color: r.entry.color }}>
-                      {isNe ? r.entry.branchNp : r.entry.branch}
-                    </div>
-                    <div className="branch-college">
-                      {isNe ? r.entry.collegeNp : r.entry.college} • {r.entry.seats} seats
-                    </div>
+                    <div className="branch-name" style={{ color: r.c.color }}>{isNe ? r.c.programNp : r.c.program}</div>
+                    <div className="branch-college">{isNe ? r.c.campusNp : r.c.campus} • {isNe ? 'cutoff rank' : 'cutoff'} {fee === 'regular' ? r.c.regular : r.c.fullFee}</div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
                       <div className="meter" style={{ flex: 1, maxWidth: 140 }}>
-                        <div
-                          className="meter-fill"
-                          style={{
-                            width: `${Math.min(100, Math.max(8, (r.entry.ioeCutoff / 200) * 100))}%`,
-                            background: r.tier === 'safe' ? 'var(--success)' : r.tier === 'likely' ? 'var(--primary)' : 'var(--gold)',
-                          }}
-                        />
+                        <div className="meter-fill" style={{ width: `${Math.max(8, 100 - (r.c.regular / 90))}%`, background: r.tier === 'safe' ? 'var(--success)' : r.tier === 'likely' ? 'var(--primary)' : 'var(--gold)' }} />
                       </div>
                       <span className={`tier-badge ${T[r.tier].cls}`}>{isNe ? T[r.tier].ne : T[r.tier].en}</span>
                     </div>
-                  </div>
-                  <div className="branch-cutoff">
-                    <div className="cutoff-num">{r.entry.ioeCutoff}</div>
-                    <div className="cutoff-label">{isNe ? 'cutoff' : 'cutoff'}</div>
                   </div>
                 </div>
               ))
@@ -156,29 +138,24 @@ export default function Predictor() {
           </>
         )}
 
-        {/* Reference table */}
         {!result && (
           <>
-            <hr className="divider"/>
+            <hr className="divider" />
             <div className="section-header">
-              <div className="section-title">📋 {isNe ? 'कटअफ सन्दर्भ' : 'Cutoff Reference'}</div>
-              <div className="section-sub">{isNe ? '2079–2080 historical cutoffs (200 मध्ये)' : '2079–2080 historical cutoffs (out of 200)'}</div>
+              <div className="section-title">📋 {isNe ? '२०८२ cutoff reference' : '2082 Cutoff Reference'}</div>
+              <div className="section-sub">{isNe ? 'सबै ५ IOE campus • Regular cutoff ranks' : 'All 5 IOE campuses • Regular cutoff ranks'}</div>
             </div>
-            {cutoffData.slice(0, 8).map((b, i) => (
-              <div key={`ref-${b.branch}-${b.college}`} className="branch-result" style={{ opacity: 0.85 }}>
+            {cutoffs.filter(c => c.campus === 'Pulchowk').map((b, i) => (
+              <div key={`ref-${b.program}`} className="branch-result" style={{ opacity: 0.9 }}>
                 <div className={`branch-rank ${getRank(i)}`}>{i + 1}</div>
                 <div style={{ flex: 1 }}>
-                  <div className="branch-name" style={{ color: b.color, fontSize: 14 }}>{isNe ? b.branchNp : b.branch}</div>
-                  <div className="branch-college">{isNe ? b.collegeNp : b.college}</div>
-                </div>
-                <div className="branch-cutoff">
-                  <div className="cutoff-num" style={{ fontSize: 16 }}>{b.ioeCutoff}</div>
-                  <div className="cutoff-label">cutoff</div>
+                  <div className="branch-name" style={{ color: b.color, fontSize: 14 }}>{isNe ? b.programNp : b.program}</div>
+                  <div className="branch-college">{isNe ? 'पुल्चोक' : 'Pulchowk'} • R {b.regular} / FF {b.fullFee}</div>
                 </div>
               </div>
             ))}
             <div style={{ textAlign: 'center', fontSize: 12, color: 'var(--muted)', marginTop: 10 }}>
-              ↑ {isNe ? 'शीर्ष 8 देखाइएको • माथि score राखेर आफ्नो अनुमान हेर्नुहोस्' : 'Showing top 8 • Enter your score above for predictions'}
+              ↑ {isNe ? 'पुल्चोक मात्र • माथि rank राखेर सबै campus हेर्नुहोस्' : 'Pulchowk shown • enter rank above for all campuses'}
             </div>
           </>
         )}

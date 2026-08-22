@@ -16,6 +16,12 @@ interface PastPaper {
 }
 
 const papers: PastPaper[] = [
+  { id: 'ioe-2082-ent', year: 2082, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
+  { id: 'ioe-2082-phy', year: 2082, university: 'IOE', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ' },
+  { id: 'ioe-2082-che', year: 2082, university: 'IOE', exam: 'Entrance', subject: 'Chemistry', subjectNp: 'रसायनशास्त्र', type: 'MCQ' },
+  { id: 'ioe-2081-ent', year: 2081, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
+  { id: 'ioe-2081-phy', year: 2081, university: 'IOE', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ' },
+  { id: 'ioe-2081-che', year: 2081, university: 'IOE', exam: 'Entrance', subject: 'Chemistry', subjectNp: 'रसायनशास्त्र', type: 'MCQ' },
   { id: 'ioe-2080-ent', year: 2080, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
   { id: 'ioe-2080-phy', year: 2080, university: 'IOE', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ' },
   { id: 'ioe-2080-che', year: 2080, university: 'IOE', exam: 'Entrance', subject: 'Chemistry', subjectNp: 'रसायनशास्त्र', type: 'MCQ' },
@@ -24,22 +30,32 @@ const papers: PastPaper[] = [
   { id: 'ioe-2079-che', year: 2079, university: 'IOE', exam: 'Entrance', subject: 'Chemistry', subjectNp: 'रसायनशास्त्र', type: 'MCQ' },
   { id: 'ioe-2078-ent', year: 2078, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
   { id: 'ioe-2078-phy', year: 2078, university: 'IOE', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ' },
+  { id: 'ioe-2078-che', year: 2078, university: 'IOE', exam: 'Entrance', subject: 'Chemistry', subjectNp: 'रसायनशास्त्र', type: 'MCQ' },
   { id: 'ioe-2077-ent', year: 2077, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
   { id: 'ioe-2077-phy', year: 2077, university: 'IOE', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ' },
+  { id: 'ioe-2077-che', year: 2077, university: 'IOE', exam: 'Entrance', subject: 'Chemistry', subjectNp: 'रसायनशास्त्र', type: 'MCQ' },
   { id: 'ioe-2076-ent', year: 2076, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
+  { id: 'ioe-2076-phy', year: 2076, university: 'IOE', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ' },
   { id: 'ioe-2075-ent', year: 2075, university: 'IOE', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
   { id: 'ioe-2075-phy', year: 2075, university: 'IOE', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ' },
+  { id: 'ioe-2075-che', year: 2075, university: 'IOE', exam: 'Entrance', subject: 'Chemistry', subjectNp: 'रसायनशास्त्र', type: 'MCQ' },
+  { id: 'ioe-sem1-2082', year: 2082, university: 'IOE', exam: 'Semester', semester: 1, subject: 'Engineering Math I', subjectNp: 'इन्जिनियरिङ गणित I', type: 'Full' },
+  { id: 'ioe-sem1-2081', year: 2081, university: 'IOE', exam: 'Semester', semester: 1, subject: 'Engineering Math I', subjectNp: 'इन्जिनियरिङ गणित I', type: 'Full' },
   { id: 'ioe-sem1-2080', year: 2080, university: 'IOE', exam: 'Semester', semester: 1, subject: 'Engineering Math I', subjectNp: 'इन्जिनियरिङ गणित I', type: 'Full' },
-  { id: 'ioe-sem1-2079', year: 2079, university: 'IOE', exam: 'Semester', semester: 1, subject: 'Engineering Math I', subjectNp: 'इन्जिनियरिङ गणित I', type: 'Full' },
+  { id: 'ioe-sem2-2082', year: 2082, university: 'IOE', exam: 'Semester', semester: 2, subject: 'Engineering Math II', subjectNp: 'इन्जिनियरिङ गणित II', type: 'Full' },
   { id: 'ioe-sem2-2080', year: 2080, university: 'IOE', exam: 'Semester', semester: 2, subject: 'Engineering Math II', subjectNp: 'इन्जिनियरिङ गणित II', type: 'Full' },
-  { id: 'ioe-sem3-2079', year: 2079, university: 'IOE', exam: 'Semester', semester: 3, subject: 'Engineering Math III', subjectNp: 'इन्जिनियरिङ गणित III', type: 'Full' },
+  { id: 'ioe-sem3-2081', year: 2081, university: 'IOE', exam: 'Semester', semester: 3, subject: 'Engineering Math III', subjectNp: 'इन्जिनियरिङ गणित III', type: 'Full' },
+  { id: 'ku-2082-ent', year: 2082, university: 'KU', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
+  { id: 'ku-2082-phy', year: 2082, university: 'KU', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ' },
+  { id: 'ku-2081-ent', year: 2081, university: 'KU', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
+  { id: 'ku-2081-phy', year: 2081, university: 'KU', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ' },
   { id: 'ku-2080-ent', year: 2080, university: 'KU', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
   { id: 'ku-2080-phy', year: 2080, university: 'KU', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ' },
   { id: 'ku-2079-ent', year: 2079, university: 'KU', exam: 'Entrance', subject: 'Mathematics', subjectNp: 'गणित', type: 'MCQ' },
   { id: 'ku-2079-phy', year: 2079, university: 'KU', exam: 'Entrance', subject: 'Physics', subjectNp: 'भौतिकशास्त्र', type: 'MCQ' },
 ]
 
-const years = [2080, 2079, 2078, 2077, 2076, 2075]
+const years = [2082, 2081, 2080, 2079, 2078, 2077, 2076, 2075]
 const examTypes = ['Entrance', 'Semester']
 const allSubjects = [...new Set(papers.map(p => p.subject))].sort()
 

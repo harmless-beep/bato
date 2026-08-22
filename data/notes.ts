@@ -212,4 +212,89 @@ Li > K > Ca > Na > Mg > Al > Zn > Fe > Ni > Sn > Pb > H > Cu > Ag > Au
       },
     ]
   },
+  {
+    id: 'english',
+    title: 'English',
+    titleNp: 'अङ्ग्रेजी',
+    items: [
+      {
+        title: 'Grammar — Tenses Quick Ref',
+        content: `**Present:** She studies. / She is studying. / She has studied.
+**Past:** She studied. / She was studying. / She had studied.
+**Future:** She will study. / She will be studying. / She will have studied.
+
+**Trick:** For IOE English, subject-verb agreement is the #1 tested area.
+Rule: Singular subject → singular verb. "The list of items IS ready." (subject = list)
+
+**Common trap:** "Neither of them ARE" ✗ → "Neither of them IS" ✓ (neither = singular)
+**Mnemonic:** "Each, either, neither, anyone, everyone" are ALL singular.`
+      },
+      {
+        title: 'Vocabulary — Root Words',
+        content: `**bene-** = good → benefit, benevolent
+**mal-** = bad → malice, malfunction
+**syn-** = together → syntax, synonym
+**anti-** = against → antibody, antipathy
+**auto-** = self → automobile, autobiography
+**tele-** = far → telephone, television
+**bio-** = life → biology, biography
+**chrono-** = time → chronicle, chronology
+
+**Mnemonic:** "Bene good, Mal bad, Syn same, Anti mad" — pair the roots with feelings.`
+      },
+      {
+        title: 'Reading Comprehension Strategy',
+        content: `**Step 1:** Skim the question first (don't read passage blind).
+**Step 2:** Scan passage for keywords from the question.
+**Step 3:** Read only that section carefully.
+**Step 4:** Eliminate obviously wrong options first.
+
+**Trick:** The correct answer is usually a paraphrase, NOT the exact words from the text. If an option copies a sentence word-for-word, it's often a distractor.
+
+**Time saver:** Do vocabulary + grammar questions first (fast), comprehension last.`
+      },
+    ]
+  },
+  {
+    id: 'aptitude',
+    title: 'Engineering Aptitude',
+    titleNp: 'Engineering Aptitude',
+    items: [
+      {
+        title: 'Logical Reasoning — Number Series',
+        content: `**Arithmetic:** 2, 5, 8, 11, ? → +3 each → 14
+**Geometric:** 3, 6, 12, 24, ? → ×2 → 48
+**Square:** 1, 4, 9, 16, ? → n² → 25
+**Fibonacci:** 1, 1, 2, 3, 5, ? → sum of prev two → 8
+
+**Trick:** Always check difference first, then ratio, then squares/cubes. 90% of series are one of these.
+
+**Mnemonic:** "D-R-S-F" — Difference, Ratio, Square, Fibonacci. Check in that order.`
+      },
+      {
+        title: 'Units & Conversions',
+        content: `**Length:** 1 m = 100 cm = 1000 mm; 1 km = 1000 m
+**Mass:** 1 kg = 1000 g; 1 tonne = 1000 kg
+**Time:** 1 hr = 60 min = 3600 s
+**Pressure:** 1 atm = 760 mmHg = 101.325 kPa
+**Energy:** 1 cal = 4.184 J; 1 kWh = 3.6 × 10⁶ J
+
+**Trick:** For unit conversion, multiply by (target/base) as a fraction = 1.
+Example: 5 km → m: 5 km × (1000 m / 1 km) = 5000 m. The "km" cancels.
+
+**Mnemonic:** "King Henry Died By Drinking Chocolate Milk" — k, h, da, b, d, c, m (metric prefixes).`
+      },
+      {
+        title: 'Estimation & Approximation',
+        content: `IOE often tests quick estimation, not exact calc.
+
+**Example:** 198 × 52 ≈ 200 × 50 = 10,000 (actual 10,296 — close enough for MCQ).
+
+**Rule:** Round to 1-2 significant figures, compute, pick nearest option.
+**Trick:** If options are 9800, 10200, 15000, 20000 → you only need rough magnitude, not precision.
+
+**Time saver:** In MCQ, estimate first → eliminate 2 wrong options → only calculate if 2 remain close.`
+      },
+    ]
+  },
 ]

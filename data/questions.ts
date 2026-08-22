@@ -147,6 +147,234 @@ export const questions: Question[] = [
     correct: 2,
     explanation: "CH3-CH=CH2 is propene with double bond at position 1: Prop-1-ene (or simply propene)"
   },
+  // ─── EXTRA: MATH ───
+  {
+    id: 16,
+    subject: 'math',
+    topic: 'Calculus - Integration',
+    text: "∫ x^2 dx = ?",
+    options: ['x^3/3 + C', 'x^3 + C', '2x + C', 'x^2/2 + C'],
+    correct: 0,
+    explanation: "Power rule for integration: ∫ x^n dx = x^(n+1)/(n+1) + C. So ∫ x^2 dx = x^3/3 + C"
+  },
+  {
+    id: 17,
+    subject: 'math',
+    topic: 'Trigonometry',
+    text: "cos(0) = ?",
+    options: ['0', '1', '-1', '1/2'],
+    correct: 1,
+    explanation: "cos(0) = 1, a standard value from the unit circle."
+  },
+  {
+    id: 18,
+    subject: 'math',
+    topic: 'Algebra - Matrices',
+    text: "The determinant of [[2,0],[0,3]] is:",
+    options: ['5', '6', '0', '1'],
+    correct: 1,
+    explanation: "For a 2x2 diagonal matrix, det = product of diagonals = 2*3 = 6."
+  },
+  {
+    id: 19,
+    subject: 'math',
+    topic: 'Coordinate Geometry',
+    text: "Slope of line through (0,1) and (2,5) is:",
+    options: ['1', '2', '3', '4'],
+    correct: 1,
+    explanation: "m = (y2-y1)/(x2-x1) = (5-1)/(2-0) = 4/2 = 2."
+  },
+  {
+    id: 20,
+    subject: 'math',
+    topic: 'Probability',
+    text: "Probability of getting heads in a fair coin toss:",
+    options: ['1/4', '1/2', '1', '0'],
+    correct: 1,
+    explanation: "A fair coin has 2 equally likely outcomes; P(heads) = 1/2."
+  },
+  // ─── EXTRA: PHYSICS ───
+  {
+    id: 21,
+    subject: 'physics',
+    topic: 'Mechanics - Projectile',
+    text: "Maximum range of a projectile is achieved at launch angle:",
+    options: ['30°', '45°', '60°', '90°'],
+    correct: 1,
+    explanation: "Range R = u^2 sin(2θ)/g is maximum when sin(2θ)=1, i.e. θ = 45°."
+  },
+  {
+    id: 22,
+    subject: 'physics',
+    topic: 'Waves & Optics',
+    text: "The unit of frequency is:",
+    options: ['Hertz', 'Watt', 'Newton', 'Joule'],
+    correct: 0,
+    explanation: "Frequency = cycles per second, unit Hertz (Hz)."
+  },
+  {
+    id: 23,
+    subject: 'physics',
+    topic: 'Electricity',
+    text: "Unit of electrical resistance is:",
+    options: ['Ampere', 'Volt', 'Ohm', 'Coulomb'],
+    correct: 2,
+    explanation: "Resistance R = V/I, unit Ohm (Ω)."
+  },
+  {
+    id: 24,
+    subject: 'physics',
+    topic: 'Magnetism',
+    text: "The direction of magnetic field around a current-carrying wire is given by:",
+    options: ['Left-hand rule', 'Right-hand grip rule', 'Fleming left rule', 'Ohm law'],
+    correct: 1,
+    explanation: "Right-hand grip rule: thumb = current, fingers curl = magnetic field direction."
+  },
+  {
+    id: 25,
+    subject: 'physics',
+    topic: 'Modern Physics',
+    text: "Photoelectric effect demonstrates:",
+    options: ['Wave nature of light', 'Particle nature of light', 'Sound waves', 'Gravity'],
+    correct: 1,
+    explanation: "Photoelectric effect shows light behaves as particles (photons), supporting quantum theory."
+  },
+  // ─── EXTRA: CHEMISTRY ───
+  {
+    id: 26,
+    subject: 'chemistry',
+    topic: 'Periodic Table',
+    text: "Which has the smallest atomic radius?",
+    options: ['Na', 'Mg', 'Al', 'Cl'],
+    correct: 3,
+    explanation: "Across a period, atomic radius decreases; Cl is rightmost among these, so smallest."
+  },
+  {
+    id: 27,
+    subject: 'chemistry',
+    topic: 'Chemical Bonding',
+    text: "CO2 has which type of bonding?",
+    options: ['Ionic', 'Covalent', 'Metallic', 'Coordinate only'],
+    correct: 1,
+    explanation: "CO2 is O=C=O, double covalent bonds between C and O."
+  },
+  {
+    id: 28,
+    subject: 'chemistry',
+    topic: 'Acids & Bases',
+    text: "pH of a neutral solution at 25°C is:",
+    options: ['0', '7', '14', '1'],
+    correct: 1,
+    explanation: "Neutral water at 25°C has pH = 7."
+  },
+  {
+    id: 29,
+    subject: 'chemistry',
+    topic: 'Electrochemistry',
+    text: "A galvanic cell converts:",
+    options: ['Chemical → Electrical', 'Electrical → Chemical', 'Heat → Electrical', 'Light → Chemical'],
+    correct: 0,
+    explanation: "Galvanic/voltaic cell converts chemical energy into electrical energy."
+  },
+  {
+    id: 30,
+    subject: 'chemistry',
+    topic: 'Inorganic Chemistry',
+    text: "Common name of NaHCO3 is:",
+    options: ['Baking soda', 'Washing soda', 'Caustic soda', 'Table salt'],
+    correct: 0,
+    explanation: "NaHCO3 = sodium bicarbonate = baking soda."
+  },
+  {
+    id: 31,
+    subject: 'math',
+    topic: 'Algebra',
+    text: "If log10(100) = x, then x = ?",
+    options: ['1', '2', '10', '0'],
+    correct: 1,
+    explanation: "log10(100) = log10(10^2) = 2."
+  },
+  {
+    id: 32,
+    subject: 'physics',
+    topic: 'Thermodynamics',
+    text: "The SI unit of heat is:",
+    options: ['Calorie', 'Joule', 'Watt', 'Kelvin'],
+    correct: 1,
+    explanation: "Heat is energy; SI unit is Joule (J)."
+  },
+  {
+    id: 33,
+    subject: 'chemistry',
+    topic: 'Organic Chemistry',
+    text: "Functional group of alcohols is:",
+    options: ['-COOH', '-OH', '-CHO', '-NH2'],
+    correct: 1,
+    explanation: "Alcohols contain the hydroxyl group -OH."
+  },
+  {
+    id: 34,
+    subject: 'math',
+    topic: 'Calculus - Limits',
+    text: "lim (x→0) sin(x)/x = ?",
+    options: ['0', '1', '∞', 'undefined'],
+    correct: 1,
+    explanation: "Standard limit: lim(x→0) sin(x)/x = 1."
+  },
+  {
+    id: 35,
+    subject: 'physics',
+    topic: 'Mechanics - Newton Laws',
+    text: "Weight of a 10 kg mass on Earth (g=10 m/s^2) is:",
+    options: ['10 N', '100 N', '1 N', '1000 N'],
+    correct: 1,
+    explanation: "W = mg = 10*10 = 100 N."
+  },
+  {
+    id: 36,
+    subject: 'chemistry',
+    topic: 'Atomic Structure',
+    text: "Number of neutrons in Carbon-14 (C, Z=6) is:",
+    options: ['6', '8', '14', '7'],
+    correct: 1,
+    explanation: "Neutrons = A - Z = 14 - 6 = 8."
+  },
+  {
+    id: 37,
+    subject: 'math',
+    topic: 'Vectors',
+    text: "Magnitude of vector (3,4) is:",
+    options: ['5', '7', '12', '1'],
+    correct: 0,
+    explanation: "|v| = sqrt(3^2 + 4^2) = sqrt(25) = 5."
+  },
+  {
+    id: 38,
+    subject: 'physics',
+    topic: 'Waves & Optics',
+    text: "Refractive index n = c/v relates to:",
+    options: ['Speed of light in vacuum vs medium', 'Mass', 'Charge', 'Temperature'],
+    correct: 0,
+    explanation: "n = c/v where c is speed in vacuum, v in medium."
+  },
+  {
+    id: 39,
+    subject: 'math',
+    topic: 'Coordinate Geometry',
+    text: "Equation of a line with slope 2 through origin is:",
+    options: ['y = 2x', 'y = x/2', 'y = 2', 'x = 2y'],
+    correct: 0,
+    explanation: "y = mx + c, with m=2 and c=0 → y = 2x."
+  },
+  {
+    id: 40,
+    subject: 'chemistry',
+    topic: 'Periodic Table',
+    text: "Group 1 elements are called:",
+    options: ['Alkaline earth', 'Alkali metals', 'Halogens', 'Noble gases'],
+    correct: 1,
+    explanation: "Group 1 (excluding H) = alkali metals (Li, Na, K, ...)."
+  },
 ]
 
 export const subjects = [

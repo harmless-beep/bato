@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { LangProvider } from './components/ui'
-import MouseFX from './components/mousefx-wrapper'
 
 export const metadata: Metadata = {
   title: 'बाटो — IOE/KU Engineering Prep',
