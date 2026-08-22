@@ -137,42 +137,19 @@ export default function Home() {
       {/* ── Dashboard body ───────────────────────────────────────────── */}
       <div className="dashboard">
 
-        {/* ── Hero grid: quote | stats+calendar ────────────────────────── */}
-        <div className="hero-grid">
-          <div>
-            {/* ── Daily Quote ─────────────────────────────────────────────── */}
-            <Reveal>
-              <div className="quote-card">
-                <div className="quote-mark">“</div>
-                <div className="quote-text" key={todayQuote().en}>
-                  {isNe ? todayQuote().ne : todayQuote().en}
-                </div>
-                <div className="quote-by">— {isNe ? todayQuote().byNp : todayQuote().by}</div>
-              </div>
-            </Reveal>
-
-            {/* ── Latest Updates (left column, under quote) ─────────────── */}
-            <Reveal delay={100}>
-              <div className="section-header" style={{ marginTop: 26 }}>
-                <div className="section-title">{isNe ? 'ताजा अपडेट' : 'Latest Updates'}</div>
-              </div>
-              <div className="news-list">
-                {news.map((n, i) => (
-                  <div key={i} className="news-item">
-                    <div className="news-top">
-                      <span className={`news-tag news-tag-${n.tag.toLowerCase()}`}>{isNe ? n.tagNp : n.tag}</span>
-                      <span className="news-date">{isNe ? n.dateNp : n.date}</span>
-                    </div>
-                    <div className="news-headline">{isNe ? n.headlineNp : n.headline}</div>
-                    <div className="news-body">{isNe ? n.bodyNp : n.body}</div>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
+        {/* ── Daily Quote ─────────────────────────────────────────────── */}
+        <Reveal>
+          <div className="quote-card">
+            <div className="quote-mark">“</div>
+            <div className="quote-text" key={todayQuote().en}>
+              {isNe ? todayQuote().ne : todayQuote().en}
+            </div>
+            <div className="quote-by">— {isNe ? todayQuote().byNp : todayQuote().by}</div>
           </div>
-          <div className="hero-side">
-            {/* ── My Stats ──────────────────────────────────────────────── */}
-            <Reveal>
+        </Reveal>
+
+        {/* ── My Stats ────────────────────────────────────────────────── */}
+        <Reveal>
           <div className="section-header">
             <div className="section-title">{isNe ? 'मेरो तथ्यांक' : 'My Stats'}</div>
           </div>
@@ -279,8 +256,6 @@ export default function Home() {
             </div>
           </Reveal>
         )}
-          </div>
-        </div>
 
         {/* ── Quick Access ────────────────────────────────────────────── */}
         <Reveal delay={80}>
@@ -300,7 +275,26 @@ export default function Home() {
           ))}
         </div>
 
-        {/* ── Two-column: News + Colleges ─────────────────────────────── */}
+        {/* ── Latest Updates ─────────────────────────────────────────── */}
+        <Reveal delay={100}>
+          <div className="section-header" style={{ marginTop: 32 }}>
+            <div className="section-title">{isNe ? 'ताजा अपडेट' : 'Latest Updates'}</div>
+          </div>
+          <div className="news-list">
+            {news.map((n, i) => (
+              <div key={i} className="news-item">
+                <div className="news-top">
+                  <span className={`news-tag news-tag-${n.tag.toLowerCase()}`}>{isNe ? n.tagNp : n.tag}</span>
+                  <span className="news-date">{isNe ? n.dateNp : n.date}</span>
+                </div>
+                <div className="news-headline">{isNe ? n.headlineNp : n.headline}</div>
+                <div className="news-body">{isNe ? n.bodyNp : n.body}</div>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+
+        {/* ── Two-column: Colleges ────────────────────────────────────── */}
         <div className="two-col">
           {/* Top Colleges */}
           <Reveal delay={160}>

@@ -700,7 +700,7 @@ html[data-theme="dark"] .filter-label { color: var(--muted); }
 }
 @media (min-width: 1025px) {
   .page-content { padding: 28px 24px 48px; max-width: 900px; }
-  .dashboard { max-width: 1100px; margin: 0 auto; }
+  .dashboard { max-width: 880px; margin: 0 auto; }
 }
 
 /* ─── Daily Quote ─── */
@@ -761,10 +761,10 @@ html[data-theme="dark"] .filter-label { color: var(--muted); }
 }
 @media (min-width: 1025px) {
   .countdown-banner { margin-bottom: 16px; }
-  .dashboard { max-width: 1200px; padding: 24px 24px 56px; }
-  .quick-grid { grid-template-columns: repeat(4, 1fr); gap: 14px; }
-  .quick-card { padding: 22px 16px; }
-  .quick-icon { font-size: 36px; }
+  .dashboard { max-width: 880px; padding: 24px 24px 56px; }
+  .quick-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .quick-card { padding: 20px 16px; }
+  .quick-icon { font-size: 34px; }
   .stats-row { grid-template-columns: repeat(3, 1fr); gap: 14px; }
   .stat-tile { padding: 20px 14px; }
   .stat-tile-num { font-size: 28px; }
@@ -959,22 +959,3 @@ html[data-theme="dark"] .support-bar { border-color: rgba(255,255,255,0.1); }
   color: var(--muted);
   letter-spacing: 0.4px;
 }
-
-/* ─── Desktop bento: hero grid (quote | stats+calendar) ─── */
-.hero-grid { display: block; }
-@media (min-width: 1025px) {
-  .hero-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    gap: 20px;
-    align-items: stretch;
-  }
-  .hero-grid > div:first-child { display: flex; }
-  .hero-grid > div:first-child > .reveal, .hero-grid .quote-card { flex: 1; }
-  .quote-card { margin-bottom: 0; display: flex; flex-direction: column; justify-content: center; }
-  /* quick grid: 6 cards -> even 3x2 */
-  .quick-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
-}
-
-/* ─── Study calendar: cap cell size on desktop ─── */
-.cal-grid { max-width: 300px; }
