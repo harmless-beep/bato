@@ -83,13 +83,14 @@ export default function Home() {
   const [stats, setStats] = useState({ questions: 0, accuracy: 0, streak: 0, days: [] as string[] })
   const [mounted, setMounted] = useState(false)
   const [quote, setQuote] = useState<{ en: string; np?: string; by: string; byNp?: string }>(() => randomQuote())
-  const [ioeDays, setIoeDays] = useState<number | null>(null)
+  const [daysLeft, setDaysLeft] = useState<{ ioe: number; cee: number } | null>(null)
 
   const newQuote = useCallback(() => setQuote(randomQuote()), [])
 
   useEffect(() => {
     setStats(getStats())
-    setIoeDays(Math.max(0, Math.ceil((new Date('2027-03-29').getTime() - Date.now()) / 86400000)))
+    const days = (iso: string) => Math.max(0, Math.ceil((new Date(iso).getTime() - Date.now()) / 86400000))
+    setDaysLeft({ ioe: days('2027-03-29'), cee: days('2026-10-05') })
     setMounted(true)
   }, [])
 
@@ -104,10 +105,23 @@ export default function Home() {
           <span className="countdown-label">
             {isNe ? 'IOE 2083 प्रवेश परीक्षा:' : 'IOE 2083 Entrance Exam:'}
           </span>
-          <span className="countdown-days">{ioeDays !== null ? `${ioeDays} ${isNe ? 'दिन बाँकी' : 'days left'}` : '…'}</span>
+          <span className="countdown-days">{daysLeft ? `${daysLeft.ioe} ${isNe ? 'दिन बाँकी' : 'days left'}` : '…'}</span>
           <span className="countdown-date">{isNe ? 'चैत २०८३' : 'Chaitra 2083'}</span>
           <Link href="/mock-test" className="countdown-cta">
             {isNe ? 'CBT अभ्यास सुरु →' : 'Start CBT Practice →'}
+          </Link>
+        </div>
+      </div>
+      <div className="countdown-banner" style={{ background: 'linear-gradient(135deg, #064e3b, #059669)' }}>
+        <div className="countdown-inner">
+          <span className="countdown-icon">🩺</span>
+          <span className="countdown-label">
+            {isNe ? 'CEE 2083 (MECEE-BL) परीक्षा:' : 'CEE 2083 (MECEE-BL) Exam:'}
+          </span>
+          <span className="countdown-days">{daysLeft ? `${daysLeft.cee} ${isNe ? 'दिन बाँकी' : 'days left'}` : '…'}</span>
+          <span className="countdown-date">{isNe ? 'असोज २०८३' : 'Ashoj 2083'}</span>
+          <Link href="/med-predictor" className="countdown-cta">
+            {isNe ? 'मेडिकल हेर्नुहोस् →' : 'Check Medical →'}
           </Link>
         </div>
       </div>
