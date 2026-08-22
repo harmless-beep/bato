@@ -226,7 +226,9 @@ export default function Suggest() {
             </div>
           ) : (
             <>
-              <button className="sug-admin-trigger" onClick={() => setAsk(!ask)} title={isNe ? 'प्रशासक' : 'Admin'}>{ask ? '✕' : '⚙️'}</button>
+              <button className="sug-admin-trigger" onClick={() => setAsk(!ask)}>
+                {ask ? '✕ ' : '⚙️ '}{isNe ? 'प्रशासक' : 'Admin'}
+              </button>
               {ask && (
                 <div className="sug-unlock">
                   <input

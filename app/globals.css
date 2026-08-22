@@ -1132,11 +1132,11 @@ html body {
 
 /* ─── Admin (suggestions) ─── */
 .sug-admin-trigger {
-  border: 1px dashed var(--border); background: transparent; color: var(--muted);
-  font-size: 14px; width: 34px; height: 30px; border-radius: 999px; cursor: pointer;
-  transition: all 0.15s; opacity: 0.7;
+  border: 1.5px solid var(--border); background: var(--card); color: var(--muted);
+  font-size: 12.5px; font-weight: 800; padding: 8px 16px; border-radius: 999px; cursor: pointer;
+  transition: all 0.15s; opacity: 0.85;
 }
-.sug-admin-trigger:hover { opacity: 1; border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+.sug-admin-trigger:hover { opacity: 1; border-color: var(--gold); color: var(--gold); transform: translateY(-1px); }
 .sug-unlock { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; }
 .sug-bad { border-color: var(--danger) !important; animation: shake 0.4s; }
 @keyframes shake {
