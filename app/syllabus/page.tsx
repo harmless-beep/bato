@@ -101,7 +101,7 @@ export default function Syllabus() {
   return (
     <div className="page">
       <div className="topbar">
-        <Link href="/" className="back-btn">← {isNe ? 'होम' : 'Home'}</Link>
+        <Link href="/" className="back-btn" aria-label="Home">←</Link>
         <span className="nav-title">🗂️ {isNe ? 'पाठ्यक्रम' : 'Syllabus'}</span>
         <div />
       </div>

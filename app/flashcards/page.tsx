@@ -44,7 +44,7 @@ export default function Flashcards() {
   return (
     <div className="page">
       <div className="topbar">
-        <Link href="/" className="back-btn">← {isNe ? 'होम' : 'Home'}</Link>
+        <Link href="/" className="back-btn" aria-label="Home">←</Link>
         <span className="nav-title">🃏 {isNe ? 'फ्लैशकार्ड' : 'Flashcards'}</span>
         <div />
       </div>

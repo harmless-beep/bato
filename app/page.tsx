@@ -28,6 +28,7 @@ const quickItems = [
   { icon: '🗂️', label: 'Syllabus',       labelNp: 'पाठ्यक्रम',      href: '/syllabus',    desc: 'IOE & KU complete entrance syllabus',       descNp: 'IOE र KU को पूर्ण प्रवेश पाठ्यक्रम' },
   { icon: '🃏', label: 'Flashcards',     labelNp: 'फ्लैशकार्ड',     href: '/flashcards',  desc: 'Quick recall for formulas & concepts',     descNp: 'सूत्र र अवधारणाहरूको छिट्टै दोहोर्याउनुहोस्' },
   { icon: '🩺', label: 'Med Predictor',  labelNp: 'मेडिकल अनुमान',  href: '/med-predictor', desc: 'MECEE rank → medical colleges',           descNp: 'MECEE rank → मेडिकल कलेज' },
+  { icon: '💼', label: 'Careers',         labelNp: 'करियर',          href: '/careers',       desc: 'Jobs, salaries & paths after degree',      descNp: 'डिग्री पछि जागिर, तलब र बाटो' },
 ]
 
 // ── Latest news ─────────────────────────────────────────────────────────────

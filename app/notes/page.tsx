@@ -22,7 +22,9 @@ export default function Notes() {
     try { return JSON.parse(localStorage.getItem('bato-known') || '[]') } catch { return [] }
   })
 
-  const entranceIds = ['math', 'physics', 'chemistry', 'english', 'aptitude', 'med-phy', 'med-chem', 'med-bio']
+  const entranceIds = ['math', 'physics', 'chemistry', 'english', 'aptitude', 'med-phy', 'med-chem', 'med-bio',
+    'csit', 'civil', 'electrical', 'mechanical', 'med-anatomy', 'med-pharma', 'med-micro', 'med-biochem',
+    'english-2', 'aptitude-2', 'g.k', 'formula-sheet']
   const bachelorIds = ['sem1', 'sem2', 'sem3', 'sem4', 'sem5']
 
   const visible = useMemo(() => {
@@ -84,7 +86,7 @@ export default function Notes() {
   return (
     <div className="page">
       <div className="topbar">
-        <Link href="/" className="back-btn">← {isNe ? 'होम' : 'Home'}</Link>
+        <Link href="/" className="back-btn" aria-label="Home">←</Link>
         <span className="nav-title">📖 {isNe ? 'Notes' : 'Notes'}</span>
         <div />
       </div>

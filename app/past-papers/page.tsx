@@ -105,7 +105,7 @@ export default function PastPapers() {
   return (
     <div className="page">
       <div className="topbar">
-        <Link href="/" className="back-btn">← {isNe ? 'होम' : 'Home'}</Link>
+        <Link href="/" className="back-btn" aria-label="Home">←</Link>
         <span className="nav-title">{isNe ? '📄 पुराना प्रश्नपत्र' : '📄 Past Papers'}</span>
         <div />
       </div>

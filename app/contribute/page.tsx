@@ -17,7 +17,7 @@ export default function Contribute() {
   return (
     <div className="page">
       <div className="topbar">
-        <Link href="/" className="back-btn">← {isNe ? 'होम' : 'Home'}</Link>
+        <Link href="/" className="back-btn" aria-label="Home">←</Link>
         <span className="nav-title">🤝 {isNe ? 'योगदान' : 'Contribute'}</span>
         <div />
       </div>

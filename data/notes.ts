@@ -1032,4 +1032,857 @@ CBR test for subgrade, aggregate crushing value, Los Angeles abrasion`
       },
     ]
   },
+  {
+    id: 'csit',
+    title: 'CSIT / Computer',
+    titleNp: 'CSIT / कम्प्युटर',
+    icon: '💻',
+    items: [
+      {
+        title: 'Data Structures — Stacks, Queues, Trees',
+        content: `**Array:** contiguous memory, O(1) random access, fixed size
+**Linked List:** nodes with data + pointer, O(n) access, dynamic size
+**Stack:** LIFO — push/pop O(1). Uses: function calls, undo, expression evaluation
+**Queue:** FIFO — enqueue/dequeue O(1). Uses: scheduling, BFS, buffering
+**Tree:** hierarchical — binary tree, BST (left < root < right), heap (min/max)
+**Traversals:** Inorder (L-Root-R), Preorder (Root-L-R), Postorder (L-R-Root)
+
+**BST search:** O(log n) balanced, O(n) worst case (skewed)`
+      },
+      {
+        title: 'Algorithms — Sorting & Big-O',
+        content: `**Complexity classes:**
+O(1) constant — array access
+O(log n) — binary search
+O(n) — linear scan
+O(n log n) — merge/quick sort
+O(n²) — bubble/insertion/selection sort
+
+**Bubble:** compare adjacent, swap — O(n²), stable
+**Selection:** find min, place at front — O(n²), unstable
+**Insertion:** insert into sorted part — O(n²), best O(n) nearly sorted
+**Merge:** divide & conquer — O(n log n), stable, O(n) space
+**Quick:** partition around pivot — O(n log n) avg, O(n²) worst
+
+**Binary search:** only on sorted arrays, halve each step`
+      },
+      {
+        title: 'DBMS — SQL & Normal Forms',
+        content: `**SQL basics:**
+SELECT col FROM table WHERE cond
+INSERT INTO table (cols) VALUES (vals)
+UPDATE table SET col=val WHERE cond
+DELETE FROM table WHERE cond
+JOIN: INNER (match both), LEFT (all left + matches), RIGHT, FULL
+
+**Normal forms:**
+1NF: atomic values, no repeating groups
+2NF: 1NF + no partial dependency (all non-key cols depend on full PK)
+3NF: 2NF + no transitive dependency (non-key to non-key)
+BCNF: 3NF + every determinant is a candidate key
+
+**ACID:** Atomicity, Consistency, Isolation, Durability`
+      },
+      {
+        title: 'Networking — OSI & TCP/IP',
+        content: `**OSI 7 layers:** Physical, Data Link, Network, Transport, Session, Presentation, Application
+**TCP/IP 4 layers:** Network Access, Internet, Transport, Application
+
+**Key protocols:**
+HTTP/HTTPS (web, 80/443), FTP (files, 21), SMTP (mail out, 25), POP3/IMAP (mail in, 110/143), DNS (name to IP, 53), DHCP (IP assignment)
+
+**TCP:** connection-oriented, reliable, 3-way handshake (SYN-SYN/ACK-ACK)
+**UDP:** connectionless, fast, no guarantee (video calls, DNS)
+
+**IP:** IPv4 32-bit (192.168.1.1), IPv6 128-bit
+**Subnet mask:** 255.255.255.0 = /24`
+      },
+      {
+        title: 'OOP Concepts',
+        content: `**4 pillars:**
+1. Encapsulation: hide data, expose methods (private fields + getters/setters)
+2. Inheritance: child class reuses parent (extends / is-a)
+3. Polymorphism: same method, different behavior (overloading = compile-time, overriding = runtime)
+4. Abstraction: hide implementation, show interface (abstract class / interface)
+
+**Class vs Object:** class = blueprint, object = instance
+**Constructor:** special method, runs on instantiation
+**this/super:** this = current object, super = parent
+**Access modifiers:** private (class only), protected (package + subclass), public (everyone)`
+      },
+      {
+        title: 'Software Engineering Basics',
+        content: `**SDLC phases:** Requirement, Design, Implementation, Testing, Deployment, Maintenance
+
+**Models:**
+Waterfall: sequential, rigid, good for clear requirements
+Agile/Scrum: iterative sprints, continuous feedback
+V-model: testing paired with each phase
+
+**Testing:**
+Unit (function level), Integration (module interaction), System (whole app), UAT (user)
+Regression: re-test after changes
+
+**UML diagrams:** Use Case, Class, Sequence, Activity, State`
+      },
+    ]
+  },
+  {
+    id: 'civil',
+    title: 'Civil Engineering',
+    titleNp: 'सिभिल इन्जिनियरिङ',
+    icon: '🏗️',
+    items: [
+      {
+        title: 'Structures — Beams & Loads',
+        content: `**Load types:** Dead (self-weight), Live (people/furniture), Wind, Seismic, Snow
+**Bending moment:** M = force x distance; max at midspan for simply supported UDL: M = wL²/8
+**Shear force:** V = wL/2 at supports (UDL)
+**Deflection:** δ = 5wL⁴/384EI (simply supported, UDL)
+
+**Support types:** Pin (no translation, rotates), Roller (vertical only), Fixed (no movement at all)
+**Statically determinate:** reactions solvable by ΣF=0, ΣM=0 (3 equations for 2D)`
+      },
+      {
+        title: 'Surveying Basics',
+        content: `**Chain surveying:** baseline + offsets for small flat areas
+**Leveling:** height of instrument (HI) method: HI = BS + RL, then RL = HI - FS
+**Rise & fall method:** rise = BS - FS (if BS>FS)
+**Contour:** line joining equal elevation points; close spacing = steep slope
+**Bearing:** WCB (0-360° from North) vs QB (quadrantal N-E etc.)
+**Traverse:** closed loop, angular error = Σangles - (n-2)x180°`
+      },
+      {
+        title: 'Construction Materials',
+        content: `**Concrete:** cement + sand + aggregate + water
+Grade: M20 = 20 N/mm² at 28 days; mix ratio 1:1.5:3 ≈ M20
+Water-cement ratio: 0.4-0.6 (lower = stronger, less workable)
+Slump test: workability; cubes tested at 7/28 days
+
+**Steel:** Fe415 (415 N/mm² yield), Fe500, Fe550
+Reinforcement: tension zone, cover 25-50mm, hooks/bends at ends
+**Brick:** standard 230x115x75mm, crushing strength 3.5-35 N/mm²
+**Cement:** OPC (ordinary), PPC (fly ash), PSC (slag)`
+      },
+      {
+        title: 'Geotechnical Engineering',
+        content: `**Soil properties:**
+Void ratio e = Vv/Vs, Porosity n = Vv/V, Water content w = Ww/Ws
+Saturation S = Vw/Vv; dry density ρd = ρ/(1+w)
+**Consistency:** Atterberg limits — LL (liquid), PL (plastic), SL (shrinkage)
+PI = LL - PL; high PI = clay (expansive)
+
+**Compaction:** Proctor test — OMC (optimum moisture content) gives max dry density
+**Bearing capacity:** Terzaghi q_u = cNc + qNq + ½γBNγ
+**Settlement:** immediate + consolidation (clay, time-dependent)`
+      },
+      {
+        title: 'Hydraulics',
+        content: `**Hydrostatics:** P = ρgh; pressure varies linearly with depth
+**Continuity:** A₁V₁ = A₂V₂ (mass conservation)
+**Bernoulli:** P/γ + V²/2g + z = constant (energy per unit weight)
+**Head loss (Darcy-Weisbach):** hf = fLV²/2gD
+**Manning's (open channel):** V = (1/n) R^(2/3) S^(1/2)
+**Reynolds number:** Re = VD/ν; <2000 laminar, >4000 turbulent
+**Hydraulic jump:** supercritical → subcritical, energy dissipator`
+      },
+      {
+        title: 'Transportation Engineering',
+        content: `**Highway alignment:** horizontal (curves, superelevation) + vertical (grades, sags)
+**Superelevation:** e = V²/127R (to counter centrifugal force)
+**Stopping sight distance:** SSD = 0.278Vt + V²/254f
+**Pavement types:** Flexible (bitumen layers) vs Rigid (concrete slab + joints)
+**CBR test:** subgrade strength; design thickness from CBR
+**Traffic studies:** PCU (passenger car unit), peak hour factor, signal design (Webster's)`
+      },
+    ]
+  },
+  {
+    id: 'electrical',
+    title: 'Electrical Engineering',
+    titleNp: 'इलेक्ट्रिकल इन्जिनियरिङ',
+    icon: '⚡',
+    items: [
+      {
+        title: 'Circuit Analysis',
+        content: `**Ohm's Law:** V = IR
+**KCL:** sum of currents into node = 0
+**KVL:** sum of voltage drops around loop = 0
+**Series:** R = R₁+R₂+..., same current
+**Parallel:** 1/R = 1/R₁+1/R₂+..., same voltage
+**Thevenin:** any linear circuit = Vth + Rth in series
+**Norton:** = In + Rn in parallel; In = Vth/Rth
+
+**Power:** P = VI = I²R = V²/R
+**Energy:** E = Pt (kWh)
+**AC:** Vrms = Vpeak/√2; Z = √(R²+(XL-XC)²)`
+      },
+      {
+        title: 'Electrical Machines',
+        content: `**Transformer:** V₁/V₂ = N₁/N₂ = I₂/I₁
+Efficiency η = output/input; losses: copper (I²R) + iron (hysteresis + eddy)
+EMF equation: E = 4.44 f N Φm
+
+**DC Motor:** Eb = V - IaRa; torque T ∝ ΦIa; speed N ∝ (V - IaRa)/Φ
+Types: shunt (constant speed), series (high starting torque), compound
+
+**Induction motor:** synchronous speed Ns = 120f/P; slip s = (Ns-N)/Ns
+Starting torque ∝ s; full load slip 2-5%
+**Alternator:** frequency f = P·N/120`
+      },
+      {
+        title: 'Power Systems',
+        content: `**Generation:** hydro (Nepal's main), thermal, solar, wind
+**Transmission:** 132/220/400 kV; step-up at plant, step-down at substations
+**Distribution:** 11kV/400V; LT (low tension) vs HT (high tension)
+**Faults:** L-G, L-L, L-L-G, 3-phase; symmetrical (3φ) vs unsymmetrical
+**Per-unit system:** normalize values: pu = actual/base
+**Load flow:** Newton-Raphson, Gauss-Seidel for V, P, Q at buses
+**Protection:** relays (overcurrent, distance, differential), circuit breakers (SF6, VCB)`
+      },
+      {
+        title: 'Electronics Basics',
+        content: `**Diode:** forward bias conducts (~0.7V Si), reverse blocks; rectifier (half/full wave)
+**Zener:** reverse breakdown for voltage regulation
+**BJT:** NPN/PNP; IC = βIB; modes: cutoff, active (amplifier), saturation (switch)
+**FET/MOSFET:** voltage-controlled; high input impedance; digital switch
+**Op-amp:** Vout = A(V+ - V-); inverting: -Rf/R1; non-inverting: (1+Rf/R1)
+**Logic gates:** AND, OR, NOT, NAND, NOR, XOR; NAND/NOR universal
+**555 timer:** astable (oscillator), monostable (one-shot)`
+      },
+      {
+        title: 'Control Systems',
+        content: `**Transfer function:** G(s) = output/input in Laplace domain
+**Blocks:** series (multiply), parallel (add), feedback: G/(1+GH)
+**Stability:** poles in left half plane = stable; Routh-Hurwitz criterion
+**Steady-state error:** depends on system type (0,1,2) and input (step, ramp, parabola)
+**PID:** P (proportional), I (eliminates offset), D (reduces overshoot)
+**Bode plot:** gain margin, phase margin; PM > 45° for good response`
+      },
+      {
+        title: 'Renewable Energy',
+        content: `**Solar:** PV cells (efficiency 15-22%), net metering in Nepal
+**Wind:** P = ½ρAV³ — power ∝ cube of wind speed
+**Hydro:** Nepal's potential ~83,000 MW, developed ~2-3%; pico/micro (up to 100kW), small (1-100MW), large (>100MW)
+**Biomass:** biogas (animal waste → methane), briquettes
+**Tidal/Geothermal:** ocean and earth-heat based
+**Storage:** lithium batteries, pumped hydro storage (PHS)`
+      },
+    ]
+  },
+  {
+    id: 'mechanical',
+    title: 'Mechanical Engineering',
+    titleNp: 'मेकानिकल इन्जिनियरिङ',
+    icon: '⚙️',
+    items: [
+      {
+        title: 'Thermodynamics',
+        content: `**Zeroth law:** thermal equilibrium transitivity
+**1st law:** ΔU = Q - W (energy conservation)
+**2nd law:** entropy ↑ in isolated systems; heat flows hot→cold
+**3rd law:** entropy → 0 as T → 0K
+
+**Gas laws:** PV = nRT; isothermal (T const), isobaric (P const), isochoric (V const), adiabatic (Q=0, PV^γ=const)
+**Carnot efficiency:** η = 1 - Tc/Th (maximum possible)
+**Specific heats:** cp - cv = R; γ = cp/cv (air 1.4)`
+      },
+      {
+        title: 'Mechanics of Materials',
+        content: `**Stress:** σ = F/A; strain ε = δ/L; Hooke's law σ = Eε
+**Poisson's ratio:** ν = -εlateral/εaxial (~0.3 steel)
+**Shear:** τ = V/A; G = shear modulus
+**Bulk modulus:** K = -V(dP/dV)
+
+**Axial deformation:** δ = PL/AE
+**Thermal stress:** σ = EαΔT (if constrained)
+**Bending:** σ = My/I; I (rect) = bh³/12, I (circle) = πd⁴/64
+**Torsion:** τ = Tr/J; J (circle) = πd⁴/32
+**Buckling (Euler):** Pcr = π²EI/L² (columns)`
+      },
+      {
+        title: 'Fluid Mechanics',
+        content: `**Properties:** density, viscosity (μ), surface tension (γ), compressibility
+**Newtonian fluid:** τ = μ(dv/dy)
+**Hydrostatics:** P = ρgh, Pascal's law, buoyancy (Archimedes: Fb = ρgV)
+
+**Continuity:** A₁V₁ = A₂V₂
+**Bernoulli:** P + ½ρV² + ρgh = constant
+**Laminar vs turbulent:** Re < 2000 laminar (pipe)
+**Poiseuille (laminar pipe flow):** Q = πΔP r⁴/8μL
+**Boundary layer:** velocity gradient near surface; separation → drag`
+      },
+      {
+        title: 'Manufacturing Processes',
+        content: `**Casting:** molten metal into mold (sand casting, die casting, investment)
+**Machining:** turning (lathe), milling, drilling, grinding — material removal
+**Forming:** forging (hammer/press), rolling, extrusion, sheet bending
+**Joining:** welding (arc, MIG, TIG), brazing, soldering, riveting
+**Additive:** 3D printing (FDM, SLA, SLS)
+
+**CNC:** computer-controlled machining; G-code
+**Tolerances:** ±0.05mm typical machining; fits (clearance, transition, interference)`
+      },
+      {
+        title: 'Heat Transfer',
+        content: `**Conduction (Fourier):** Q = kAΔT/L — solids, k = thermal conductivity
+**Convection (Newton):** Q = hAΔT — fluids, h = heat transfer coefficient
+**Radiation (Stefan-Boltzmann):** Q = εσAT⁴ — no medium needed, σ = 5.67x10⁻⁸
+
+**Composite walls:** resistances in series: R_total = Σ(L/kA)
+**Fins:** extend surface area to increase heat dissipation
+**Heat exchangers:** counter-flow (more efficient) vs parallel; LMTD method`
+      },
+      {
+        title: 'Machine Design',
+        content: `**Design process:** load analysis → material selection → failure theory → sizing → check
+**Factor of safety:** FOS = ultimate stress/allowable stress (1.5-3 typical)
+
+**Failure theories:** Maximum normal stress (brittle), Maximum shear stress/Tresca (ductile), von Mises (distortion energy)
+**Gears:** involute profile; module m = d/N; gear ratio = N₂/N₁
+**Shafts:** transmit torque; τ = 16T/πd³
+**Bearings:** rolling (ball/roller) vs sliding; L10 life (revolutions for 90% reliability)
+**Springs:** k = Gd⁴/8D³n (helical)`
+      },
+    ]
+  },
+  {
+    id: 'med-anatomy',
+    title: 'Medical Anatomy',
+    titleNp: 'मेडिकल एनाटोमी',
+    icon: '🦴',
+    items: [
+      {
+        title: 'Skeletal System',
+        content: `**206 bones adult** (270 at birth, fuse down)
+**Axial skeleton:** skull (22), vertebral column (26), rib cage (24 + sternum)
+**Appendicular:** limbs + girdles (126)
+
+**Vertebrae:** 7 cervical, 12 thoracic, 5 lumbar, 5 sacral (fused), 4 coccygeal
+**Skull sutures:** coronal, sagittal, lambdoid, squamous
+**Long bone parts:** epiphysis (ends), diaphysis (shaft), metaphysis (growth plate)
+
+**Joints:** fibrous (skull sutures — immovable), cartilaginous (vertebrae — slightly movable), synovial (knee — freely movable)
+**Synovial types:** ball & socket (hip), hinge (elbow), pivot (neck), saddle (thumb)`
+      },
+      {
+        title: 'Muscular System',
+        content: `**3 muscle types:** skeletal (voluntary, striated), cardiac (involuntary, striated), smooth (involuntary, non-striated)
+**Skeletal muscle structure:** muscle → fascicle → fiber (cell) → myofibril → sarcomere
+
+**Sarcomere:** Z-line to Z-line; actin (thin) + myosin (thick)
+**Sliding filament theory:** myosin heads pull actin → shortening
+**Neuromuscular junction:** ACh neurotransmitter; motor unit = neuron + fibers
+
+**Major muscles:** biceps (flex elbow), triceps (extend), deltoid (abduct shoulder), quadriceps (extend knee), hamstrings (flex knee), gastrocnemius (calf, plantarflex)`
+      },
+      {
+        title: 'Circulatory System',
+        content: `**Heart:** 4 chambers — 2 atria (receiving), 2 ventricles (pumping)
+**Valves:** tricuspid (RA→RV), bicuspid/mitral (LA→LV), pulmonary, aortic
+**Blood flow:** RA → RV → lungs (pulmonary) → LA → LV → body (systemic)
+
+**Heartbeat:** SA node (pacemaker) → AV node → bundle of His → Purkinje fibers
+**Cardiac output:** CO = HR x SV (~5 L/min)
+**Blood pressure:** systolic/diastolic ~120/80 mmHg
+
+**Blood:** RBC (O₂ via Hb), WBC (immunity), platelets (clotting), plasma (55%)
+**Blood groups:** ABO + Rh; O- universal donor, AB+ universal recipient`
+      },
+      {
+        title: 'Nervous System',
+        content: `**CNS:** brain + spinal cord; **PNS:** cranial (12) + spinal (31) nerves
+**Neuron:** dendrites (receive) → cell body → axon (send) → terminal buttons
+**Myelin:** speeds conduction; oligodendrocytes (CNS), Schwann (PNS)
+
+**Action potential:** -70mV resting → +30mV peak (Na+ in) → repolarize (K+ out)
+**Synapse:** electrical (gap junctions) vs chemical (neurotransmitters)
+**Brain regions:** cerebrum (thinking), cerebellum (coordination), brainstem (vital: breathing, HR), hypothalamus (homeostasis), amygdala (emotion)`
+      },
+      {
+        title: 'Respiratory System',
+        content: `**Airway:** nose → pharynx → larynx → trachea → bronchi → bronchioles → alveoli
+**Lungs:** right 3 lobes, left 2 lobes (cardiac notch)
+
+**Breathing:** diaphragm contracts → thoracic volume ↑ → pressure ↓ → air in
+**Lung volumes:** TV 500ml, IRV ~3100ml, ERV ~1200ml, RV ~1200ml
+**Vital capacity:** TV + IRV + ERV ≈ 4.8L
+**Total lung capacity:** VC + RV ≈ 6L
+
+**Gas exchange:** O₂ into blood (Hb), CO₂ out; diffusion across alveolar-capillary membrane
+**Control:** respiratory center in medulla; CO₂ (not O₂) is the main driver
+**Oxygen saturation:** SpO₂ normal 95-100%`
+      },
+    ]
+  },
+  {
+    id: 'med-pharma',
+    title: 'Medical Pharmacology',
+    titleNp: 'मेडिकल फार्माकोलोजी',
+    icon: '💊',
+    items: [
+      {
+        title: 'Drug Classification Basics',
+        content: `**By source:** natural (morphine), synthetic (aspirin), semi-synthetic
+**By action:** agonist (activates receptor), antagonist (blocks)
+**By body system:** CVS, CNS, respiratory, GI, endocrine drugs
+
+**Pharmacokinetics (what body does to drug):** ADME
+Absorption (oral/IV/IM/sublingual), Distribution (blood→tissues), Metabolism (liver, CYP450), Excretion (kidney, bile)
+
+**Pharmacodynamics (what drug does to body):** receptor binding, enzyme inhibition
+**Half-life (t½):** time for plasma conc to halve; 4-5 half-lives to steady state`
+      },
+      {
+        title: 'Antibiotics',
+        content: `**Mechanism:** inhibit cell wall (penicillins), protein synthesis (tetracyclines, macrolides), DNA (fluoroquinolones), folate (sulfonamides)
+**Penicillins:** amoxicillin — cell wall; β-lactamase resistant: cloxacillin
+**Cephalosporins:** 1st-5th gen (wider spectrum); ceftriaxone (3rd gen, meningitis)
+**Macrolides:** azithromycin (atypical pneumonia, URTI)
+**Tetracyclines:** doxycycline (rickettsia, acne, malaria prophylaxis)
+**Aminoglycosides:** gentamicin (severe Gram -ve; nephro/ototoxic)
+**Fluoroquinolones:** ciprofloxacin (UTI, GI); avoid in kids (cartilage)
+**Metronidazole:** anaerobes, amoebiasis, giardiasis`
+      },
+      {
+        title: 'Painkillers & NSAIDs',
+        content: `**Paracetamol (acetaminophen):** antipyretic + analgesic; safe dose 4g/day; overdose → liver toxicity (N-acetylcysteine antidote)
+**Aspirin (NSAID):** antiplatelet (low dose 75-325mg), analgesic, anti-inflammatory; Reye's syndrome in kids
+**Ibuprofen:** common NSAID; GI bleeding risk with long use
+**Diclofenac:** strong NSAID; topical gel common
+
+**Opioids (strong pain):** morphine, tramadol, pethidine — CNS depression, addiction risk
+**Local anesthetics:** lidocaine (amide), procaine (ester) — block Na+ channels`
+      },
+      {
+        title: 'CVS Drugs',
+        content: `**Antihypertensives:**
+ACE inhibitors: enalapril (cough side effect)
+ARBs: losartan (no cough)
+Beta-blockers: metoprolol (HR ↓, contraindicated in asthma)
+Calcium channel blockers: amlodipine
+Diuretics: furosemide (loop), HCTZ (thiazide)
+
+**Anti-anginal:** nitroglycerin (vasodilator, sublingual)
+**Anticoagulants:** warfarin (vitamin K antagonist), heparin (immediate), DOACs (apixaban)
+**Antiplatelets:** aspirin, clopidogrel
+**Statins:** atorvastatin (cholesterol ↓)
+**Digoxin:** heart failure, AF (narrow therapeutic window)`
+      },
+      {
+        title: 'Side Effects & Interactions',
+        content: `**Common ADRs:** nausea, dizziness, rash, diarrhea, drowsiness
+
+**Important toxicities:**
+Paracetamol → liver; Gentamicin → kidney + ear; Warfarin → bleeding (vitamin K antidote); Methotrexate → bone marrow; Digoxin → arrhythmia
+
+**Drug interactions:**
+Warfarin + aspirin → bleeding ↑
+ACE-I + K-sparing diuretics → hyperkalemia
+CYP450 inhibitors (ketoconazole) raise drug levels
+Alcohol + paracetamol → liver toxicity
+
+**Pregnancy:** category A (safe) to X (teratogenic); avoid isotretinoin, warfarin, ACE-I`
+      },
+    ]
+  },
+  {
+    id: 'med-micro',
+    title: 'Microbiology',
+    titleNp: 'माइक्रोबायोलोजी',
+    icon: '🦠',
+    items: [
+      {
+        title: 'Bacteria Basics',
+        content: `**Prokaryotes:** no nucleus, no membrane organelles, peptidoglycan cell wall, 70S ribosomes
+**Shapes:** cocci (round), bacilli (rod), spirilla (spiral), vibrio (comma)
+**Gram staining:** Gram + (thick peptidoglycan, purple), Gram - (thin + outer membrane, pink)
+
+**Clinically important:**
+Staph aureus (boils, MRSA), Strep pyogenes (throat), E. coli (UTI), Salmonella (typhoid), Vibrio cholerae (diarrhea), Mycobacterium TB (acid-fast), Clostridium tetani (tetanus)
+
+**Spores:** Clostridium/Bacillus — resistant to heat/chemicals
+**Culture media:** blood agar, MacConkey (selective for Gram -ve)`
+      },
+      {
+        title: 'Viruses',
+        content: `**Structure:** nucleic acid (DNA/RNA) + protein capsid; obligate intracellular parasites
+**No ribosomes, no metabolism** — need host cell machinery
+
+**Classification:** DNA (herpes, hepatitis B, HPV) vs RNA (influenza, HIV, HCV, polio, corona)
+**Enveloped vs non-enveloped:** envelope = lipid membrane (easier to kill with alcohol)
+
+**Important viruses:** HIV (CD4 ↓, AIDS), Influenza (RNA, antigenic drift/shift), Hepatitis B (DNA, liver), COVID-19 (SARS-CoV-2), Dengue (mosquito), Rabies (fatal, post-exposure vaccine)
+
+**Antivirals:** acyclovir (HSV), oseltamivir (influenza), ART for HIV`
+      },
+      {
+        title: 'Immunity',
+        content: `**Innate immunity:** first line — skin, mucus, phagocytes (macrophages, neutrophils), complement, inflammation
+**Adaptive immunity:** specific, memory — B cells (antibodies) + T cells
+
+**B cells → antibodies (humoral):** IgG (most abundant, crosses placenta), IgA (mucosa), IgM (first response), IgE (allergy/parasites), IgD
+**T cells (cellular):** CD4 helper (orchestrates), CD8 cytotoxic (kills infected)
+
+**Vaccination:** active immunity (memory); attenuated (MMR), killed (polio IPV), subunit (HepB), mRNA (COVID)
+**Antigen vs antibody:** antigen = foreign trigger; antibody = produced defense
+**Autoimmunity:** self-attack (RA, SLE, type 1 DM)`
+      },
+      {
+        title: 'Infectious Diseases',
+        content: `**Transmission:** airborne (TB, flu), droplet (COVID, measles), fecal-oral (cholera, typhoid, hepatitis A), blood (HIV, HepB), vector (malaria, dengue)
+
+**Major Nepal diseases:**
+Malaria (Plasmodium, mosquito), Dengue (Aedes), TB (Mycobacterium), Typhoid (Salmonella typhi), Cholera (Vibrio), Japanese encephalitis (Culex mosquito), Rabies, Leishmaniasis (sandfly)
+
+**Prevention:** sanitation, vaccination, vector control (nets, insecticide), safe water, hand hygiene
+**Outbreak control:** isolate, trace contacts, quarantine, surveillance`
+      },
+      {
+        title: 'Parasites',
+        content: `**Protozoa (single cell):** Plasmodium (malaria), Entamoeba (amoebic dysentery), Giardia, Leishmania (kala-azar)
+**Helminths (worms):**
+Roundworms: Ascaris, hookworm (Ancylostoma)
+Tapeworms: Taenia (pork/beef)
+Flukes: Schistosoma (blood), Fasciola (liver)
+
+**Life cycle basics:** definitive host (adult stage) vs intermediate host (larval)
+**Diagnosis:** stool microscopy (ova/cysts), blood smear (malaria), serology
+**Treatment:** antihelminthics (albendazole, ivermectin), antimalarials (artemisinin combo)`
+      },
+    ]
+  },
+  {
+    id: 'med-biochem',
+    title: 'Biochemistry',
+    titleNp: 'बायोकेमिस्ट्री',
+    icon: '🧬',
+    items: [
+      {
+        title: 'Carbohydrate Metabolism',
+        content: `**Glycolysis (cytosol):** glucose → 2 pyruvate; net 2 ATP + 2 NADH; anaerobic → lactate
+**Krebs/TCA cycle (mitochondria):** acetyl-CoA → CO₂; 3 NADH + 1 FADH₂ + 1 GTP per turn
+**ETC/oxidative phosphorylation:** 1 NADH ≈ 2.5 ATP, 1 FADH₂ ≈ 1.5 ATP
+**Total glucose oxidation:** ~30-32 ATP
+
+**Glycogenesis/glycogenolysis:** storage/release (liver, muscle)
+**Gluconeogenesis:** pyruvate → glucose (fasting, liver)
+**Diabetes:** type 1 (insulin deficiency), type 2 (resistance); HbA1c reflects 3-month glucose`
+      },
+      {
+        title: 'Protein Synthesis',
+        content: `**Central dogma:** DNA → (transcription) → mRNA → (translation) → protein
+**Transcription (nucleus):** RNA polymerase; mRNA from DNA template; splicing removes introns
+**Genetic code:** 64 codons, 61 sense + 3 stop (UAA, UAG, UGA); AUG = start (methionine)
+
+**Translation (ribosome):** mRNA + tRNA (anticodon) + rRNA
+A site (aminoacyl), P site (peptidyl), E site (exit)
+**Mutations:** point (missense, nonsense, silent), frameshift (insertion/deletion)
+
+**Protein structure:** primary (sequence), secondary (α-helix, β-sheet), tertiary (3D), quaternary (multi-subunit)`
+      },
+      {
+        title: 'Enzymes',
+        content: `**Enzymes = biological catalysts (mostly proteins)** — lower activation energy, not consumed
+**Active site:** substrate binds; lock-and-key vs induced fit
+**Cofactors:** inorganic (Zn²⁺, Mg²⁺); coenzymes = organic (NAD⁺, FAD, vitamin-derived)
+
+**Kinetics (Michaelis-Menten):** V = Vmax[S]/(Km + [S])
+Km = substrate conc at ½Vmax (lower Km = higher affinity)
+**Lineweaver-Burk:** 1/V vs 1/[S] linear
+
+**Inhibition:** competitive (Km ↑, Vmax same), non-competitive (Vmax ↓, Km same)
+**Regulation:** allosteric, feedback inhibition, phosphorylation
+**Enzymes of clinical value:** ALT/AST (liver), CK-MB/troponin (heart), amylase (pancreas)`
+      },
+      {
+        title: 'Vitamins',
+        content: `**Water-soluble (B, C):** not stored, excreted; deficiency quick
+B1 thiamine → beriberi; B3 niacin → pellagra (3 Ds); B9 folate → neural tube defects (pregnancy); B12 cobalamin → pernicious anemia (needs IF); C → scurvy
+
+**Fat-soluble (A, D, E, K):** stored in fat; toxicity possible
+A (retinol) → night blindness; D → rickets/osteomalacia (from sun); E (tocopherol) → antioxidant; K → bleeding (coagulation factors)
+
+**Rich sources:** B12 (meat), C (citrus), D (sun/fish oil), A (liver, carrots - carotene)
+**Mnemonic A-D-E-K = "All Doctors Eat Kids"**`
+      },
+      {
+        title: 'Hormones',
+        content: `**Endocrine glands:** pituitary (master), thyroid, adrenal, pancreas, gonads
+**Pituitary:** GH (growth), TSH, ACTH, FSH/LH, ADH (water), oxytocin
+
+**Thyroid:** T3/T4 (metabolism ↑), calcitonin (Ca ↓)
+**Parathyroid:** PTH (Ca ↑ from bone)
+**Adrenal:** cortisol (stress, glucose ↑), aldosterone (Na⁺/water), adrenaline (fight-flight)
+
+**Pancreas:** insulin (glucose ↓), glucagon (glucose ↑)
+**Gonads:** testosterone (male), estrogen/progesterone (female)
+**Feedback:** negative (most) — e.g., thyroid hormones inhibit TSH`
+      },
+    ]
+  },
+  {
+    id: 'english-2',
+    title: 'English Writing',
+    titleNp: 'अङ्ग्रेजी लेखन',
+    icon: '✍️',
+    items: [
+      {
+        title: 'Essay Structure',
+        content: `**Structure: Intro → Body (2-3 paras) → Conclusion**
+**Intro:** hook + thesis statement (main argument)
+**Body paragraphs:** topic sentence → evidence/example → analysis → link
+**Conclusion:** restate thesis (new words) + final thought
+
+**Transitions:** however, therefore, moreover, in contrast, consequently, for instance
+**Word count rule:** intro 10-15%, body 70-80%, conclusion 10%
+
+**Tone:** formal for exams — no contractions (don't → do not), no slang
+**Punctuation check:** commas in lists, periods at end, capital letters for proper nouns`
+      },
+      {
+        title: 'Report & Letter Format',
+        content: `**Formal letter (block format):**
+Your address → date → recipient address → salutation (Dear Sir/Madam) → subject line → body → closing (Yours faithfully, + signature)
+
+**Report structure:**
+Title → introduction (purpose) → findings (organized by theme) → conclusion → recommendations
+
+**Business email:** clear subject line, greeting, short paragraphs, call to action, sign-off
+
+**Common exam topics:** write a letter to editor, report on event, application for job/scholarship, complaint letter`
+      },
+      {
+        title: 'Common Grammar Errors',
+        content: `**Its vs It's:** its = possessive; it's = it is
+**Their/There/They're:** their = possessive, there = place, they're = they are
+**Affect vs Effect:** affect = verb, effect = noun
+**Then vs Than:** then = time, than = comparison
+**Who vs Whom:** who = subject, whom = object
+
+**Subject-verb agreement:** "The team IS playing" (team = singular)
+**Run-ons:** join with period, comma + conjunction, or semicolon
+**Dangling modifier:** "Walking home, the rain started" ✗ → "Walking home, I felt rain" ✓`
+      },
+      {
+        title: 'Paragraph Writing',
+        content: `**Topic sentence** — states the main idea (first sentence)
+**Supporting sentences** — evidence, examples, reasons (3-5 sentences)
+**Concluding sentence** — wraps up the idea
+
+**Unity:** every sentence supports the topic
+**Coherence:** logical order (chronological, spatial, order of importance)
+**Development:** use examples, statistics, anecdotes, definitions
+
+**Paragraph length:** 5-8 sentences, 80-120 words typical
+**Connectors:** first, next, then, finally (sequence); because, since, as (cause); but, however (contrast)`
+      },
+    ]
+  },
+  {
+    id: 'aptitude-2',
+    title: 'Aptitude Advanced',
+    titleNp: 'एप्टिच्युड एडभान्स',
+    icon: '🎯',
+    items: [
+      {
+        title: 'Data Interpretation',
+        content: `**Tables:** read carefully — units, totals, headers
+**Bar/Line charts:** compare values; note scale (lakhs, crores, %)
+**Pie charts:** angle = (value/total) × 360°; 1% = 3.6°
+**Percentage change:** (new - old)/old × 100
+
+**Trick:** in DI, check units FIRST — many traps are lakh vs crore vs thousand
+**Approximation:** round numbers for speed; options are usually far apart
+**Time strategy:** DI sets take 2-3 min each; do easy sets first`
+      },
+      {
+        title: 'Blood Relations',
+        content: `**Immediate family:** father, mother, brother, sister, son, daughter, spouse
+**Extended:** uncle (father's brother / mother's brother), aunt, cousin, nephew, niece, grandfather, grandmother
+
+**In-laws:** father-in-law, mother-in-law, son-in-law, daughter-in-law, brother-in-law, sister-in-law
+
+**Trick:** draw a family tree — squares (male), circles (female), = or - for marriage, vertical line for children
+**Common question:** "Pointing to a photo, Ramesh says 'She is the daughter of my grandfather's only son' → who is she?" = Ramesh's sister (grandfather's only son = father)`
+      },
+      {
+        title: 'Coding-Decoding',
+        content: `**Letter shift:** each letter shifted by fixed number (A→D = +3)
+**Reverse alphabet:** A↔Z, B↔Y (A=26, B=25...)
+**Word → code:** "CAT" → "DBU" (+1 each letter)
+**Number coding:** position in alphabet (A=1, B=2...)
+
+**Trick:** identify the pattern FIRST (shift, reverse, vowel/consonant rules)
+**Mixed:** sometimes letters shift differently (odd positions +2, even -1)
+**Practice:** if A=1, Z=26; then "NEPAL" = 14 5 16 1 12`
+      },
+      {
+        title: 'Direction Sense',
+        content: `**4 main directions:** N, S, E, W; 4 diagonals: NE, SE, SW, NW
+**Turn rules:** left turn = 90° counterclockwise, right = 90° clockwise
+**Displacement:** shortest distance = straight line (Pythagoras for right angles)
+
+**Example:** "Walk 5km north, turn right, walk 3km, turn right, walk 5km → where?" = 3km east of start
+**Trick:** draw on paper; cancel out opposite movements (N-S, E-W)
+**Sun direction:** sunrise = east, sunset = west (basic assumption)
+**Clock angles:** hour hand 30°/hr, minute hand 6°/min`
+      },
+    ]
+  },
+  {
+    id: 'g.k',
+    title: 'General Knowledge',
+    titleNp: 'सामान्य ज्ञान',
+    icon: '🌏',
+    items: [
+      {
+        title: 'Nepal Geography',
+        content: `**Area:** 147,516 km²; borders: China (north), India (east/south/west)
+**Provinces:** 7 — Koshi, Madhesh, Bagmati, Gandaki, Lumbini, Karnali, Sudurpashchim
+**Highest peak:** Mt. Everest 8,848m (Sagarmatha); lowest: Kechana Kalan ~60m
+
+**Districts:** 77 (was 14 zones, 75 districts)
+**Rivers:** Koshi (east), Gandaki/Narayani (center), Karnali (west)
+**Climate:** tropical (Terai) → alpine (Himalaya)
+**National symbols:** animal = cow, bird = Lophophorus (Danfe), flower = Rhododendron (Laligurans), color = crimson`
+      },
+      {
+        title: 'World Capitals & Countries',
+        content: `**Asia:** China-Beijing, India-New Delhi, Japan-Tokyo, Korea-Seoul, Thailand-Bangkok, UAE-Abu Dhabi (not Dubai!)
+**Europe:** UK-London, France-Paris, Germany-Berlin, Russia-Moscow, Italy-Rome
+**Americas:** USA-Washington DC, Canada-Ottawa (not Toronto), Brazil-Brasilia (not Rio), Mexico-Mexico City
+**Africa:** Egypt-Cairo, Nigeria-Abuja, South Africa-Pretoria (3 capitals), Kenya-Nairobi
+**Oceania:** Australia-Canberra (not Sydney), New Zealand-Wellington
+
+**Trick:** capital is often NOT the biggest city (Canberra, Ottawa, Brasilia, Washington DC, Abuja)`
+      },
+      {
+        title: 'Science GK',
+        content: `**Units:** force = Newton, pressure = Pascal, energy = Joule, power = Watt, frequency = Hertz, charge = Coulomb
+**Elements:** H (1), He (2), C (6), N (7), O (8), Na (11), Fe (26), Au (79), Pb (82)
+**Periodic table:** 118 elements; groups = columns, periods = rows
+
+**Physics facts:** speed of light 3×10⁸ m/s, sound 343 m/s in air, gravity 9.8 m/s², water boils 100°C
+**Human body:** 206 bones, 639 muscles, heart beats ~72/min, blood volume ~5L, skin largest organ
+**Planets:** Mercury (nearest), Venus (hottest), Jupiter (largest), Saturn (rings)`
+      },
+      {
+        title: 'Sports GK',
+        content: `**Olympics:** every 4 years; 2024 Paris, 2028 Los Angeles; motto "Faster, Higher, Stronger"
+**World Cup (football):** every 4 years; Brazil most titles (5)
+**Cricket:** 2011 WC India, 2019 England, 2023 Australia; T20 WC 2024 India
+
+**Nepal sports:** cricket = national obsession (national team "Rhinos"), football = ANFA
+**Key terms:** cricket (wicket, boundary, LBW, powerplay), football (offside, penalty, hat-trick), tennis (deuce, ace, grand slam)
+**Notable athletes:** Sandeep Lamichhane (cricket), Paras Khadka (former captain)`
+      },
+      {
+        title: 'Constitution & Nepal Basics',
+        content: `**Nepal Constitution 2072 (2015):** promulgated 3rd Ashoj 2072 (Sep 20, 2015)
+**Federal republic:** 3 tiers — federal, provincial, local
+**President:** ceremonial head; Prime Minister = executive head
+**Parliament:** House of Representatives (275) + National Assembly (59)
+
+**Key dates:** Republic declared 2065 Jestha 15 (May 28, 2008); Constitution Day = 3rd Ashoj
+**National symbols:** anthem "Sayaun Thunga Phoolka Hami", flag = world's only non-quadrilateral
+**Religion:** ~81% Hindu, Buddhist 9%, Muslim 4%`
+      },
+    ]
+  },
+  {
+    id: 'formula-sheet',
+    title: 'Formula Sheets',
+    titleNp: 'सूत्र संग्रह',
+    icon: '📋',
+    items: [
+      {
+        title: 'Physics Formula Sheet',
+        content: `**Kinematics:** v = u+at; s = ut+½at²; v² = u²+2as
+**Force:** F = ma; friction f = μN; centripetal F = mv²/r
+**Work-Energy:** W = Fd cosθ; KE = ½mv²; PE = mgh
+**Power:** P = W/t = Fv
+
+**Gravity:** F = Gm₁m₂/r²; g = GM/R²; escape v = √(2gR)
+**SHM:** T = 2π√(m/k) (spring); T = 2π√(L/g) (pendulum)
+**Waves:** v = fλ; Doppler f' = f(v±vo)/(v∓vs)
+**Electricity:** V = IR; P = VI; C = Q/V; E = ½CV²
+**Optics:** 1/f = 1/u + 1/v; Snell n₁sinθ₁ = n₂sinθ₂
+**Modern:** E = hf; λ = h/mv (de Broglie); E = mc²`
+      },
+      {
+        title: 'Chemistry Formula Sheet',
+        content: `**Mole:** n = mass/molar mass = N/NA (NA = 6.022×10²³)
+**Molarity:** M = moles/L; **Molality:** m = moles/kg
+**Dilution:** M₁V₁ = M₂V₂
+
+**Ideal gas:** PV = nRT (R = 0.0821 L·atm/mol·K)
+**pH:** pH = -log[H⁺]; pH + pOH = 14
+**Nernst:** E = E° - (0.059/n)logQ (25°C)
+
+**Rate law:** rate = k[A]^m[B]^n
+**Arrhenius:** k = Ae^(-Ea/RT)
+**Equilibrium:** Kc = [products]/[reactants]; Kp = Kc(RT)^Δn
+**% yield** = (actual/theoretical) × 100`
+      },
+      {
+        title: 'Math Formula Sheet',
+        content: `**Quadratic:** x = [-b ± √(b²-4ac)]/2a; sum = -b/a, product = c/a
+**AP:** Tn = a+(n-1)d; Sn = n/2[2a+(n-1)d]
+**GP:** Tn = ar^(n-1); Sn = a(rⁿ-1)/(r-1); S∞ = a/(1-r), |r|<1
+
+**Trig:** sin²θ + cos²θ = 1; tan = sin/cos
+sin(A+B) = sinAcosB + cosAsinB
+cos(A+B) = cosAcosB - sinAsinB
+**Derivatives:** d/dx xⁿ = nxⁿ⁻¹; d/dx sinx = cosx; d/dx eˣ = eˣ
+**Integrals:** ∫xⁿdx = xⁿ⁺¹/(n+1); ∫1/x dx = ln|x|
+
+**Vectors:** a·b = |a||b|cosθ; |a×b| = |a||b|sinθ
+**Log:** log(ab) = loga + logb; log(a/b) = loga - logb`
+      },
+      {
+        title: 'Biology Facts Sheet',
+        content: `**Cell:** mitochondria = powerhouse; nucleus = control center; ribosome = protein factory; lysosome = waste disposal
+**DNA:** A-T, G-C; 46 chromosomes human; 23 pairs
+
+**Blood:** RBC 4.5-5.5 million/mm³; WBC 4,000-11,000; platelets 1.5-4 lakh
+**Heart:** 72 bpm; cardiac output 5L/min
+**Kidney:** nephron = functional unit; ~1 million/kidney
+
+**Vitamins:** A (vision), D (bones), K (clotting), C (scurvy), B12 (anemia)
+**Hormones:** insulin (blood sugar ↓), thyroxine (metabolism), adrenaline (stress)
+**Photosynthesis:** 6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂ (light, chlorophyll)`
+      },
+      {
+        title: 'Electrical Formulas',
+        content: `**Ohm's law:** V = IR
+**Resistors:** series R = R₁+R₂+...; parallel 1/R = 1/R₁+1/R₂+...
+**Power:** P = VI = I²R = V²/R
+
+**Capacitor:** Q = CV; series 1/C = Σ1/Ci; parallel C = ΣCi
+**AC:** XL = 2πfL; XC = 1/2πfC; Z = √(R²+(XL-XC)²); Vrms = Vpeak/√2
+**Transformer:** V₁/V₂ = N₁/N₂; η = out/in
+
+**Motor:** Eb = V - IaRa; N ∝ (V-IaRa)/Φ
+**Induction:** Ns = 120f/P; slip s = (Ns-N)/Ns
+**Energy:** E(kWh) = P(kW) × t(h)
+**Three-phase power:** P = √3 VL IL cosφ`
+      },
+      {
+        title: 'Mechanics Formulas',
+        content: `**Stress/strain:** σ = F/A; ε = δ/L; E = σ/ε (Young's)
+**Axial deformation:** δ = PL/AE
+**Poisson:** ν = -εlat/εaxial
+
+**Bending:** σ = My/I; I_rect = bh³/12; I_circle = πd⁴/64
+**Torsion:** τ = Tr/J; J = πd⁴/32
+**Buckling:** Pcr = π²EI/L² (Euler)
+**Beam deflection (UDL, simply supported):** δmax = 5wL⁴/384EI
+
+**Thermodynamics:** PV = nRT; ΔU = Q-W; η_carnot = 1-Tc/Th
+**Fluid:** P = ρgh; Q = Av (continuity); Re = ρVD/μ
+**Heat conduction:** Q = kAΔT/L`
+      },
+    ]
+  },
 ]
