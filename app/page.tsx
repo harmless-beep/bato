@@ -137,19 +137,23 @@ export default function Home() {
       {/* ── Dashboard body ───────────────────────────────────────────── */}
       <div className="dashboard">
 
-        {/* ── Daily Quote ─────────────────────────────────────────────── */}
-        <Reveal>
-          <div className="quote-card">
-            <div className="quote-mark">“</div>
-            <div className="quote-text" key={todayQuote().en}>
-              {isNe ? todayQuote().ne : todayQuote().en}
-            </div>
-            <div className="quote-by">— {isNe ? todayQuote().byNp : todayQuote().by}</div>
+        {/* ── Hero grid: quote | stats+calendar ────────────────────────── */}
+        <div className="hero-grid">
+          <div>
+            {/* ── Daily Quote ─────────────────────────────────────────────── */}
+            <Reveal>
+              <div className="quote-card">
+                <div className="quote-mark">“</div>
+                <div className="quote-text" key={todayQuote().en}>
+                  {isNe ? todayQuote().ne : todayQuote().en}
+                </div>
+                <div className="quote-by">— {isNe ? todayQuote().byNp : todayQuote().by}</div>
+              </div>
+            </Reveal>
           </div>
-        </Reveal>
-
-        {/* ── My Stats ────────────────────────────────────────────────── */}
-        <Reveal>
+          <div className="hero-side">
+            {/* ── My Stats ──────────────────────────────────────────────── */}
+            <Reveal>
           <div className="section-header">
             <div className="section-title">{isNe ? 'मेरो तथ्यांक' : 'My Stats'}</div>
           </div>
@@ -256,6 +260,8 @@ export default function Home() {
             </div>
           </Reveal>
         )}
+          </div>
+        </div>
 
         {/* ── Quick Access ────────────────────────────────────────────── */}
         <Reveal delay={80}>

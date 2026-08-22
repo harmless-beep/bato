@@ -959,3 +959,19 @@ html[data-theme="dark"] .support-bar { border-color: rgba(255,255,255,0.1); }
   color: var(--muted);
   letter-spacing: 0.4px;
 }
+
+/* ─── Desktop bento: hero grid (quote | stats+calendar) ─── */
+.hero-grid { display: block; }
+@media (min-width: 1025px) {
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 20px;
+    align-items: stretch;
+  }
+  .hero-grid > div:first-child { display: flex; }
+  .hero-grid > div:first-child > .reveal, .hero-grid .quote-card { flex: 1; }
+  .quote-card { margin-bottom: 0; display: flex; flex-direction: column; justify-content: center; }
+  /* quick grid: 6 cards -> even 3x2 */
+  .quick-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+}
