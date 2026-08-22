@@ -80,8 +80,10 @@ button { font-family: var(--font); cursor: pointer; }
 }
 .theme-switcher-btn:hover { background: var(--surface-2); transform: translateY(-1px); opacity: 1; }
 .theme-switcher-btn.active {
-  background: var(--primary); opacity: 1;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  background: linear-gradient(135deg, var(--primary), var(--violet));
+  opacity: 1; color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.22), 0 0 12px var(--primary);
+  transform: translateY(-1px);
 }
 
 /* ─── Hero ─── */
@@ -215,7 +217,7 @@ button { font-family: var(--font); cursor: pointer; }
 .footer a { color: var(--primary); font-weight: 700; }
 
 /* ─── Page layout ─── */
-.page { min-height: 100vh; background: var(--bg); }
+.page { min-height: 100vh; }
 .topbar,
 .page-header {
   background: var(--card);
@@ -501,6 +503,10 @@ html[data-theme="dark"] {
   --border: #2a2f3d;
   --shadow: 0 1px 3px rgba(0,0,0,0.4);
   --shadow-lg: 0 8px 30px rgba(0,0,0,0.5);
+  --hero-a: #1b2138; --hero-b: #241a30; --hero-c: #33270f;
+  --glow-a: #4c5bd4; --glow-b: #f59e0b;
+  --pred-a: #1e1b4b; --pred-b: #4338ca;
+  --score-a: #4338ca; --score-b: #7c3aed;
 }
 html[data-theme="forest"] {
   --bg: #0b1613;
@@ -518,6 +524,10 @@ html[data-theme="forest"] {
   --border: #1d332b;
   --shadow: 0 1px 3px rgba(0,0,0,0.4);
   --shadow-lg: 0 8px 30px rgba(0,0,0,0.5);
+  --hero-a: #0c2a20; --hero-b: #0f3d2e; --hero-c: #1a3311;
+  --glow-a: #10b981; --glow-b: #fbbf24;
+  --pred-a: #064e3b; --pred-b: #10b981;
+  --score-a: #065f46; --score-b: #22c55e;
 }
 html[data-theme="ocean"] {
   --bg: #0a1320;
@@ -535,6 +545,10 @@ html[data-theme="ocean"] {
   --border: #1c3049;
   --shadow: 0 1px 3px rgba(0,0,0,0.4);
   --shadow-lg: 0 8px 30px rgba(0,0,0,0.5);
+  --hero-a: #082338; --hero-b: #0c2f52; --hero-c: #123d66;
+  --glow-a: #38bdf8; --glow-b: #818cf8;
+  --pred-a: #0c4a6e; --pred-b: #0ea5e9;
+  --score-a: #075985; --score-b: #6366f1;
 }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) body { background: var(--bg); }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .nav {
@@ -542,10 +556,10 @@ html[data-theme="ocean"] {
   border-bottom: 1px solid var(--border);
 }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .hero {
-  background: linear-gradient(160deg, #151a33 0%, #1c1830 45%, #2a2410 100%);
+  background: linear-gradient(160deg, var(--hero-a) 0%, var(--hero-b) 45%, var(--hero-c) 100%);
 }
-:is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .hero::before { background: #3b4a8f; opacity: 0.35; }
-:is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .hero::after { background: #8f7a2e; opacity: 0.3; }
+:is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .hero::before { background: var(--glow-a); opacity: 0.35; }
+:is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .hero::after { background: var(--glow-b); opacity: 0.3; }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .hero-title { color: #f1f5f9; }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .hero-badge { background: rgba(255,255,255,0.06); border-color: var(--border); color: #d1d5db; }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .topbar, :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .page-header { background: var(--card); border-bottom: 1px solid var(--border); }
@@ -568,8 +582,8 @@ html[data-theme="ocean"] {
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .feature-icon { background: var(--primary-soft); }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .tag { background: var(--surface-2); color: var(--muted); }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .footer { border-top-color: var(--border); }
-:is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .predictor-hero { background: linear-gradient(135deg, #1e1b4b, #3730a3); }
-:is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .score-card { background: linear-gradient(135deg, #3730a3, #6d28d9); }
+:is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .predictor-hero { background: linear-gradient(135deg, var(--pred-a), var(--pred-b)); }
+:is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .score-card { background: linear-gradient(135deg, var(--score-a), var(--score-b)); }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .rank-1 { background: rgba(251,191,36,0.15); color: #fbbf24; }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .rank-2 { background: rgba(148,163,184,0.15); color: #cbd5e1; }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .rank-3 { background: rgba(249,115,22,0.15); color: #fb923c; }
@@ -581,6 +595,24 @@ html[data-theme="ocean"] {
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .divider { border-top-color: var(--border); }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .section-title { color: var(--text); }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .filter-label { color: var(--muted); }
+
+/* ─── Ambient aurora glow (depth) ─── */
+html body {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(1100px 620px at 12% -10%, rgba(79,70,229,0.09) 0, transparent 55%),
+    radial-gradient(900px 520px at 100% 12%, rgba(124,58,237,0.08) 0, transparent 50%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+:is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) body {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(1100px 620px at 12% -10%, var(--glow-a) 0, transparent 55%),
+    radial-gradient(900px 520px at 100% 12%, var(--glow-b) 0, transparent 50%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
 
 /* ─── Home Dashboard (added) ─── */
 .dashboard { padding: 12px 16px 40px; }
