@@ -16,18 +16,22 @@ interface PastPaper {
   pdfUrl?: string
 }
 
-// Direct download / source links for official papers
+// Direct download / source links — local PDFs first, then external fallbacks
 const sources: Record<string, string> = {
-  ioe_entrance: 'https://peadigitals.com/pages/question',
-  ioe_cutoff_2082: 'https://pea.edu.np/content/uploads/2026/06/IOE-Cutoff-Rank-2082.pdf',
-  ioe_pulchowk_lists: 'https://pcampus.edu.np',
-  ioe_thc_lists: 'https://thc.tu.edu.np',
-  ioe_wrc_lists: 'https://ioepas.edu.np',
-  ioe_erc_lists: 'https://ioepc.edu.np',
-  ku_syllabus: 'https://apply.ku.edu.np/syllabi/2026/Test_Syllabus_2026.pdf',
-  ku_papers: 'https://exam.ku.edu.np',
-  paper_guides: 'https://paperguides.org',
-  en_nepal: 'https://engineeringnepal.com.np/p/old-questions.html',
+  // LOCAL (served from /bato/pdfs/ via Next.js static export)
+  ioe_cutoff_local:    '/bato/pdfs/ioe-cutoff-2082.pdf',
+  ioe_syllabus_local: '/bato/pdfs/ioe-exam-center-2080.pdf',
+  ku_syllabus_local:  '/bato/pdfs/ku-kucat-syllabus-2026.pdf',
+  // EXTERNAL fallbacks
+  ioe_entrance:      'https://peadigitals.com/pages/question',
+  ioe_pulchowk:     'https://pcampus.edu.np',
+  ioe_thc:           'https://thc.tu.edu.np',
+  ioe_wrc:           'https://ioepas.edu.np',
+  ioe_erc:           'https://ioepc.edu.np',
+  ku_papers:         'https://exam.ku.edu.np',
+  paper_guides:      'https://paperguides.org',
+  en_nepal:          'https://engineeringnepal.com.np/p/old-questions.html',
+  ioe_tracker:       'https://ioe-entrance.bibeksubedi0001.com.np',
 }
 
 const papers: PastPaper[] = [
@@ -170,7 +174,7 @@ export default function PastPapers() {
                 </div>
               </div>
               <a
-                href={p.university === 'IOE' ? sources.ioe_entrance : sources.ku_papers}
+                href={p.university === 'IOE' ? sources.ioe_cutoff_local : sources.ku_papers}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-primary btn-sm"
@@ -190,11 +194,25 @@ export default function PastPapers() {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 12 }}>
-        <a href={sources.ioe_cutoff_2082} target="_blank" rel="noopener noreferrer" className="paper-card" style={{ textDecoration: 'none', display: 'flex', gap: 12, alignItems: 'center' }}>
+        <a href={sources.ioe_cutoff_local} target="_blank" rel="noopener noreferrer" className="paper-card" style={{ textDecoration: 'none', display: 'flex', gap: 12, alignItems: 'center' }}>
           <span style={{ fontSize: 28 }}>📊</span>
           <div>
             <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>IOE Cutoff Ranks 2082</div>
-            <div style={{ color: 'var(--muted)', fontSize: 12 }}>PEA • all campuses • PDF</div>
+            <div style={{ color: 'var(--muted)', fontSize: 12 }}>PEA • all campuses • PDF • 971 KB</div>
+          </div>
+        </a>
+        <a href={sources.ku_syllabus_local} target="_blank" rel="noopener noreferrer" className="paper-card" style={{ textDecoration: 'none', display: 'flex', gap: 12, alignItems: 'center' }}>
+          <span style={{ fontSize: 28 }}>🗺️</span>
+          <div>
+            <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>KU KUCAT Syllabus 2026</div>
+            <div style={{ color: 'var(--muted)', fontSize: 12 }}>Official PDF • PCM/PCB topics • 281 KB</div>
+          </div>
+        </a>
+        <a href={sources.ioe_syllabus_local} target="_blank" rel="noopener noreferrer" className="paper-card" style={{ textDecoration: 'none', display: 'flex', gap: 12, alignItems: 'center' }}>
+          <span style={{ fontSize: 28 }}>🏛️</span>
+          <div>
+            <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>IOE Exam Center 2080</div>
+            <div style={{ color: 'var(--muted)', fontSize: 12 }}>Exam center list PDF • 230 KB</div>
           </div>
         </a>
         <a href={sources.paper_guides} target="_blank" rel="noopener noreferrer" className="paper-card" style={{ textDecoration: 'none', display: 'flex', gap: 12, alignItems: 'center' }}>
@@ -204,28 +222,14 @@ export default function PastPapers() {
             <div style={{ color: 'var(--muted)', fontSize: 12 }}>Free past papers + notes • paperguides.org</div>
           </div>
         </a>
-        <a href={sources.ioe_entrance} target="_blank" rel="noopener noreferrer" className="paper-card" style={{ textDecoration: 'none', display: 'flex', gap: 12, alignItems: 'center' }}>
-          <span style={{ fontSize: 28 }}>📝</span>
-          <div>
-            <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>IOE Past Questions</div>
-            <div style={{ color: 'var(--muted)', fontSize: 12 }}>PEA Digital • model questions • Free</div>
-          </div>
-        </a>
-        <a href={sources.ku_syllabus} target="_blank" rel="noopener noreferrer" className="paper-card" style={{ textDecoration: 'none', display: 'flex', gap: 12, alignItems: 'center' }}>
-          <span style={{ fontSize: 28 }}>🗺️</span>
-          <div>
-            <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>KU KUCAT Syllabus 2026</div>
-            <div style={{ color: 'var(--muted)', fontSize: 12 }}>PCM/PCB topics • Official PDF</div>
-          </div>
-        </a>
         <a href={sources.en_nepal} target="_blank" rel="noopener noreferrer" className="paper-card" style={{ textDecoration: 'none', display: 'flex', gap: 12, alignItems: 'center' }}>
-          <span style={{ fontSize: 28 }}>🏛️</span>
+          <span style={{ fontSize: 28 }}>📝</span>
           <div>
             <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>Engineering Nepal</div>
             <div style={{ color: 'var(--muted)', fontSize: 12 }}>IOE, KU, PoU, PU papers • Free</div>
           </div>
         </a>
-        <a href="https://ioe-entrance.bibeksubedi0001.com.np" target="_blank" rel="noopener noreferrer" className="paper-card" style={{ textDecoration: 'none', display: 'flex', gap: 12, alignItems: 'center' }}>
+        <a href={sources.ioe_tracker} target="_blank" rel="noopener noreferrer" className="paper-card" style={{ textDecoration: 'none', display: 'flex', gap: 12, alignItems: 'center' }}>
           <span style={{ fontSize: 28 }}>🎯</span>
           <div>
             <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>IOE Cutoff Tracker</div>
