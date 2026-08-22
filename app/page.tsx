@@ -21,7 +21,7 @@ function saveStat(key: string, val: number) {
 
 // ── Quick-access items ───────────────────────────────────────────────────────
 const quickItems = [
-  { icon: '📝', label: 'Mock Test',      labelNp: 'Mock Test',      href: '/mock-test',   desc: 'Timed tests from past year questions',    descNp: 'पुराना प्रश्नमा आधारित समयबद्ध परीक्षा' },
+  { icon: '🖥️', label: 'CBT Simulator', labelNp: 'CBT सिम्युलेटर', href: '/mock-test', desc: 'IOE / KU / CEE exam-day CBT practice', descNp: 'IOE / KU / CEE परीक्षाको दिनको CBT अभ्यास' },
   { icon: '📖', label: 'Notes',          labelNp: 'नोट्स',           href: '/notes',       desc: 'High-yield Math, Physics & Chemistry',     descNp: 'High-yield गणित, भौतिक र रसायन' },
   { icon: '📚', label: 'Past Papers',    labelNp: 'पुराना पत्रहरू', href: '/past-papers', desc: 'IOE entrance & semester papers by year',   descNp: 'IOE entrance र semester प्रश्नपत्रहरू' },
   { icon: '🎯', label: 'Branch Predictor', labelNp: 'शाखा अनुमान', href: '/predictor',   desc: 'See which branches you can get',            descNp: 'कुन शाखा पाउन सकिन्छ हेर्नुहोस्' },
@@ -95,7 +95,7 @@ export default function Home() {
           <span className="countdown-days">~198 {isNe ? 'दिन बाँकी' : 'days left'}</span>
           <span className="countdown-date">{isNe ? '〜 भदौ २०८३' : '~ Bhadra 2083'}</span>
           <Link href="/mock-test" className="countdown-cta">
-            {isNe ? 'अभ्यास सुरु गर्नुहोस् →' : 'Start Practicing →'}
+            {isNe ? 'CBT अभ्यास सुरु →' : 'Start CBT Practice →'}
           </Link>
         </div>
       </div>
