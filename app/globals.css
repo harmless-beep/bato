@@ -1221,66 +1221,6 @@ html body {
 }
 .sug-unvote:hover { border-color: var(--danger); color: var(--danger); }
 
-/* ─── Companion wardrobe (left overlay drawer) ─── */
-.wardrobe-backdrop {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9500;
-  display: flex; align-items: stretch; justify-content: flex-start;
-}
-.wardrobe {
-  position: relative; width: min(340px, 88vw); height: 100%;
-  background: var(--card); border-right: 1px solid var(--border);
-  box-shadow: var(--shadow-lg); overflow-y: auto; padding: 18px 14px 28px;
-  animation: drawer-in 0.25s ease;
-}
-@keyframes drawer-in { from { transform: translateX(-100%); } to { transform: translateX(0); } }
-.wardrobe-close {
-  position: sticky; top: 0; z-index: 3; float: right;
-  border: 1px solid var(--border); background: var(--surface); color: var(--muted);
-  width: 28px; height: 28px; border-radius: 999px; cursor: pointer; font-size: 13px;
-  transition: all 0.15s;
-}
-.wardrobe-close:hover { border-color: var(--danger); color: var(--danger); transform: rotate(90deg); }
-.wardrobe-title { font-size: 18px; font-weight: 900; color: var(--text); }
-.wardrobe-sub { font-size: 11.5px; color: var(--muted); font-weight: 700; margin-top: 2px; }
-.wardrobe-pets { display: flex; gap: 6px; margin: 14px 0 12px; }
-.wardrobe-pet {
-  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
-  padding: 7px 2px 5px; border: 1.5px solid var(--border); border-radius: 10px;
-  background: var(--surface); cursor: pointer; font-family: inherit; font-size: 21px; line-height: 1;
-  transition: all 0.15s;
-}
-.wardrobe-pet:hover { transform: translateY(-2px); border-color: var(--primary); }
-.wardrobe-pet.active { border-color: var(--primary); background: var(--primary-soft); }
-.wardrobe-pet span { font-size: 8.5px; font-weight: 800; color: var(--muted); margin-top: 2px; }
-.wardrobe-pet.active span { color: var(--primary); }
-.wardrobe-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.wardrobe-item {
-  position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px;
-  padding: 9px 3px 6px; border: 1px solid var(--border); border-radius: 10px;
-  background: var(--surface); cursor: pointer; font-family: inherit;
-  transition: all 0.15s;
-}
-.wardrobe-item:hover { transform: translateY(-2px); border-color: var(--primary); }
-.wardrobe-item.locked { opacity: 0.55; filter: grayscale(1); cursor: not-allowed; }
-.wardrobe-item.locked:hover { border-color: var(--border); }
-.wardrobe-item.equipped { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold), var(--shadow); }
-.wardrobe-item.shake { animation: shake 0.4s; }
-.wardrobe-item-emoji { font-size: 24px; line-height: 1.2; }
-.wardrobe-item-name {
-  font-size: 9px; font-weight: 700; color: var(--muted); text-align: center;
-  line-height: 1.2; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.wardrobe-item.equipped .wardrobe-item-name { color: var(--gold); }
-.wardrobe-item-check { position: absolute; top: 3px; right: 5px; color: var(--gold); font-weight: 900; font-size: 11px; }
-
-/* accessory stacked above pet */
-.companion-pet-wrap { position: relative; }
-.companion-acc {
-  position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
-  font-size: 23px; line-height: 1; z-index: 2; pointer-events: none;
-  animation: pet-jump 0.4s ease;
-}
-
 /* ─── Suggest FAB (bottom-right overlay) ─── */
 .sug-fab {
   position: fixed; right: 16px; bottom: 16px; z-index: 9000;
@@ -1319,13 +1259,3 @@ html body {
 
 /* shared suggestion form row */
 .sug-submit-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
-
-/* ─── companion: accessory sits ON the pet ─── */
-.companion-pet-wrap { position: relative; display: flex; }
-.companion-acc {
-  position: absolute; top: -3px; left: 50%; transform: translateX(-50%);
-  font-size: 26px; line-height: 1; z-index: 3; pointer-events: none;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35));
-  animation: acc-drop 0.3s ease;
-}
-@keyframes acc-drop { from { transform: translateX(-50%) translateY(-8px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
