@@ -31,11 +31,14 @@ export default function EasterEggs() {
         if (!f.includes(id)) { f.push(id); localStorage.setItem('bato-eggs', JSON.stringify(f)) }
       } catch { /* noop */ }
     }
+    let toastTimer: ReturnType<typeof setTimeout>
     const toast = (msg: string) => {
       let el = document.getElementById('egg-toast') as HTMLDivElement | null
       if (!el) { el = document.createElement('div'); el.id = 'egg-toast'; document.body.appendChild(el) }
       el.textContent = msg
       el.classList.remove('show'); void el.offsetWidth; el.classList.add('show')
+      clearTimeout(toastTimer)
+      toastTimer = setTimeout(() => el?.classList.remove('show'), 3000)
     }
     const burst = (x: number, y: number, palette: string[], n = 22) => {
       for (let i = 0; i < n; i++) {
@@ -78,6 +81,7 @@ export default function EasterEggs() {
         if (konami.current.length > KONAMI.length) konami.current.shift()
         if (konami.current.join(',') === KONAMI.join(',')) {
           konami.current = []
+          bato.current = []  // konami ends in b,a — don't pollute the "bato" buffer
           mark('konami')
           const el = document.querySelector('.quote-card, .card, main') as HTMLElement | null
           const r = el ? el.getBoundingClientRect() : { left: innerWidth / 2, top: innerHeight / 3 }
