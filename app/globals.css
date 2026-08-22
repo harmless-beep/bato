@@ -402,6 +402,12 @@ button { font-family: var(--font); cursor: pointer; }
   font-size: 11px; color: var(--muted); font-weight: 700;
   margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.6px;
 }
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px 24px;
+  margin-top: 16px;
+}
 
 .stat-card { text-align: center; }
 .stat-num { font-size: 28px; font-weight: 800; }
@@ -500,6 +506,7 @@ html[data-theme="dark"] .timer { background: #0b0d12; }
 html[data-theme="dark"] .btn-outline { background: var(--card); border-color: var(--border); color: var(--text); }
 html[data-theme="dark"] .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
 html[data-theme="dark"] .chip { background: var(--card); border-color: var(--border); color: var(--text); }
+html[data-theme="dark"] .chip.active { background: var(--primary); border-color: var(--primary); color: white; }
 html[data-theme="dark"] .info-box { background: var(--primary-soft); color: #c7d2fe; }
 html[data-theme="dark"] .warn-box { background: rgba(251,191,36,0.08); color: #fcd34d; }
 html[data-theme="dark"] .input { background: var(--card); border-color: var(--border); color: var(--text); }

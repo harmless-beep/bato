@@ -212,29 +212,11 @@ export default function Flashcards() {
               </div>
             </div>
 
-            <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
+            <div style={{ display: "flex", gap: 8, marginBottom: 6 }}>
               <button className="btn btn-outline btn-sm" style={{ flex: 1 }} onClick={() => next(-1)}>← {L("Prev", "अघिल्लो")}</button>
-              <button className="btn btn-outline btn-sm" onClick={() => mark(true)}>✅</button>
-              <button className="btn btn-outline btn-sm" onClick={() => mark(false)}>🔄</button>
+              <button className="btn btn-outline btn-sm" style={{ flex: 1 }} onClick={() => mark(true)}>✅ {L("Got it", "जानें")}</button>
+              <button className="btn btn-outline btn-sm" style={{ flex: 1 }} onClick={() => mark(false)}>🔄 {L("Redo", "फेरि")}</button>
               <button className="btn btn-primary btn-sm" style={{ flex: 1 }} onClick={() => next(1)}>{L("Next", "अर्को")} →</button>
-            </div>
-
-            {/* Palette dots */}
-            <div style={{ display: "flex", gap: 4, flexWrap: "wrap", justifyContent: "center" }}>
-              {deck.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => { setIdx(i); setFlipped(false) }}
-                  style={{
-                    width: 20, height: 20, borderRadius: 5, fontSize: 8, fontWeight: 700, cursor: "pointer", fontFamily: "inherit",
-                    border: i === idx ? "2px solid var(--primary)" : "1px solid var(--border)",
-                    background: known.includes(deck[i].id) ? "var(--primary)" : "var(--bg)",
-                    color: known.includes(deck[i].id) ? "white" : "var(--text)",
-                  }}
-                >
-                  {i + 1}
-                </button>
-              ))}
             </div>
           </>
         ) : null}

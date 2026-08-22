@@ -16,7 +16,7 @@ interface ExamConfig {
   durationMin: number
   negMark: number
   adaptive?: boolean // KU-style: question value scales with streak (1→5)
-  sections: { subject: string; count: number; label: string; labelNp: string }[]
+  sections: { subject: string; count: number; label: string; labelNp: string; icon: string }[]
   desc: string
   descNp: string
 }
@@ -30,9 +30,9 @@ const EXAM_CONFIGS: ExamConfig[] = [
     durationMin: 120,
     negMark: 0.1, // 10% of a 1-mark question (5% in recent pattern updates)
     sections: [
-      { subject: 'math', count: 40, label: 'Mathematics', labelNp: 'गणित' },
-      { subject: 'physics', count: 30, label: 'Physics', labelNp: 'भौतिकशास्त्र' },
-      { subject: 'chemistry', count: 30, label: 'Chemistry', labelNp: 'रसायनशास्त्र' },
+      { subject: 'math', count: 40, label: 'Mathematics', labelNp: 'गणित', icon: '📐' },
+      { subject: 'physics', count: 30, label: 'Physics', labelNp: 'भौतिकशास्त्र', icon: '⚡' },
+      { subject: 'chemistry', count: 30, label: 'Chemistry', labelNp: 'रसायनशास्त्र', icon: '🧪' },
     ],
     desc: '100 MCQs • 2 hours • -0.1 per wrong (10%)',
     descNp: '१०० प्रश्न • २ घण्टा • गलतमा -०.१ (१०%)',
@@ -46,9 +46,9 @@ const EXAM_CONFIGS: ExamConfig[] = [
     negMark: 0,
     adaptive: true, // marks scale with difficulty: 1→2→3→4→5 on correct streaks
     sections: [
-      { subject: 'physics', count: 40, label: 'Physics', labelNp: 'भौतिकशास्त्र' },
-      { subject: 'chemistry', count: 40, label: 'Chemistry', labelNp: 'रसायनशास्त्र' },
-      { subject: 'math', count: 40, label: 'Mathematics', labelNp: 'गणित' },
+      { subject: 'physics', count: 40, label: 'Physics', labelNp: 'भौतिकशास्त्र', icon: '⚡' },
+      { subject: 'chemistry', count: 40, label: 'Chemistry', labelNp: 'रसायनशास्त्र', icon: '🧪' },
+      { subject: 'math', count: 40, label: 'Mathematics', labelNp: 'गणित', icon: '📐' },
     ],
     desc: '120 MCQs • 2 hours • adaptive marks (1-5 per Q)',
     descNp: '१२० प्रश्न • २ घण्टा • adaptive अंक (१-५ प्रति प्रश्न)',
@@ -61,9 +61,9 @@ const EXAM_CONFIGS: ExamConfig[] = [
     durationMin: 180,
     negMark: 0.25,
     sections: [
-      { subject: 'physics', count: 50, label: 'Physics', labelNp: 'भौतिकशास्त्र' },
-      { subject: 'chemistry', count: 50, label: 'Chemistry', labelNp: 'रसायनशास्त्र' },
-      { subject: 'biology', count: 100, label: 'Biology', labelNp: 'जीवविज्ञान' },
+      { subject: 'physics', count: 50, label: 'Physics', labelNp: 'भौतिकशास्त्र', icon: '⚡' },
+      { subject: 'chemistry', count: 50, label: 'Chemistry', labelNp: 'रसायनशास्त्र', icon: '🧪' },
+      { subject: 'biology', count: 100, label: 'Biology', labelNp: 'जीवविज्ञान', icon: '🧬' },
     ],
     desc: '200 MCQs • 3 hours • -0.25 per wrong',
     descNp: '२०० प्रश्न • ३ घण्टा • गलतमा -०.२५',
@@ -92,6 +92,7 @@ export default function MockTest() {
   const [current, setCurrent] = useState(0)
   const [timeLeft, setTimeLeft] = useState(0)
   const [result, setResult] = useState<{ score: number; maxScore: number; correct: number; wrong: number; skipped: number } | null>(null)
+  const [startSection, setStartSection] = useState(0)
 
   const bySubject = useMemo(() => {
     const m = new Map<string, Question[]>()
@@ -102,11 +103,13 @@ export default function MockTest() {
     return m
   }, [])
 
-  const buildSession = useCallback((cfg: ExamConfig): Question[] => {
+  const buildSession = useCallback((cfg: ExamConfig, startIdx: number): Question[] => {
     // Fresh random per start — every click gives a different order.
     const rng = () => Math.floor(Math.random() * 1e9)
     const out: Question[] = []
-    for (const sec of cfg.sections) {
+    // Rotate sections so the chosen subject comes first (real CBT lets you pick)
+    const ordered = [...cfg.sections.slice(startIdx), ...cfg.sections.slice(0, startIdx)]
+    for (const sec of ordered) {
       const pool = bySubject.get(sec.subject) ?? []
       if (pool.length >= sec.count) {
         out.push(...shuffle(pool).slice(0, sec.count))
@@ -125,7 +128,8 @@ export default function MockTest() {
 
   const startTest = (cfg: ExamConfig) => {
     setConfig(cfg)
-    setSession(buildSession(cfg))
+    setStartSection(0)
+    setSession(buildSession(cfg, 0))
     setAnswers(new Array(cfg.sections.reduce((s, x) => s + x.count, 0)).fill(null))
     setMarked(new Set())
     setCurrent(0)
@@ -264,12 +268,38 @@ export default function MockTest() {
               <div>• {L('Use Prev/Next buttons or the question palette to jump.', 'Prev/Next बटन वा प्रश्न प्यालेटबाट जानुहोस्।')}</div>
               <div>• 🏳️ {L('Mark-for-review flags a question for later.', 'Mark-for-review ले प्रश्नलाई पछि हेर्न चिन्ह लगाउँछ।')}</div>
               <div>• {L('Timer auto-submits when time runs out.', 'समय सकिएपछि आफै submit हुन्छ।')}</div>
+
+              {/* Section start picker — pick which subject to begin with */}
+              <div style={{ marginTop: 14, borderTop: '1px solid var(--border)', paddingTop: 12 }}>
+                <div style={{ fontWeight: 800, fontSize: 13.5, color: 'var(--text)', marginBottom: 8 }}>
+                  🎯 {L('Start with which section?', 'कुन सेक्सनबाट सुरु गर्ने?')}
+                </div>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  {config.sections.map((s, si) => (
+                    <button
+                      key={s.subject}
+                      className={`chip ${startSection === si ? 'active' : ''}`}
+                      onClick={() => setStartSection(si)}
+                    >
+                      {s.icon} {isNe ? s.labelNp : s.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
             <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
               <button className="btn btn-outline" style={{ flex: 1 }} onClick={() => setPhase('select')}>
                 {L('← Back', '← फिर्ता')}
               </button>
-              <button className="btn btn-primary" style={{ flex: 1 }} onClick={() => setPhase('test')}>
+              <button className="btn btn-primary" style={{ flex: 1 }} onClick={() => {
+                setSession(buildSession(config, startSection))
+                setAnswers(new Array(config.sections.reduce((s, x) => s + x.count, 0)).fill(null))
+                setMarked(new Set())
+                setCurrent(0)
+                setTimeLeft(config.durationMin * 60)
+                setResult(null)
+                setPhase('test')
+              }}>
                 {L('🚀 Start Test', '🚀 परीक्षा सुरु')}
               </button>
             </div>
