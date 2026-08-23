@@ -189,7 +189,7 @@ function QrBackdrop() {
 
     const mk = (): Mote[] => {
       const p = pal()
-      return Array.from({ length: 26 }, () => ({
+      return Array.from({ length: 44 }, () => ({
         x: Math.random() * W, y: Math.random() * H,
         vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
         c: p[Math.floor(Math.random() * p.length)],
@@ -289,6 +289,7 @@ export function SupportButton() {
       {open && typeof document !== 'undefined' && createPortal(
         <div className="support-modal" onClick={() => setOpen(false)}>
           <div className="support-modal-card" onClick={e => e.stopPropagation()}>
+            <QrBackdrop />
             <button className="support-close" onClick={() => setOpen(false)} aria-label="Close">✕</button>
             <div className="support-hearts">
               <span>☕</span><span>❤️</span><span>☕</span>
@@ -302,7 +303,6 @@ export function SupportButton() {
                 : 'No ads, no fees. Just students helping students. If बाटो helped you, a single chai means the world — and keeps it going for the next learner. ☕'}
             </div>
             <div className="support-qr-big">
-              <QrBackdrop />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/bato/qr-donate.png" alt="Donate QR" />
             </div>
