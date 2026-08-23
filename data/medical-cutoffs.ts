@@ -31,7 +31,7 @@ export const medicalCutoffs: MedCutoff[] = [
     program: 'MBBS', type: 'Government', seats: 74,
     cutoffs: { scholarship: 100, paying: 500 },
     feeNote: 'Govt subsidized: ~NPR 15-20 lakh total',
-    website: 'https://bpkihs.edu.np',
+    website: 'https://bpkihs.edu',
   },
   {
     id: 'pahs-mbbs', college: 'Patan Academy of Health Sciences (PAHS), Lagankhel',
@@ -52,7 +52,7 @@ export const medicalCutoffs: MedCutoff[] = [
     program: 'MBBS', type: 'Government', seats: 100,
     cutoffs: { scholarship: 250, paying: 750 },
     feeNote: 'Provincial govt academy: subsidized fees',
-    website: 'https://nmch.edu.np',
+    website: 'https://ngmc.edu.np',
   },
   {
     id: 'pahs-biratnagar', college: 'Provincial Academy of Health Sciences, Biratnagar',
@@ -73,7 +73,7 @@ export const medicalCutoffs: MedCutoff[] = [
     program: 'MBBS', type: 'Government', seats: 50,
     cutoffs: { scholarship: 400, paying: 1200 },
     feeNote: 'Remote-area govt quota',
-    website: 'https://kaahs.edu.np',
+    website: 'https://kahs.edu.np',
   },
 
   // ─── MBBS — Private ─────────────────────────────────────────────────────────
@@ -89,14 +89,14 @@ export const medicalCutoffs: MedCutoff[] = [
     program: 'MBBS', type: 'Private', seats: 100,
     cutoffs: { scholarship: 300, paying: 2000 },
     feeNote: 'Private: ~NPR 45-55 lakh total',
-    website: 'https://manipal.edu.np/mcomsnepal',
+    website: 'https://manipalpokhara.edu.np',
   },
   {
     id: 'nobel-mbbs', college: 'Nobel Medical College, Biratnagar',
     program: 'MBBS', type: 'Private', seats: 100,
     cutoffs: { scholarship: 400, paying: 2200 },
     feeNote: 'Private: ~NPR 40-50 lakh total',
-    website: 'https://nobelmedicalcollege.edu.np',
+    website: 'https://nobelmedicalcollege.com.np',
   },
   {
     id: 'cmc-mbbs', college: 'Chitwan Medical College (CMC), Bharatpur',
@@ -117,14 +117,14 @@ export const medicalCutoffs: MedCutoff[] = [
     program: 'MBBS', type: 'Private', seats: 100,
     cutoffs: { scholarship: 600, paying: 2800 },
     feeNote: 'Private: ~NPR 40-50 lakh total',
-    website: 'https://nationalmedicalcollege.edu.np',
+    website: 'https://nmcbir.edu.np',
   },
   {
     id: 'nmcj-mbbs', college: 'Nepal Medical College (NMC), Jorpati, Kathmandu',
     program: 'MBBS', type: 'Private', seats: 100,
     cutoffs: { scholarship: 650, paying: 3000 },
     feeNote: 'Private: ~NPR 40-50 lakh total',
-    website: 'https://nmc.edu.np',
+    website: 'https://nmcth.edu',
   },
   {
     id: 'lmc-mbbs', college: 'Lumbini Medical College (LMC), Tansen',
@@ -154,7 +154,7 @@ export const medicalCutoffs: MedCutoff[] = [
     program: 'BDS', type: 'Government', seats: 40,
     cutoffs: { scholarship: 120, paying: 550 },
     feeNote: 'Govt subsidized',
-    website: 'https://bpkihs.edu.np',
+    website: 'https://bpkihs.edu',
   },
   {
     id: 'kdc-bds', college: 'Kantipur Dental College Teaching Hospital, Basundhara, Kathmandu',
@@ -168,14 +168,14 @@ export const medicalCutoffs: MedCutoff[] = [
     program: 'BDS', type: 'Private', seats: 60,
     cutoffs: { scholarship: 400, paying: 1500 },
     feeNote: 'Private dental: ~NPR 30-40 lakh total',
-    website: 'https://mkedbc.edu.np',
+    website: null,
   },
   {
     id: 'pdc-bds', college: "People's Dental College and Hospital, Nayabazar, Kathmandu",
     program: 'BDS', type: 'Private', seats: 60,
     cutoffs: { scholarship: 350, paying: 1300 },
     feeNote: 'Private dental: ~NPR 30-40 lakh total',
-    website: 'https://peoplesdentalcollege.edu.np',
+    website: 'https://pdch.com.np',
   },
   {
     id: 'cmc-bds', college: 'Chitwan Medical College (CMC), Bharatpur',
@@ -196,35 +196,35 @@ export const medicalCutoffs: MedCutoff[] = [
     program: 'BDS', type: 'Private', seats: 60,
     cutoffs: { scholarship: 480, paying: 1650 },
     feeNote: 'Private dental',
-    website: 'https://cms.edu.np',
+    website: 'https://cmsnepal.edu.np',
   },
   {
     id: 'nmc-bds', college: 'National Medical College, Birgunj',
     program: 'BDS', type: 'Private', seats: 50,
     cutoffs: { scholarship: 520, paying: 1800 },
     feeNote: 'Private dental',
-    website: 'https://nationalmedicalcollege.edu.np',
+    website: 'https://nmcbir.edu.np',
   },
   {
     id: 'nmcj-bds', college: 'Nepal Medical College (NMC), Jorpati',
     program: 'BDS', type: 'Private', seats: 50,
     cutoffs: { scholarship: 550, paying: 1900 },
     feeNote: 'Private dental',
-    website: 'https://nmc.edu.np',
+    website: 'https://nmcth.edu',
   },
   {
     id: 'ngmc-bds', college: 'Nepalgunj Medical College, Nepalgunj',
     program: 'BDS', type: 'Private', seats: 50,
     cutoffs: { scholarship: 530, paying: 1750 },
     feeNote: 'Private dental',
-    website: 'https://nmch.edu.np',
+    website: 'https://ngmc.edu.np',
   },
   {
     id: 'nobel-bds', college: 'Nobel Medical College, Biratnagar',
     program: 'BDS', type: 'Private', seats: 50,
     cutoffs: { scholarship: 510, paying: 1700 },
     feeNote: 'Private dental',
-    website: 'https://nobelmedicalcollege.edu.np',
+    website: 'https://nobelmedicalcollege.com.np',
   },
   {
     id: 'ucms-bds', college: 'Universal College of Medical Sciences (UCMS), Bhairahawa',
@@ -247,7 +247,7 @@ export const medicalCutoffs: MedCutoff[] = [
     program: 'BSc Nursing', type: 'Government', seats: 75,
     cutoffs: { scholarship: 200, paying: 700 },
     feeNote: 'Govt subsidized',
-    website: 'https://bpkihs.edu.np',
+    website: 'https://bpkihs.edu',
   },
   {
     id: 'pahs-nursing', college: 'Patan Academy of Health Sciences (PAHS), Lagankhel',
@@ -261,7 +261,7 @@ export const medicalCutoffs: MedCutoff[] = [
     program: 'BSc Nursing', type: 'Government', seats: 40,
     cutoffs: { scholarship: 350, paying: 1000 },
     feeNote: 'Remote-area quota',
-    website: 'https://kaahs.edu.np',
+    website: 'https://kahs.edu.np',
   },
   {
     id: 'naiphc-nursing', college: 'National Academy of Health Sciences, Kathmandu',
@@ -333,21 +333,21 @@ export const medicalCutoffs: MedCutoff[] = [
     program: 'B.Pharm', type: 'Private', seats: 50,
     cutoffs: { scholarship: 480, paying: 1400 },
     feeNote: 'Private pharmacy',
-    website: 'https://manipal.edu.np/mcomsnepal',
+    website: 'https://manipalpokhara.edu.np',
   },
   {
     id: 'cmc-pharm', college: 'College of Medical Sciences (CMS), Bharatpur',
     program: 'B.Pharm', type: 'Private', seats: 40,
     cutoffs: { scholarship: 520, paying: 1600 },
     feeNote: 'Private pharmacy',
-    website: 'https://cms.edu.np',
+    website: 'https://cmsnepal.edu.np',
   },
   {
     id: 'nmc-pharm', college: 'National Medical College, Birgunj',
     program: 'B.Pharm', type: 'Private', seats: 40,
     cutoffs: { scholarship: 550, paying: 1700 },
     feeNote: 'Private pharmacy',
-    website: 'https://nationalmedicalcollege.edu.np',
+    website: 'https://nmcbir.edu.np',
   },
 
   // ─── BPT (Physiotherapy) ────────────────────────────────────────────────────
@@ -370,14 +370,14 @@ export const medicalCutoffs: MedCutoff[] = [
     program: 'BPT', type: 'Private', seats: 30,
     cutoffs: { scholarship: 580, paying: 1700 },
     feeNote: 'Private physiotherapy',
-    website: 'https://manipal.edu.np/mcomsnepal',
+    website: 'https://manipalpokhara.edu.np',
   },
   {
     id: 'nmcj-bpt', college: 'Nepal Medical College (NMC), Jorpati',
     program: 'BPT', type: 'Private', seats: 30,
     cutoffs: { scholarship: 650, paying: 1900 },
     feeNote: 'Private physiotherapy',
-    website: 'https://nmc.edu.np',
+    website: 'https://nmcth.edu',
   },
 
   // ─── BAMS (Ayurveda) ──────────────────────────────────────────────────────
@@ -418,7 +418,7 @@ export const medicalCutoffs: MedCutoff[] = [
     program: 'BSc MLT', type: 'Government', seats: 40,
     cutoffs: { scholarship: 350, paying: 1100 },
     feeNote: 'Govt subsidized — lab tech',
-    website: 'https://bpkihs.edu.np',
+    website: 'https://bpkihs.edu',
   },
   {
     id: 'cmc-mlt', college: 'Chitwan Medical College (CMC), Bharatpur',
@@ -466,7 +466,7 @@ export const medicalCutoffs: MedCutoff[] = [
     program: 'BPH', type: 'Government', seats: 40,
     cutoffs: { scholarship: 400, paying: 1200 },
     feeNote: 'Remote-area quota — public health',
-    website: 'https://kaahs.edu.np',
+    website: 'https://kahs.edu.np',
   },
 ]
 

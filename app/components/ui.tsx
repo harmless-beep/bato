@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import { getPerfMode, setPerfMode } from './perf-mode'
@@ -164,6 +164,106 @@ export function ThemeToggle() {
 }
 
 // ── Support button + QR modal (self-contained) ─────────────────────────────
+const QR_PAL: Record<string, string[]> = {
+  light:  ['#4f46e5', '#7c3aed', '#f59e0b', '#818cf8', '#c084fc'],
+  dark:   ['#818cf8', '#a78bfa', '#fbbf24', '#38bdf8', '#34d399'],
+  forest: ['#34d399', '#4ade80', '#fbbf24', '#f97316', '#86efac'],
+  ocean:  ['#38bdf8', '#0ea5e9', '#818cf8', '#06b6d4', '#22d3ee'],
+}
+
+function QrBackdrop() {
+  const ref = useRef<HTMLCanvasElement>(null)
+  useEffect(() => {
+    const canvas = ref.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    let W = 0, H = 0, DPR = 1
+    const theme = () => document.documentElement.dataset.theme ?? 'light'
+    const pal = () => QR_PAL[theme()] ?? QR_PAL.light
+    let mx = -9999, my = -9999
+
+    interface Mote { x: number; y: number; vx: number; vy: number; c: string; s: number; ph: number }
+    let motes: Mote[] = []
+
+    const mk = (): Mote[] => {
+      const p = pal()
+      return Array.from({ length: 26 }, () => ({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
+        c: p[Math.floor(Math.random() * p.length)],
+        s: 1.5 + Math.random() * 2.5,
+        ph: Math.random() * Math.PI * 2,
+      }))
+    }
+
+    const resize = () => {
+      DPR = Math.min(window.devicePixelRatio || 1, 2)
+      const rect = canvas.parentElement?.getBoundingClientRect()
+      W = rect?.width ?? 200; H = rect?.height ?? 200
+      canvas.width = W * DPR; canvas.height = H * DPR
+      canvas.style.width = W + 'px'; canvas.style.height = H + 'px'
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0)
+      motes = mk()
+    }
+    resize()
+    window.addEventListener('resize', resize)
+    canvas.addEventListener('mousemove', (e) => {
+      const r = canvas.getBoundingClientRect()
+      mx = e.clientX - r.left; my = e.clientY - r.top
+    })
+    canvas.addEventListener('mouseleave', () => { mx = -9999; my = -9999 })
+
+    const mo = new MutationObserver(() => { motes = mk() })
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+
+    let raf = 0
+    const draw = () => {
+      raf = requestAnimationFrame(draw)
+      ctx.clearRect(0, 0, W, H)
+      for (const m of motes) {
+        const dx = mx - m.x, dy = my - m.y
+        const d2 = dx * dx + dy * dy
+        if (d2 < 6400) { // 80px radius — gentle attract
+          const d = Math.sqrt(d2) || 1
+          m.vx += (dx / d) * 0.12
+          m.vy += (dy / d) * 0.12
+        }
+        m.vx *= 0.985; m.vy *= 0.985
+        m.x += m.vx; m.y += m.vy
+        if (m.x < -10) m.x = W + 10
+        if (m.x > W + 10) m.x = -10
+        if (m.y < -10) m.y = H + 10
+        if (m.y > H + 10) m.y = -10
+        m.ph += 0.02
+        const tw = 0.55 + 0.45 * Math.sin(m.ph)
+        const g = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.s * 3.2)
+        g.addColorStop(0, m.c)
+        g.addColorStop(1, 'transparent')
+        ctx.globalAlpha = 0.35 * tw
+        ctx.fillStyle = g
+        ctx.beginPath()
+        ctx.arc(m.x, m.y, m.s * 3.2, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.globalAlpha = 0.9
+        ctx.fillStyle = m.c
+        ctx.beginPath()
+        ctx.arc(m.x, m.y, m.s, 0, Math.PI * 2)
+        ctx.fill()
+      }
+      ctx.globalAlpha = 1
+    }
+    if (!reduced) raf = requestAnimationFrame(draw)
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener('resize', resize)
+      mo.disconnect()
+    }
+  }, [])
+  return <canvas ref={ref} aria-hidden="true" />
+}
+
 export function SupportButton() {
   const { lang } = useLang()
   const isNe = lang === 'ne'
@@ -173,10 +273,11 @@ export function SupportButton() {
       <button
         className="lang-toggle support-btn"
         onClick={() => setOpen(true)}
-        title={isNe ? 'साथ दिनुहोस्' : 'Support us'}
-        aria-label="Support us"
+        title={isNe ? 'साथ दिनुहोस्' : 'Keep बाटो free'}
+        aria-label={isNe ? 'साथ दिनुहोस्' : 'Support us'}
       >
-        ☕
+        <span className="support-btn-heart">❤️</span>
+        {isNe ? 'साथ' : 'Keep free'}
       </button>
       {open && typeof document !== 'undefined' && createPortal(
         <div className="support-modal" onClick={() => setOpen(false)}>
@@ -186,19 +287,23 @@ export function SupportButton() {
               <span>☕</span><span>❤️</span><span>☕</span>
             </div>
             <div className="support-thanks">
-              {isNe ? 'धन्यवाद! 🙏' : 'Thank you! 🙏'}
+              {isNe ? 'तपाईंले बाटोलाई मुफ्त राख्नुहुन्छ!' : 'You keep बाटो free!'}
             </div>
             <div className="support-thanks-sub">
               {isNe
-                ? 'तपाईंको साथले बाटोलाई जीवित राख्छ।'
-                : 'Your support keeps बाटो alive.'}
+                ? 'कुनै विज्ञापन छैन। कुनै शुल्क छैन। कहिल्यै पनि। किनभने विद्यार्थीहरूले चिया किन्छन्। ☕'
+                : 'No ads. No fees. Ever. Because students like you buy a chai. ☕'}
             </div>
             <div className="support-qr-big">
+              <QrBackdrop />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/bato/qr-donate.png" alt="Donate QR" />
             </div>
             <div className="support-scan">
               {isNe ? 'QR scan गरेर दान गर्नुहोस्' : 'Scan the QR to donate'}
+            </div>
+            <div className="support-proof">
+              {isNe ? 'हरेक चियाले बाटोलाई विज्ञापन-मुक्त राख्छ' : 'Every chai keeps बाटो ad-free'}
             </div>
             <button className="btn btn-gold btn-sm" onClick={() => setOpen(false)}>
               {isNe ? 'बन्द गर्नुहोस्' : 'Close'}
