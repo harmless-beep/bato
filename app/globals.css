@@ -48,12 +48,14 @@ button { font-family: var(--font); cursor: pointer; }
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
   position: sticky;
   top: 0;
   z-index: 100;
   border-bottom: 1px solid var(--border);
 }
-.nav-logo { display: flex; align-items: center; gap: 12px; }
+.nav-logo { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.nav-controls { display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
 .nav-logo-icon { width: 40px; height: 40px; border-radius: 12px; box-shadow: var(--shadow); }
 .nav-title { color: var(--text); font-size: 22px; font-weight: 800; line-height: 1.1; }
 .nav-sub { color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: 1.2px; }
@@ -786,6 +788,13 @@ html body {
 
 /* ─── Global responsive tuning ─── */
 @media (max-width: 600px) {
+  .nav { flex-wrap: wrap; padding: 10px 14px calc(10px + env(safe-area-inset-top)); padding-top: calc(10px + env(safe-area-inset-top)); }
+  .nav-controls { width: 100%; justify-content: flex-start; gap: 6px; }
+  .nav-logo-icon { width: 34px; height: 34px; }
+  .nav-title { font-size: 16px; }
+  .nav-sub { font-size: 8px; letter-spacing: 0.6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70vw; }
+  .theme-switcher-btn { width: 32px; height: 32px; }
+  .lang-toggle { padding: 6px 10px; }
   .page-content { padding: 16px 12px 32px; }
   .stats-row { grid-template-columns: repeat(3, 1fr); gap: 6px; }
   .stat-tile-num { font-size: 18px; }
@@ -794,7 +803,9 @@ html body {
   .countdown-banner { padding: 12px 14px; }
   .countdown-days { font-size: 15px; }
   .topbar { padding: 8px 12px; }
-  .nav-title { font-size: 14px; }
+  /* wide data tables: keep the label column pinned while numeric cols scroll.
+     --card is translucent by design; use opaque --surface so scrolled figures never bleed through. */
+  .table-sticky { position: sticky; left: 0; background: var(--surface); box-shadow: 2px 0 0 var(--border); }
 }
 @media (min-width: 601px) and (max-width: 1024px) {
   .page-content { padding: 20px 20px 40px; }

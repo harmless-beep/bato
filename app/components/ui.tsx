@@ -333,7 +333,7 @@ export function TopBar() {
           <div className="nav-sub">{t('appSub')}</div>
         </div>
       </Link>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <div className="nav-controls">
         <PerfToggle />
         <ThemeToggle />
         <SupportButton />

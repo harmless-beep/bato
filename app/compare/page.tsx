@@ -19,7 +19,7 @@ function progRow(a: Cutoff | undefined, b: Cutoff | undefined, isNe: boolean) {
 
   return (
     <tr key={name} style={{ borderBottom: '1px solid var(--border)' }}>
-      <td style={{ padding: '8px 10px', fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>{name}</td>
+      <td className="table-sticky" style={{ padding: '8px 10px', fontSize: 13, color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{name}</td>
       <td style={{ padding: '8px 10px', textAlign: 'center', fontSize: 13, fontWeight: 700, color: rA !== null ? 'var(--text)' : 'var(--muted)' }}>
         {rA !== null ? `R ${rA}` : '—'}
       </td>
@@ -125,7 +125,7 @@ export default function Compare() {
           <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 500 }}>
             <thead>
               <tr style={{ background: 'var(--card)' }}>
-                <th style={{ padding: '10px 10px', textAlign: 'left', fontSize: 12, color: 'var(--muted)', fontWeight: 700, borderBottom: '2px solid var(--border)' }}>Program</th>
+                <th className="table-sticky" style={{ padding: '10px 10px', textAlign: 'left', fontSize: 12, color: 'var(--muted)', fontWeight: 700, borderBottom: '2px solid var(--border)' }}>Program</th>
                 <th style={{ padding: '10px 10px', textAlign: 'center', fontSize: 12, color: 'var(--muted)', fontWeight: 700, borderBottom: '2px solid var(--border)', background: cardBg(left) }}>{left} R</th>
                 <th style={{ padding: '10px 10px', textAlign: 'center', fontSize: 12, color: 'var(--muted)', fontWeight: 700, borderBottom: '2px solid var(--border)', background: cardBg(right) }}>{right} R</th>
                 <th style={{ padding: '10px 10px', textAlign: 'center', fontSize: 12, color: 'var(--muted)', fontWeight: 700, borderBottom: '2px solid var(--border)' }}>R diff</th>

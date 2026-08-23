@@ -278,7 +278,7 @@ export default function Careers() {
           <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 420 }}>
             <thead>
               <tr>
-                <th style={thStyle}>{isNe ? 'भूमिका' : 'Role'}</th>
+                <th className="table-sticky" style={thStyle}>{isNe ? 'भूमिका' : 'Role'}</th>
                 <th style={thStyle}>{isNe ? 'प्रवेश' : 'Entry'}</th>
                 <th style={thStyle}>{isNe ? 'मध्य' : 'Mid'}</th>
                 <th style={thStyle}>{isNe ? 'Senior' : 'Senior'}</th>
@@ -287,7 +287,7 @@ export default function Careers() {
             <tbody>
               {table.map(r => (
                 <tr key={r.role[0]}>
-                  <td style={{ ...tdStyle, fontWeight: 700 }}>{L(r.role)}</td>
+                  <td className="table-sticky" style={{ ...tdStyle, fontWeight: 700 }}>{L(r.role)}</td>
                   <td style={tdStyle}>{r.entry}</td>
                   <td style={tdStyle}>{r.mid}</td>
                   <td style={{ ...tdStyle, color: 'var(--primary)', fontWeight: 700 }}>{r.senior}</td>
