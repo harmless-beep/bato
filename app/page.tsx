@@ -218,7 +218,7 @@ export default function Home() {
                               aspectRatio: '1', borderRadius: 6,
                               display: 'flex', alignItems: 'center', justifyContent: 'center',
                               fontSize: 10, fontWeight: 700,
-                              background: studied ? 'var(--primary)' : c.inRange ? 'var(--card)' : 'transparent',
+                              background: studied ? 'var(--primary)' : 'var(--card)',
                               color: studied ? '#fff' : 'var(--muted)',
                               border: isToday ? '2px solid var(--gold, #f59e0b)' : c.inRange ? '1px solid var(--border)' : 'none',
                               opacity: c.inRange ? 1 : 0,
