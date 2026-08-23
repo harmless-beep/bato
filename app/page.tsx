@@ -127,6 +127,22 @@ export default function Home() {
         </div>
       </div>
 
+      {/* ── ThreeUI Hero ─────────────────────────────────────────────── */}
+      <div className="threeui-hero">
+        <div className="threeui-hero-inner">
+          <iframe
+            src="/spark-badge.html"
+            title="Spark Badge — credential animation"
+            loading="eager"
+            sandbox="allow-scripts allow-same-origin"
+            style={{ width: '100%', height: '100%', border: 0, display: 'block', borderRadius: 12 }}
+          />
+        </div>
+        <div className="threeui-hero-label">
+          <span className="threeui-hero-badge">✨ Interactive</span>
+        </div>
+      </div>
+
       {/* ── Dashboard body ───────────────────────────────────────────── */}
       <div className="dashboard">
 

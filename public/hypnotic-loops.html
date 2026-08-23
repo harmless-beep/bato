@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Hypnotic Loops — LINES / DOTS / RAYS / TYPE</title>
+<style>
+  :root{ --bg:#2919EB; }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ height:100%; background:var(--bg); overflow:hidden; }
+  body{
+    font-family:"Helvetica Neue",Helvetica,Inter,"Segoe UI",Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    display:grid; place-items:center;
+  }
+  #stage{ position:relative; }
+  #gl{ display:block; width:100%; height:100%; }
+  .lbl{
+    position:absolute;
+    color:#fff;
+    font-weight:600;
+    white-space:nowrap;
+    transform-origin:0 0;
+    transform:rotate(-90deg) translate(-50%,-100%);
+    pointer-events:none;
+    user-select:none;
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="gl"></canvas>
+  <div class="lbl" data-i="0">LINES</div>
+  <div class="lbl" data-i="1">DOTS</div>
+  <div class="lbl" data-i="2">RAYS</div>
+  <div class="lbl" data-i="3">TYPE</div>
+</div>
+<script>
+(() => {
+"use strict";
+
+/* ────────────────────────────────────────────────────────────────────────────
+   Composition constants — measured from the reference (design space 1200×900)
+   ──────────────────────────────────────────────────────────────────────────── */
+const DW = 1200, DH = 900;
+const BG = [0x29/255, 0x19/255, 0xEB/255];
+
+const MAIN   = { x: 452, y: 452, s: 1.0 };            // main disc
+const THUMB_X = 975, THUMB_Y0 = 150, THUMB_DY = 200;  // side stack
+const THUMB_S = 0.218;                                // thumb scale vs main
+const LABEL_X = 1134.5;                               // right edge of the rotated caps
+const LABEL_SIZE = 14.5;
+
+const R0 = 150;            // base disc radius, design px
+const LOOP = 12.0;         // s — full pattern loop
+const DEF_PERIOD = 6.0;    // s — deformation cycle
+const DEF_LAG = 127/30;    // s — main shape lags the thumbnails
+const PAT_PHASE = 325/30;  // s — pattern index phase (TYPE at its centre)
+const TRANS = 0.40;        // s — radial wipe duration (measured ~12 frames @30fps)
+const TRANS_LEAD = 0.10;   // s — the wipe begins slightly before the index crosses
+
+// mode ids
+const M_TYPE = 0, M_RAYS = 1, M_DOTS = 2, M_LINES = 3;
+const THUMB_MODES = [M_LINES, M_DOTS, M_RAYS, M_TYPE];
+
+// measured deformation envelope, one 6 s cycle sampled every 5 frames @30fps
+const AMP = [0,0.009,0.053,0.127,0.235,0.387,0.652,0.868,0.944,0.976,0.988,0.996,
+             0.999,0.996,0.991,0.985,0.971,0.953,0.912,0.834,0.769,0.736,0.716,
+             0.705,0.698,0.677,0.637,0.553,0.384,0.146,0.009,0.005,0.003,0.001,0,0.001];
+
+/* Deformation.  Each point of the disc orbits a small circle in its own
+   (radius, depth) plane; the orbit phase runs NFOLD times around the disc and
+   advances OMEGA turns from hub to rim.  So the sheet corrugates into lobes,
+   the ring pattern stretches on the crests and squeezes on the flanks (the
+   reference measures 68 px vs 38 px for the same 30 px base pitch), and where
+   the phase outruns the radius the sheet folds back and occludes itself. */
+const P = {
+  RIPPLE: 0.20,   // corrugation depth at amp = 1, as a fraction of radius
+  NFOLD:  5.0,    // corrugation lobes around the disc
+  OMEGA:  2.20,   // turns the corrugation phase advances between hub and rim
+  PHASE:  0.60,   // where lobe #1 sits (rad)
+  ZGAIN:  1.00,   // how much of the corrugation goes into depth
+  TWIST:  0.00,   // extra rotation between hub and rim (rad)
+  SWIRL:  0.06,   // tangential component of the corrugation (folds the rays)
+  SCALE1: 1.92,   // global scale at amp = 1
+  SPIN:   0.35,   // constant rotation of the whole rosette (rad)
+  SPINV:  0.0,    // rotation per second
+};
+
+// while tuning: ?RIPPLE=…&NFOLD=… overrides any of the above
+try {
+  const q = new URLSearchParams(location.search);
+  for (const k of Object.keys(P)) if (q.has(k)) P[k] = parseFloat(q.get(k));
+} catch (e) {}
+
+/* ── amplitude envelope ─────────────────────────────────────────────────── */
+function ampAt(t){
+  let u = ((t % DEF_PERIOD) + DEF_PERIOD) % DEF_PERIOD;
+  const f = u / DEF_PERIOD * AMP.length;
+  const i = Math.floor(f), k = f - i;
+  const a = AMP[i % AMP.length], b = AMP[(i+1) % AMP.length];
+  return a + (b - a) * k;
+}
+
+/* ── pattern schedule: ping-pong TYPE→RAYS→DOTS→LINES→DOTS→RAYS→TYPE ────── */
+function patIndex(t){ return 1.5 * (1 - Math.cos(2*Math.PI*(t - PAT_PHASE)/LOOP)); }
+function schedule(t){
+  const i  = patIndex(t);
+  const cur = Math.max(0, Math.min(3, Math.round(i)));
+  // instantaneous rate of the index, to convert "distance past the edge" into time
+  const rate = Math.abs(1.5 * (2*Math.PI/LOOP) * Math.sin(2*Math.PI*(t - PAT_PHASE)/LOOP));
+  const rising = Math.sin(2*Math.PI*(t - PAT_PHASE)/LOOP) > 0;
+  const prev = Math.max(0, Math.min(3, rising ? cur - 1 : cur + 1));
+  const edge = rising ? cur - 0.5 : cur + 0.5;
+  let w = 1;
+  if (prev !== cur && rate > 1e-6) w = Math.min(1, Math.abs(i - edge) / (rate * TRANS));
+  return { cur, prev, w };
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   WebGL
+   ──────────────────────────────────────────────────────────────────────────── */
+const canvas = document.getElementById('gl');
+let gl = canvas.getContext('webgl2', {antialias:false, alpha:false, premultipliedAlpha:false});
+let isGL2 = !!gl;
+if (!gl) {
+  gl = canvas.getContext('webgl', {antialias:false, alpha:false});
+  if (gl) gl.getExtension('OES_standard_derivatives');
+}
+if (!gl) { document.body.innerHTML = '<p style="color:#fff;font:14px sans-serif;padding:2rem">WebGL is required.</p>'; return; }
+
+function sh(type, src){
+  const s = gl.createShader(type);
+  gl.shaderSource(s, src); gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s) + '\n' + src);
+  return s;
+}
+function prog(vs, fs){
+  const p = gl.createProgram();
+  gl.attachShader(p, sh(gl.VERTEX_SHADER, vs));
+  gl.attachShader(p, sh(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(p);
+  if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
+  return p;
+}
+const HEAD = isGL2 ? '#version 300 es\n' : '#extension GL_OES_standard_derivatives : enable\n';
+const VIN  = isGL2 ? 'in' : 'attribute';
+const VOUT = isGL2 ? 'out' : 'varying';
+const FIN  = isGL2 ? 'in' : 'varying';
+const FOUT = isGL2 ? 'out vec4 fragColor;' : '';
+const FCOL = isGL2 ? 'fragColor' : 'gl_FragColor';
+const TEX  = isGL2 ? 'texture' : 'texture2D';
+
+/* ── surface mesh: polar grid ───────────────────────────────────────────── */
+const NR = 150, NT = 420;
+{
+  const verts = new Float32Array((NR+1)*(NT+1)*2);
+  let o = 0;
+  for (let i = 0; i <= NR; i++)
+    for (let j = 0; j <= NT; j++){ verts[o++] = i/NR; verts[o++] = j/NT; }
+  const idx = new Uint32Array(NR*NT*6);
+  let q = 0;
+  for (let i = 0; i < NR; i++)
+    for (let j = 0; j < NT; j++){
+      const a = i*(NT+1)+j, b = a+1, c = a+(NT+1), d = c+1;
+      idx[q++]=a; idx[q++]=c; idx[q++]=b; idx[q++]=b; idx[q++]=c; idx[q++]=d;
+    }
+  var VBO = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, VBO);
+  gl.bufferData(gl.ARRAY_BUFFER, verts, gl.STATIC_DRAW);
+  var IBO = gl.createBuffer();
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, IBO);
+  if (!isGL2) gl.getExtension('OES_element_index_uint');
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, idx, gl.STATIC_DRAW);
+  var IDXCOUNT = idx.length;
+}
+
+/* ── scene shader ───────────────────────────────────────────────────────── */
+const SCENE_VS = HEAD + `
+precision highp float;
+${VIN} vec2 a_tp;                 // (t, phi01)
+uniform vec2  u_center;           // design px
+uniform float u_scale;            // instance scale
+uniform float u_amp, u_spin, u_ripple, u_nfold, u_omega, u_phase, u_zgain, u_twist;
+uniform float u_swirl, u_scale1, u_R0;
+uniform vec2  u_design;
+${VOUT} float v_t;
+${VOUT} float v_ph;
+${VOUT} vec3  v_nrm;
+${VOUT} vec3  v_local;
+
+const float TAU = 6.28318530718;
+
+/* The disc is corrugated: every point orbits a small circle in its own
+   (radius, depth) plane, so the sheet ripples into NFOLD lobes.  Projected,
+   the ring pattern is stretched at the crests and squeezed on the flanks —
+   and where the corrugation outruns the radius the sheet folds over itself
+   and occludes what is behind. */
+vec3 surf(float t, float ph){
+  float r   = u_R0 * t;
+  float S   = 1.0 + (u_scale1 - 1.0) * u_amp;
+  float a   = u_ripple * u_amp;
+  float phi = u_nfold*ph + u_omega*TAU*t + u_phase;
+  float rho = r * S * (1.0 + a*cos(phi));
+  float z   = r * S * a * u_zgain * sin(phi);
+  float ang = ph + u_spin + u_twist * u_amp * t + u_swirl * u_amp * sin(phi);
+  return vec3(rho*cos(ang), rho*sin(ang), z);
+}
+void main(){
+  float t  = a_tp.x;
+  float ph = a_tp.y * TAU;
+  vec3 p  = surf(t, ph);
+  float dt = 1.0/${(NR).toFixed(1)}, dp = TAU/${(NT).toFixed(1)};
+  vec3 pt = surf(min(t+dt,1.0), ph) - surf(max(t-dt,0.0), ph);
+  vec3 pp = surf(t, ph+dp) - surf(t, ph-dp);
+  v_nrm = normalize(cross(pp, pt));
+  v_t  = t;
+  v_ph = a_tp.y;
+  v_local = p;
+  vec2 s = u_center + p.xy * u_scale;
+  gl_Position = vec4((s/u_design*2.0-1.0)*vec2(1.0,-1.0), -p.z*u_scale/600.0, 1.0);
+}`;
+
+const SCENE_FS = HEAD + `
+precision highp float;
+${FIN} float v_t;
+${FIN} float v_ph;
+${FIN} vec3  v_nrm;
+${FIN} vec3  v_local;
+uniform int   u_cur, u_prev;
+uniform float u_wipe;
+uniform float u_R0;
+uniform sampler2D u_type;
+uniform vec3  u_bg;
+${FOUT}
+
+const float TAU = 6.28318530718;
+
+float aastep(float e, float x){
+  float w = fwidth(x) * 0.8 + 1e-6;
+  return smoothstep(e - w, e + w, x);
+}
+// concentric strokes: centres every pitch, stroke width sw (design px)
+float ringPat(float r, float pitch, float sw, float rmax){
+  float u = r / pitch;
+  float d = abs(fract(u + 0.5) - 0.5) * pitch;      // px from nearest ring centre
+  float m = 1.0 - aastep(sw*0.5, d);
+  m *= 1.0 - aastep(rmax, r);
+  return m;
+}
+float dotPat(float r, float ph, float pitch, float n, float rad, float rmax){
+  float u = r / pitch;
+  float dr = (fract(u + 0.5) - 0.5) * pitch;
+  float ua = ph * n;
+  float da = (fract(ua + 0.5) - 0.5) * (TAU * max(r, 8.0) / n);
+  float e  = length(vec2(dr, da * 0.62));
+  float m  = 1.0 - aastep(rad, e);
+  m *= 1.0 - aastep(rmax, r);
+  m *= aastep(pitch*0.6, r);
+  return m;
+}
+float rayPat(float r, float ph, float n, float rmax){
+  float u = fract(ph * n);
+  float d = abs(u - 0.5);
+  float m = aastep(0.25, d);
+  m *= 1.0 - aastep(rmax, r);
+  return m;
+}
+float typePat(float r, float ph, float pitch, float band, float reps, float rmax, float off){
+  float u = (r - off) / pitch;
+  float f = fract(u + 0.5) - 0.5;
+  float vv = f * pitch / band + 0.5;                // 0..1 across the cap band
+  if (vv < 0.0 || vv > 1.0) return 0.0;
+  if (r > rmax || r < pitch*0.5) return 0.0;
+  float uu = fract(ph * reps);
+  float a = ${TEX}(u_type, vec2(uu, 1.0 - vv)).a;
+  return smoothstep(0.35, 0.62, a);
+}
+
+float pattern(int mode, float r, float ph){
+  if (mode == 3) return ringPat(r, 30.0, 15.0, 156.0);                  // LINES
+  if (mode == 2) return dotPat (r, ph, 10.0, 36.0, 2.5, 152.0);         // DOTS
+  if (mode == 1) return rayPat (r, ph, 6.0, 152.0);                     // RAYS
+  return typePat(r, ph, 28.0, 17.0, 2.85, 142.0, 20.0);                  // TYPE
+}
+
+void main(){
+  float r  = v_t * u_R0;
+  float ph = v_ph;
+
+  float wipeR = u_wipe * 170.0;
+  int mode = (r < wipeR) ? u_cur : u_prev;
+  float m = pattern(mode, r, ph);
+  // hard cutout, not alpha: the gaps must let folds behind show through,
+  // so edges are resolved by supersampling the scene buffer instead
+  if (m < 0.5) discard;
+
+  vec3 N = normalize(v_nrm);
+  vec3 V = vec3(0.0, 0.0, 1.0);
+  if (dot(N, V) < 0.0) N = -N;
+  vec3 L = normalize(vec3(-0.30, 0.52, 0.80));
+
+  float diff = max(dot(N, L), 0.0);
+  vec3  H    = normalize(L + V);
+  float spec = pow(max(dot(N, H), 0.0), 34.0);
+  // measured at rest: k rises with radius and ramps along a fixed screen
+  // direction (bright toward the lower-left) — a baked gradient, not lighting
+  float grad = dot(v_local.xy / u_R0, vec2(-0.39, 0.92));
+  float k = 0.055 + 0.34*diff + 0.44*spec + 0.13*v_t + 0.235*grad;
+  k = clamp(k, 0.0, 1.0);
+
+  ${FCOL} = vec4(mix(u_bg, vec3(1.0), k), 1.0);
+}`;
+
+const QUAD_VS = HEAD + `
+precision highp float;
+${VIN} vec2 a_p;
+${VOUT} vec2 v_uv;
+void main(){ v_uv = a_p*0.5+0.5; gl_Position = vec4(a_p,0.0,1.0); }`;
+
+const BRIGHT_FS = HEAD + `
+precision highp float;
+${FIN} vec2 v_uv;
+uniform sampler2D u_src; uniform vec3 u_bg;
+${FOUT}
+void main(){
+  vec3 c = ${TEX}(u_src, v_uv).rgb;
+  vec3 e = max(c - u_bg - 0.30, vec3(0.0));
+  ${FCOL} = vec4(e, 1.0);
+}`;
+
+const BLUR_FS = HEAD + `
+precision highp float;
+${FIN} vec2 v_uv;
+uniform sampler2D u_src; uniform vec2 u_dir;
+${FOUT}
+void main(){
+  vec3 s = vec3(0.0);
+  s += ${TEX}(u_src, v_uv - u_dir*4.0).rgb * 0.028;
+  s += ${TEX}(u_src, v_uv - u_dir*3.0).rgb * 0.066;
+  s += ${TEX}(u_src, v_uv - u_dir*2.0).rgb * 0.124;
+  s += ${TEX}(u_src, v_uv - u_dir*1.0).rgb * 0.180;
+  s += ${TEX}(u_src, v_uv               ).rgb * 0.204;
+  s += ${TEX}(u_src, v_uv + u_dir*1.0).rgb * 0.180;
+  s += ${TEX}(u_src, v_uv + u_dir*2.0).rgb * 0.124;
+  s += ${TEX}(u_src, v_uv + u_dir*3.0).rgb * 0.066;
+  s += ${TEX}(u_src, v_uv + u_dir*4.0).rgb * 0.028;
+  ${FCOL} = vec4(s, 1.0);
+}`;
+
+const COMP_FS = HEAD + `
+precision highp float;
+${FIN} vec2 v_uv;
+uniform sampler2D u_scene, u_glow;
+uniform float u_amount;
+${FOUT}
+void main(){
+  vec3 c = ${TEX}(u_scene, v_uv).rgb;
+  vec3 g = ${TEX}(u_glow,  v_uv).rgb;
+  ${FCOL} = vec4(c + g*u_amount, 1.0);
+}`;
+
+const pScene  = prog(SCENE_VS, SCENE_FS);
+const pBright = prog(QUAD_VS, BRIGHT_FS);
+const pBlur   = prog(QUAD_VS, BLUR_FS);
+const pComp   = prog(QUAD_VS, COMP_FS);
+
+const quad = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, quad);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+
+/* ── "EXPERIMENT" strip texture ─────────────────────────────────────────── */
+const typeTex = gl.createTexture();
+function buildTypeTexture(){
+  const H = 128;
+  const c = document.createElement('canvas');
+  const g = c.getContext('2d');
+  const word = 'EXPERIMENT';
+  const fs = 100;                                   // cap-height driven below
+  g.font = `600 ${fs}px "Helvetica Neue",Helvetica,Inter,Arial,sans-serif`;
+  const wpx = g.measureText(word).width;
+  const gap = fs * 0.42;
+  c.width  = Math.ceil(wpx + gap);
+  c.height = H;
+  const g2 = c.getContext('2d');
+  g2.clearRect(0,0,c.width,c.height);
+  g2.font = `600 ${fs}px "Helvetica Neue",Helvetica,Inter,Arial,sans-serif`;
+  g2.textBaseline = 'alphabetic';
+  g2.fillStyle = '#fff';
+  // cap height ≈ 0.715em -> fill the strip vertically
+  const cap = fs * 0.715;
+  const baseline = (H + cap) / 2;
+  const sy = H / cap;                                // stretch caps to full height
+  g2.save();
+  g2.translate(0, baseline);
+  g2.scale(1, sy);
+  g2.translate(0, -baseline);
+  g2.fillText(word, 0, baseline);
+  g2.restore();
+
+  gl.bindTexture(gl.TEXTURE_2D, typeTex);
+  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, c);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+}
+buildTypeTexture();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(buildTypeTexture);
+
+/* ── framebuffers ───────────────────────────────────────────────────────── */
+function makeFBO(w, h){
+  const tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  const fb = gl.createFramebuffer();
+  gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+  gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+  const rb = gl.createRenderbuffer();
+  gl.bindRenderbuffer(gl.RENDERBUFFER, rb);
+  gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, w, h);
+  gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, rb);
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  return { fb, tex, rb, w, h };
+}
+let sceneFBO = null, bloomA = null, bloomB = null;
+let VW = 0, VH = 0, SW = 0, SH = 0, DPR = 1;
+
+function resize(){
+  const vw = window.innerWidth, vh = window.innerHeight;
+  const s = Math.min(vw / DW, vh / DH);
+  const cssW = Math.round(DW * s), cssH = Math.round(DH * s);
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  const stage = document.getElementById('stage');
+  stage.style.width = cssW + 'px';
+  stage.style.height = cssH + 'px';
+  VW = Math.round(cssW * DPR); VH = Math.round(cssH * DPR);
+  canvas.width = VW; canvas.height = VH;
+  canvas.style.width = cssW + 'px'; canvas.style.height = cssH + 'px';
+
+  // The pattern is a hard cutout (fragments outside a stroke are discarded so
+  // folds behind stay visible), so it cannot be antialiased in the shader —
+  // supersample the scene buffer instead and let the composite downsample it.
+  const budget = 7.5e6;
+  const ss = (VW * VH * 4 <= budget) ? 2 : (VW * VH * 2.25 <= budget ? 1.5 : 1);
+  SW = Math.round(VW * ss); SH = Math.round(VH * ss);
+
+  [sceneFBO, bloomA, bloomB].forEach(f => { if (f){ gl.deleteTexture(f.tex); gl.deleteFramebuffer(f.fb); gl.deleteRenderbuffer(f.rb); } });
+  sceneFBO = makeFBO(SW, SH);
+  const hw = Math.max(2, VW >> 1), hh = Math.max(2, VH >> 1);
+  bloomA = makeFBO(hw, hh); bloomB = makeFBO(hw, hh);
+
+  // labels
+  const px = cssW / DW;
+  document.querySelectorAll('.lbl').forEach(el => {
+    const i = +el.dataset.i;
+    el.style.fontSize = (LABEL_SIZE * px) + 'px';
+    el.style.letterSpacing = (0.42 * px) + 'px';
+    el.style.left = (LABEL_X * px) + 'px';
+    el.style.top  = ((THUMB_Y0 + THUMB_DY * i) * px) + 'px';
+  });
+}
+window.addEventListener('resize', resize);
+resize();
+
+/* ── draw ───────────────────────────────────────────────────────────────── */
+const uS = {};
+['u_center','u_scale','u_amp','u_spin','u_ripple','u_nfold','u_omega','u_phase','u_zgain',
+ 'u_twist','u_swirl','u_scale1','u_R0','u_design','u_cur','u_prev','u_wipe','u_type','u_bg']
+ .forEach(n => uS[n] = gl.getUniformLocation(pScene, n));
+const aTP = gl.getAttribLocation(pScene, 'a_tp');
+
+function drawInstance(cx, cy, scale, amp, sched, spin){
+  gl.uniform2f(uS.u_center, cx, cy);
+  gl.uniform1f(uS.u_scale, scale);
+  gl.uniform1f(uS.u_amp, amp);
+  gl.uniform1f(uS.u_spin, spin);
+  gl.uniform1f(uS.u_ripple, P.RIPPLE);
+  gl.uniform1f(uS.u_nfold, P.NFOLD);
+  gl.uniform1f(uS.u_omega, P.OMEGA);
+  gl.uniform1f(uS.u_phase, P.PHASE);
+  gl.uniform1f(uS.u_zgain, P.ZGAIN);
+  gl.uniform1f(uS.u_twist, P.TWIST);
+  gl.uniform1f(uS.u_swirl, P.SWIRL);
+  gl.uniform1f(uS.u_scale1, P.SCALE1);
+  gl.uniform1f(uS.u_R0, R0);
+  gl.uniform1i(uS.u_cur, sched.cur);
+  gl.uniform1i(uS.u_prev, sched.prev);
+  gl.uniform1f(uS.u_wipe, sched.w);
+  gl.drawElements(gl.TRIANGLES, IDXCOUNT, gl.UNSIGNED_INT, 0);
+}
+
+function fullscreen(p){
+  gl.useProgram(p);
+  gl.bindBuffer(gl.ARRAY_BUFFER, quad);
+  const a = gl.getAttribLocation(p, 'a_p');
+  gl.enableVertexAttribArray(a);
+  gl.vertexAttribPointer(a, 2, gl.FLOAT, false, 0, 0);
+}
+
+let vao = null;
+if (isGL2){ vao = gl.createVertexArray(); gl.bindVertexArray(vao);
+  gl.bindBuffer(gl.ARRAY_BUFFER, VBO);
+  gl.enableVertexAttribArray(aTP); gl.vertexAttribPointer(aTP, 2, gl.FLOAT, false, 0, 0);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, IBO);
+  gl.bindVertexArray(null);
+}
+
+function render(t){
+  const ampMain  = ampAt(t - DEF_LAG);
+  const ampThumb = ampAt(t);
+  const sched    = schedule(t + TRANS_LEAD);
+  const spin     = P.SPIN + P.SPINV * t;
+
+  gl.bindFramebuffer(gl.FRAMEBUFFER, sceneFBO.fb);
+  gl.viewport(0, 0, SW, SH);
+  gl.clearColor(BG[0], BG[1], BG[2], 1);
+  gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LEQUAL);
+  gl.disable(gl.BLEND);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+  gl.useProgram(pScene);
+  if (isGL2) gl.bindVertexArray(vao);
+  else {
+    gl.bindBuffer(gl.ARRAY_BUFFER, VBO);
+    gl.enableVertexAttribArray(aTP); gl.vertexAttribPointer(aTP, 2, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, IBO);
+  }
+  gl.uniform2f(uS.u_design, DW, DH);
+  gl.uniform3f(uS.u_bg, BG[0], BG[1], BG[2]);
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, typeTex);
+  gl.uniform1i(uS.u_type, 0);
+
+  drawInstance(MAIN.x, MAIN.y, MAIN.s, ampMain, sched, spin);
+  for (let i = 0; i < 4; i++){
+    drawInstance(THUMB_X, THUMB_Y0 + THUMB_DY*i, THUMB_S, ampThumb,
+                 { cur: THUMB_MODES[i], prev: THUMB_MODES[i], w: 1 }, spin);
+  }
+
+  if (isGL2) gl.bindVertexArray(null);
+
+  // bloom
+  gl.disable(gl.DEPTH_TEST);
+  gl.bindFramebuffer(gl.FRAMEBUFFER, bloomA.fb);
+  gl.viewport(0, 0, bloomA.w, bloomA.h);
+  fullscreen(pBright);
+  gl.uniform1i(gl.getUniformLocation(pBright,'u_src'), 0);
+  gl.uniform3f(gl.getUniformLocation(pBright,'u_bg'), BG[0], BG[1], BG[2]);
+  gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, sceneFBO.tex);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+  for (let pass = 0; pass < 2; pass++){
+    const rad = pass === 0 ? 1.0 : 2.4;
+    gl.bindFramebuffer(gl.FRAMEBUFFER, bloomB.fb);
+    fullscreen(pBlur);
+    gl.uniform1i(gl.getUniformLocation(pBlur,'u_src'), 0);
+    gl.uniform2f(gl.getUniformLocation(pBlur,'u_dir'), rad/bloomA.w, 0);
+    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, bloomA.tex);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, bloomA.fb);
+    fullscreen(pBlur);
+    gl.uniform1i(gl.getUniformLocation(pBlur,'u_src'), 0);
+    gl.uniform2f(gl.getUniformLocation(pBlur,'u_dir'), 0, rad/bloomA.h);
+    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, bloomB.tex);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  }
+
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  gl.viewport(0, 0, VW, VH);
+  fullscreen(pComp);
+  gl.uniform1i(gl.getUniformLocation(pComp,'u_scene'), 0);
+  gl.uniform1i(gl.getUniformLocation(pComp,'u_glow'), 1);
+  gl.uniform1f(gl.getUniformLocation(pComp,'u_amount'), 0.50);
+  gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, sceneFBO.tex);
+  gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, bloomA.tex);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
+}
+
+/* ── loop ───────────────────────────────────────────────────────────────── */
+const stillQ = window.matchMedia('(prefers-reduced-motion: reduce)');
+let t0 = performance.now(), frozen = null, raf = 0;
+
+function frame(){
+  const t = frozen !== null ? frozen : ((performance.now() - t0) / 1000) % LOOP;
+  render(t);
+  raf = requestAnimationFrame(frame);
+}
+function start(){
+  cancelAnimationFrame(raf);
+  if (stillQ.matches){
+    // hold one representative pose rather than looping
+    frozen = 181 / 30;
+    render(frozen);
+  } else {
+    frozen = null;
+    raf = requestAnimationFrame(frame);
+  }
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) cancelAnimationFrame(raf);
+  else if (!stillQ.matches && frozen === null) raf = requestAnimationFrame(frame);
+});
+stillQ.addEventListener?.('change', start);
+start();
+
+// test hooks
+window.__seek = (t) => { cancelAnimationFrame(raf); frozen = ((t % LOOP) + LOOP) % LOOP; render(frozen); };
+window.__live = () => { frozen = null; t0 = performance.now(); raf = requestAnimationFrame(frame); };
+window.__P = P;
+
+})();
+</script>
+</body>
+</html>
