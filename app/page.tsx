@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { TopBar, useLang } from './components/ui'
 import { Reveal, CountUp } from './components/reveal'
 import { quotes } from '../data/quotes'
+import examNews from './data/exam-news.json'
 
 // Random quote, fresh each load (client-only).
 function randomQuote() {
@@ -51,13 +52,27 @@ const quickItems = [
   { icon: '💼', label: 'Careers',         labelNp: 'करियर',          href: '/careers',       desc: 'Jobs, salaries & paths after degree',      descNp: 'डिग्री पछि जागिर, तलब र बाटो' },
 ]
 
-// ── Latest news ─────────────────────────────────────────────────────────────
-const news = [
-  { tag: 'IOE',   tagNp: 'IOE',   date: '2083-04-15', dateNp: '१५ चैत २०८३', headline: 'IOE 2083 Registration Open',          headlineNp: 'IOE २०८३ दर्ता खुल्यो',         body: 'Applications for IOE 2083 entrance exam are now open. Last date: 2083 Chaitra end.',         bodyNp: 'IOE २०८३ को लागि दर्ता खुलेको छ। अन्तिम मिति: २०८३ चैत अन्त्य।' },
-  { tag: 'KU',    tagNp: 'KU',    date: '2083-04-10', dateNp: '१० चैत २०८३', headline: 'KU KUCAT 2083 Schedule Announced',   headlineNp: 'KU KUCAT २०८३ तालिका घोषणा',   body: 'Kathmandu University KUCAT exam scheduled for 2083 Jestha first week.',                      bodyNp: 'काठमाडौं विश्वविद्यालय KUCAT परीक्षा २०८३ जेठ प्रथम साता।' },
-  { tag: 'CEE',   tagNp: 'CEE',   date: '2083-03-28', dateNp: '२८ फागुन २०८३', headline: 'CEE 2083 Form Fill-up Ongoing',       headlineNp: 'CEE २०८३ फारम भर्ने जारी',     body: 'PU, TU and Pokhara University CEE forms available. Apply before deadline.',                   bodyNp: 'पीयू, टीयू र पोखरा विश्वविद्यालय CEE फारम उपलब्ध। म्यादभित्र आवेदन दिनुहोस्।' },
-  { tag: 'FC',    tagNp: 'कार्ड',   date: '2083-04-01', dateNp: '१ बैशाख २०८३', headline: 'Flashcards: 1,000+ facts & formulas',    headlineNp: 'फ्लैशकार्ड: १०००+ तथ्य र सूत्र',         body: 'New formula & fact cards for IOE, KU & CEE — separated by exam.',                       bodyNp: 'IOE, KU र CEE का नयाँ सूत्र र तथ्य कार्डहरू — परीक्षा अनुसार।' },
-]
+// ── Latest news — scraped from IOE, MECEE-BL, KU, KUSMS ──────────────────────
+
+const TAG_MAP: Record<string, { en: string; ne: string }> = {
+  IOE:   { en: 'IOE',   ne: 'IOE' },
+  MECEE: { en: 'MECEE', ne: 'CEE' },
+  KU:    { en: 'KU',    ne: 'KU' },
+  KUSMS: { en: 'KUSMS', ne: 'KUSMS' },
+}
+
+// Re-exported to match the card interface
+const news = examNews.slice(0, 6).map((n) => ({
+  tag:    TAG_MAP[n.source]?.en ?? n.source,
+  tagNp:  TAG_MAP[n.source]?.ne ?? n.source,
+  date:   n.date,
+  dateNp: n.date, // BS conversion skipped — use same date
+  headline: n.title.length > 60 ? n.title.slice(0, 57) + '…' : n.title,
+  headlineNp: n.title.length > 60 ? n.title.slice(0, 57) + '…' : n.title,
+  body:   '',
+  bodyNp: '',
+  newsUrl: n.url,
+}))
 
 // ── Top campuses ─────────────────────────────────────────────────────────────
 const topCampuses = [
@@ -281,7 +296,9 @@ export default function Home() {
                   <span className={`news-tag news-tag-${n.tag.toLowerCase()}`}>{isNe ? n.tagNp : n.tag}</span>
                   <span className="news-date">{isNe ? n.dateNp : n.date}</span>
                 </div>
-                <div className="news-headline">{isNe ? n.headlineNp : n.headline}</div>
+                {n.newsUrl
+                  ? <a href={n.newsUrl} target="_blank" rel="noopener noreferrer" className="news-headline">{isNe ? n.headlineNp : n.headline}</a>
+                  : <div className="news-headline">{isNe ? n.headlineNp : n.headline}</div>}
                 <div className="news-body">{isNe ? n.bodyNp : n.body}</div>
               </div>
             ))}

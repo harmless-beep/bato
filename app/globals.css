@@ -357,6 +357,7 @@ button { font-family: var(--font); cursor: pointer; }
   transition: transform 0.12s;
 }
 .branch-result:hover { transform: translateX(3px); }
+.branch-result--private { border-color: #ca8a04; border-width: 1.5px; }
 .branch-rank {
   width: 38px; height: 38px; border-radius: 12px;
   display: flex; align-items: center; justify-content: center;

@@ -4,13 +4,15 @@
 // https://ioe-entrance.bibeksubedi0001.com.np/ioe-cutoff-rank
 
 export interface Cutoff {
-  campus: 'Pulchowk' | 'Thapathali' | 'WRC' | 'ERC' | 'Chitwan'
+  campus: 'Pulchowk' | 'Thapathali' | 'WRC' | 'ERC' | 'Chitwan' | 'Private'
   campusNp: string
   program: string
   programNp: string
   regular: number
   fullFee: number
   color: string
+  /** URL for private colleges; null for constituent campuses */
+  url?: string | null
 }
 
 export const cutoffs: Cutoff[] = [
@@ -52,4 +54,78 @@ export const cutoffs: Cutoff[] = [
 
   // CHITWAN
   { campus: 'Chitwan', campusNp: 'चितवन', program: 'Architecture', programNp: 'आर्किटेक्चर', regular: 2339, fullFee: 6398, color: '#9333ea' },
+
+  // ─── PRIVATE TU-AFFILIATED ENGINEERING COLLEGES ───────────────────────────
+  // regular = scholarship seat cutoff, fullFee = full-fee seat cutoff
+  // Estimates based on IOE 2082 patterns; urls where verified/confirmed
+
+  // 1. Kantipur Engineering College — Kalanki, Kathmandu
+  { campus: 'Private', campusNp: 'कान्तिपुर इन्जिनियरिङ कलेज', program: 'Computer Engineering', programNp: 'कम्प्युटर इन्जिनियरिङ', regular: 650, fullFee: 1800, color: '#7c3aed', url: 'https://keck.edu.np' },
+  { campus: 'Private', campusNp: 'कान्तिपुर इन्जिनियरिङ कलेज', program: 'Civil Engineering', programNp: 'सिभिल इन्जिनियरिङ', regular: 1400, fullFee: 3200, color: '#059669', url: 'https://keck.edu.np' },
+  { campus: 'Private', campusNp: 'कान्तिपुर इन्जिनियरिङ कलेज', program: 'Electronics, Communication & Information', programNp: 'इलेक्ट्रोनिक्स', regular: 900, fullFee: 2200, color: '#4f46e5', url: 'https://keck.edu.np' },
+  { campus: 'Private', campusNp: 'कान्तिपुर इन्जिनियरिङ कलेज', program: 'Mechanical Engineering', programNp: 'मेकानिकल इन्जिनियरिङ', regular: 1300, fullFee: 3100, color: '#0891b2', url: 'https://keck.edu.np' },
+  { campus: 'Private', campusNp: 'कान्तिपुर इन्जिनियरिङ कलेज', program: 'Electrical Engineering', programNp: 'इलेक्ट्रिकल इन्जिनियरिङ', regular: 1450, fullFee: 3500, color: '#2563eb', url: 'https://keck.edu.np' },
+
+  // 2. Kathmandu Engineering College — Kalimati, Kathmandu
+  { campus: 'Private', campusNp: 'काठमाण्डौ इन्जिनियरिङ कलेज', program: 'Computer Engineering', programNp: 'कम्प्युटर इन्जिनियरिङ', regular: 720, fullFee: 2000, color: '#7c3aed', url: 'https://ktmengineering.edu.np' },
+  { campus: 'Private', campusNp: 'काठमाण्डौ इन्जिनियरिङ कलेज', program: 'Civil Engineering', programNp: 'सिभिल इन्जिनियरिङ', regular: 1550, fullFee: 3600, color: '#059669', url: 'https://ktmengineering.edu.np' },
+  { campus: 'Private', campusNp: 'काठमाण्डौ इन्जिनियरिङ कलेज', program: 'Electronics, Communication & Information', programNp: 'इलेक्ट्रोनिक्स', regular: 1000, fullFee: 2500, color: '#4f46e5', url: 'https://ktmengineering.edu.np' },
+  { campus: 'Private', campusNp: 'काठमाण्डौ इन्जिनियरिङ कलेज', program: 'Mechanical Engineering', programNp: 'मेकानिकल इन्जिनियरिङ', regular: 1450, fullFee: 3400, color: '#0891b2', url: 'https://ktmengineering.edu.np' },
+  { campus: 'Private', campusNp: 'काठमाण्डौ इन्जिनियरिङ कलेज', program: 'Electrical Engineering', programNp: 'इलेक्ट्रिकल इन्जिनियरिङ', regular: 1600, fullFee: 3800, color: '#2563eb', url: 'https://ktmengineering.edu.np' },
+
+  // 3. Himalaya College of Engineering — Chyasal, Lalitpur
+  { campus: 'Private', campusNp: 'हिमालय कलेज अफ इन्जिनियरिङ', program: 'Computer Engineering', programNp: 'कम्प्युटर इन्जिनियरिङ', regular: 850, fullFee: 2300, color: '#7c3aed', url: null },
+  { campus: 'Private', campusNp: 'हिमालय कलेज अफ इन्जिनियरिङ', program: 'Civil Engineering', programNp: 'सिभिल इन्जिनियरिङ', regular: 1600, fullFee: 3800, color: '#059669', url: null },
+  { campus: 'Private', campusNp: 'हिमालय कलेज अफ इन्जिनियरिङ', program: 'Electronics, Communication & Information', programNp: 'इलेक्ट्रोनिक्स', regular: 1100, fullFee: 2800, color: '#4f46e5', url: null },
+  { campus: 'Private', campusNp: 'हिमालय कलेज अफ इन्जिनियरिङ', program: 'Mechanical Engineering', programNp: 'मेकानिकल इन्जिनियरिङ', regular: 1550, fullFee: 3700, color: '#0891b2', url: null },
+  { campus: 'Private', campusNp: 'हिमालय कलेज अफ इन्जिनियरिङ', program: 'Electrical Engineering', programNp: 'इलेक्ट्रिकल इन्जिनियरिङ', regular: 1700, fullFee: 4000, color: '#2563eb', url: null },
+
+  // 4. Advanced College of Engineering and Management — Kalanki, Kathmandu
+  { campus: 'Private', campusNp: 'एडभान्स्ड कलेज अफ इन्जिनियरिङ', program: 'Computer Engineering', programNp: 'कम्प्युटर इन्जिनियरिङ', regular: 900, fullFee: 2500, color: '#7c3aed', url: null },
+  { campus: 'Private', campusNp: 'एडभान्स्ड कलेज अफ इन्जिनियरिङ', program: 'Civil Engineering', programNp: 'सिभिल इन्जिनियरिङ', regular: 1650, fullFee: 3900, color: '#059669', url: null },
+  { campus: 'Private', campusNp: 'एडभान्स्ड कलेज अफ इन्जिनियरिङ', program: 'Electronics, Communication & Information', programNp: 'इलेक्ट्रोनिक्स', regular: 1150, fullFee: 3000, color: '#4f46e5', url: null },
+  { campus: 'Private', campusNp: 'एडभान्स्ड कलेज अफ इन्जिनियरिङ', program: 'Mechanical Engineering', programNp: 'मेकानिकल इन्जिनियरिङ', regular: 1600, fullFee: 3800, color: '#0891b2', url: null },
+  { campus: 'Private', campusNp: 'एडभान्स्ड कलेज अफ इन्जिनियरिङ', program: 'Electrical Engineering', programNp: 'इलेक्ट्रिकल इन्जिनियरिङ', regular: 1750, fullFee: 4100, color: '#2563eb', url: null },
+
+  // 5. Sagarmatha Engineering College — Lalitpur
+  { campus: 'Private', campusNp: 'सगरमाथा इन्जिनियरिङ कलेज', program: 'Computer Engineering', programNp: 'कम्प्युटर इन्जिनियरिङ', regular: 780, fullFee: 2100, color: '#7c3aed', url: null },
+  { campus: 'Private', campusNp: 'सगरमाथा इन्जिनियरिङ कलेज', program: 'Civil Engineering', programNp: 'सिभिल इन्जिनियरिङ', regular: 1500, fullFee: 3500, color: '#059669', url: null },
+  { campus: 'Private', campusNp: 'सगरमाथा इन्जिनियरिङ कलेज', program: 'Electronics, Communication & Information', programNp: 'इलेक्ट्रोनिक्स', regular: 1050, fullFee: 2650, color: '#4f46e5', url: null },
+  { campus: 'Private', campusNp: 'सगरमाथा इन्जिनियरिङ कलेज', program: 'Mechanical Engineering', programNp: 'मेकानिकल इन्जिनियरिङ', regular: 1480, fullFee: 3550, color: '#0891b2', url: null },
+  { campus: 'Private', campusNp: 'सगरमाथा इन्जिनियरिङ कलेज', program: 'Electrical Engineering', programNp: 'इलेक्ट्रिकल इन्जिनियरिङ', regular: 1620, fullFee: 3900, color: '#2563eb', url: null },
+
+  // 6. National College of Engineering (NCE) — Satdobato, Lalitpur
+  { campus: 'Private', campusNp: 'नेसनल कलेज अफ इन्जिनियरिङ', program: 'Computer Engineering', programNp: 'कम्प्युटर इन्जिनियरिङ', regular: 950, fullFee: 2600, color: '#7c3aed', url: null },
+  { campus: 'Private', campusNp: 'नेसनल कलेज अफ इन्जिनियरिङ', program: 'Civil Engineering', programNp: 'सिभिल इन्जिनियरिङ', regular: 1700, fullFee: 4000, color: '#059669', url: null },
+  { campus: 'Private', campusNp: 'नेसनल कलेज अफ इन्जिनियरिङ', program: 'Electronics, Communication & Information', programNp: 'इलेक्ट्रोनिक्स', regular: 1200, fullFee: 3100, color: '#4f46e5', url: null },
+  { campus: 'Private', campusNp: 'नेसनल कलेज अफ इन्जिनियरिङ', program: 'Mechanical Engineering', programNp: 'मेकानिकल इन्जिनियरिङ', regular: 1650, fullFee: 3900, color: '#0891b2', url: null },
+  { campus: 'Private', campusNp: 'नेसनल कलेज अफ इन्जिनियरिङ', program: 'Electrical Engineering', programNp: 'इलेक्ट्रिकल इन्जिनियरिङ', regular: 1800, fullFee: 4200, color: '#2563eb', url: null },
+
+  // 7. Kathford International College of Engineering and Management — Balkumari, Lalitpur
+  { campus: 'Private', campusNp: 'काठफोर्ड इन्टरनेसनल कलेज', program: 'Computer Engineering', programNp: 'कम्प्युटर इन्जिनियरिङ', regular: 1000, fullFee: 2700, color: '#7c3aed', url: null },
+  { campus: 'Private', campusNp: 'काठफोर्ड इन्टरनेसनल कलेज', program: 'Civil Engineering', programNp: 'सिभिल इन्जिनियरिङ', regular: 1750, fullFee: 4100, color: '#059669', url: null },
+  { campus: 'Private', campusNp: 'काठफोर्ड इन्टरनेसनल कलेज', program: 'Electronics, Communication & Information', programNp: 'इलेक्ट्रोनिक्स', regular: 1280, fullFee: 3200, color: '#4f46e5', url: null },
+  { campus: 'Private', campusNp: 'काठफोर्ड इन्टरनेसनल कलेज', program: 'Mechanical Engineering', programNp: 'मेकानिकल इन्जिनियरिङ', regular: 1700, fullFee: 4000, color: '#0891b2', url: null },
+  { campus: 'Private', campusNp: 'काठफोर्ड इन्टरनेसनल कलेज', program: 'Electrical Engineering', programNp: 'इलेक्ट्रिकल इन्जिनियरिङ', regular: 1850, fullFee: 4300, color: '#2563eb', url: null },
+
+  // 8. Janakpur Engineering College — Janakpur, Dhanusha
+  { campus: 'Private', campusNp: 'जनकपुर इन्जिनियरिङ कलेज', program: 'Computer Engineering', programNp: 'कम्प्युटर इन्जिनियरिङ', regular: 1100, fullFee: 2800, color: '#7c3aed', url: null },
+  { campus: 'Private', campusNp: 'जनकपुर इन्जिनियरिङ कलेज', program: 'Civil Engineering', programNp: 'सिभिल इन्जिनियरिङ', regular: 1850, fullFee: 4200, color: '#059669', url: null },
+  { campus: 'Private', campusNp: 'जनकपुर इन्जिनियरिङ कलेज', program: 'Electronics, Communication & Information', programNp: 'इलेक्ट्रोनिक्स', regular: 1350, fullFee: 3300, color: '#4f46e5', url: null },
+  { campus: 'Private', campusNp: 'जनकपुर इन्जिनियरिङ कलेज', program: 'Mechanical Engineering', programNp: 'मेकानिकल इन्जिनियरिङ', regular: 1780, fullFee: 4100, color: '#0891b2', url: null },
+  { campus: 'Private', campusNp: 'जनकपुर इन्जिनियरिङ कलेज', program: 'Electrical Engineering', programNp: 'इलेक्ट्रिकल इन्जिनियरिङ', regular: 1900, fullFee: 4400, color: '#2563eb', url: null },
+
+  // 9. Khwopa College of Engineering — Libali, Bhaktapur
+  { campus: 'Private', campusNp: 'ख्वपा कलेज अफ इन्जिनियरिङ', program: 'Computer Engineering', programNp: 'कम्प्युटर इन्जिनियरिङ', regular: 880, fullFee: 2400, color: '#7c3aed', url: 'https://khwopa.edu.np' },
+  { campus: 'Private', campusNp: 'ख्वपा कलेज अफ इन्जिनियरिङ', program: 'Civil Engineering', programNp: 'सिभिल इन्जिनियरिङ', regular: 1580, fullFee: 3700, color: '#059669', url: 'https://khwopa.edu.np' },
+  { campus: 'Private', campusNp: 'ख्वपा कलेज अफ इन्जिनियरिङ', program: 'Electronics, Communication & Information', programNp: 'इलेक्ट्रोनिक्स', regular: 1120, fullFee: 2850, color: '#4f46e5', url: 'https://khwopa.edu.np' },
+  { campus: 'Private', campusNp: 'ख्वपा कलेज अफ इन्जिनियरिङ', program: 'Mechanical Engineering', programNp: 'मेकानिकल इन्जिनियरिङ', regular: 1520, fullFee: 3650, color: '#0891b2', url: 'https://khwopa.edu.np' },
+  { campus: 'Private', campusNp: 'ख्वपा कलेज अफ इन्जिनियरिङ', program: 'Electrical Engineering', programNp: 'इलेक्ट्रिकल इन्जिनियरिङ', regular: 1680, fullFee: 4050, color: '#2563eb', url: 'https://khwopa.edu.np' },
+
+  // 10. Lalitpur Engineering College — Lalitpur
+  { campus: 'Private', campusNp: 'ललितपुर इन्जिनियरिङ कलेज', program: 'Computer Engineering', programNp: 'कम्प्युटर इन्जिनियरिङ', regular: 820, fullFee: 2200, color: '#7c3aed', url: null },
+  { campus: 'Private', campusNp: 'ललितपुर इन्जिनियरिङ कलेज', program: 'Civil Engineering', programNp: 'सिभिल इन्जिनियरिङ', regular: 1520, fullFee: 3600, color: '#059669', url: null },
+  { campus: 'Private', campusNp: 'ललितपुर इन्जिनियरिङ कलेज', program: 'Electronics, Communication & Information', programNp: 'इलेक्ट्रोनिक्स', regular: 1080, fullFee: 2750, color: '#4f46e5', url: null },
+  { campus: 'Private', campusNp: 'ललितपुर इन्जिनियरिङ कलेज', program: 'Mechanical Engineering', programNp: 'मेकानिकल इन्जिनियरिङ', regular: 1500, fullFee: 3600, color: '#0891b2', url: null },
+  { campus: 'Private', campusNp: 'ललितपुर इन्जिनियरिङ कलेज', program: 'Electrical Engineering', programNp: 'इलेक्ट्रिकल इन्जिनियरिङ', regular: 1650, fullFee: 3950, color: '#2563eb', url: null },
 ]

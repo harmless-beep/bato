@@ -15,7 +15,7 @@ const T: Record<Exclude<Tier, 'none'>, { cls: string; en: string; ne: string }> 
   reach:  { cls: 'tier-reach',  en: '🔥 Reach', ne: '🔥 चुनौती' },
 }
 
-const campuses = ['All', 'Pulchowk', 'Thapathali', 'WRC', 'ERC', 'Chitwan'] as const
+const campuses = ['All', 'Pulchowk', 'Thapathali', 'WRC', 'ERC', 'Chitwan', 'Private'] as const
 
 function tierFor(margin: number): Tier {
   // margin = cutoffRank - yourRank; positive means you're better (lower rank)
@@ -135,11 +135,19 @@ export default function Predictor() {
               <div className="warn-box">😞 {isNe ? 'यो rank ले हालका cutoff भन्दा धेरै तल छ।' : 'This rank is below current cutoffs.'}</div>
             ) : (
               result.map((r, i) => (
-                <div key={`${r.c.campus}-${r.c.program}`} className="branch-result">
+                <div key={`${r.c.campus}-${r.c.program}`} className={`branch-result${r.c.campus === 'Private' ? ' branch-result--private' : ''}`}>
                   <div className={`branch-rank ${getRankClass(i)}`}>{i + 1}</div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div className="branch-name" style={{ color: r.c.color }}>{isNe ? r.c.programNp : r.c.program}</div>
-                    <div className="branch-college">{isNe ? r.c.campusNp : r.c.campus} • {isNe ? 'cutoff rank' : 'cutoff'} {fee === 'regular' ? r.c.regular : r.c.fullFee}</div>
+                    <div className="branch-college">
+                      {isNe ? r.c.campusNp : r.c.campus}
+                      {r.c.campus === 'Private' && r.c.url && (
+                        <a href={r.c.url} target="_blank" rel="noopener noreferrer" style={{ marginLeft: 6, color: 'var(--muted)', fontSize: 11 }} title={r.c.url}>
+                          🔗
+                        </a>
+                      )}
+                      {' • '}{isNe ? 'cutoff rank' : 'cutoff'} {fee === 'regular' ? r.c.regular : r.c.fullFee}
+                    </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
                       <div className="meter" style={{ flex: 1, maxWidth: 140 }}>
                         <div className="meter-fill" style={{ width: `${Math.max(8, 100 - (r.c.regular / 90))}%`, background: r.tier === 'safe' ? 'var(--success)' : r.tier === 'likely' ? 'var(--primary)' : 'var(--gold)' }} />
