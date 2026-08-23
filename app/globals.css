@@ -4,7 +4,7 @@
   --bg: #f5f6fa;
   --surface: #f8fafc;
   --surface-2: #eef0f5;
-  --card: #ffffff;
+  --card: color-mix(in srgb, #ffffff 88%, transparent);
   --primary: #4f46e5;
   --primary-soft: #eef2ff;
   --violet: #7c3aed;
@@ -28,6 +28,13 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* All page content sits above the ambient canvas (z-index 0, fixed) */
+.page-root {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
 a { color: inherit; text-decoration: none; }
 button { font-family: var(--font); cursor: pointer; }
 
@@ -35,7 +42,7 @@ button { font-family: var(--font); cursor: pointer; }
 
 /* ─── Nav ─── */
 .nav {
-  background: rgba(255,255,255,0.9);
+  background: color-mix(in srgb, var(--card) 82%, transparent);
   backdrop-filter: blur(12px);
   padding: 14px 24px;
   display: flex;
@@ -212,6 +219,8 @@ button { font-family: var(--font); cursor: pointer; }
 /* ─── Card ─── */
 .card {
   background: var(--card);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-radius: var(--radius);
   padding: 20px;
   border: 1px solid var(--border);
@@ -226,7 +235,8 @@ button { font-family: var(--font); cursor: pointer; }
 .page { min-height: 100vh; }
 .topbar,
 .page-header {
-  background: var(--card);
+  background: color-mix(in srgb, var(--card) 85%, transparent);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
   padding: 14px 16px;
   display: flex;
@@ -498,7 +508,7 @@ html[data-theme="dark"] {
   --bg: #0f1117;
   --surface: #1a1d27;
   --surface-2: #232734;
-  --card: #191c26;
+  --card: color-mix(in srgb, #191c26 88%, transparent);
   --primary: #818cf8;
   --primary-soft: #1e2440;
   --violet: #a78bfa;
@@ -519,7 +529,7 @@ html[data-theme="forest"] {
   --bg: #0b1613;
   --surface: #12201c;
   --surface-2: #182a24;
-  --card: #122019;
+  --card: color-mix(in srgb, #122019 88%, transparent);
   --primary: #34d399;
   --primary-soft: #133a2b;
   --violet: #4ade80;
@@ -540,7 +550,7 @@ html[data-theme="ocean"] {
   --bg: #0a1320;
   --surface: #0f1c2e;
   --surface-2: #14253c;
-  --card: #0e1a2b;
+  --card: color-mix(in srgb, #0e1a2b 88%, transparent);
   --primary: #38bdf8;
   --primary-soft: #0f3350;
   --violet: #818cf8;
@@ -559,7 +569,7 @@ html[data-theme="ocean"] {
 }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) body { background: var(--bg); }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .nav {
-  background: rgba(15,17,23,0.9);
+  background: color-mix(in srgb, var(--card) 82%, transparent);
   border-bottom: 1px solid var(--border);
 }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .hero {
@@ -569,7 +579,7 @@ html[data-theme="ocean"] {
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .hero::after { background: var(--glow-b); opacity: 0.3; }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .hero-title { color: #f1f5f9; }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .hero-badge { background: rgba(255,255,255,0.06); border-color: var(--border); color: #d1d5db; }
-:is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .topbar, :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .page-header { background: var(--card); border-bottom: 1px solid var(--border); }
+:is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .topbar, :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .page-header { background: color-mix(in srgb, var(--card) 85%, transparent); border-bottom: 1px solid var(--border); }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .back-btn { background: var(--surface-2); color: var(--text); }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .option { background: var(--surface); }
 :is(html[data-theme="dark"],html[data-theme="forest"],html[data-theme="ocean"]) .option-letter { background: var(--surface-2); border-color: var(--border); color: var(--text); }
@@ -1266,3 +1276,9 @@ html body {
 
 /* shared suggestion form row */
 .sug-submit-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+
+/* Glassmorphism: blur for main surfaces so text stays crisp over interactive bg */
+.branch-result, .paper-card, .question-card, .feature-card, .news-item, .info-box, .col-full, .compare-cell {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}

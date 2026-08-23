@@ -26,12 +26,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <AmbientBg />
-        <LangProvider>
-          {children}
-          <EasterEggs />
-          <Companion />
-          <SuggestFab />
-        </LangProvider>
+        <div className="page-root">
+          <LangProvider>
+            {children}
+            <EasterEggs />
+            <Companion />
+            <SuggestFab />
+          </LangProvider>
+        </div>
       </body>
     </html>
   )

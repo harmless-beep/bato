@@ -483,7 +483,7 @@ export default function AmbientBg() {
       ref={canvasRef}
       aria-hidden="true"
       style={{
-        position: 'fixed', inset: 0, zIndex: -1,
+        position: 'fixed', inset: 0, zIndex: 0,
         width: '100vw', height: '100vh',
         pointerEvents: 'none',
       }}
