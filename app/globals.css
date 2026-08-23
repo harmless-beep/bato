@@ -85,6 +85,12 @@ button { font-family: var(--font); cursor: pointer; }
   box-shadow: 0 2px 8px rgba(0,0,0,0.22), 0 0 12px var(--primary);
   transform: translateY(-1px);
 }
+.perf-toggle {
+  font-size: 13px;
+}
+.perf-toggle.perf-full {
+  text-shadow: 0 0 8px var(--gold), 0 0 16px var(--gold);
+}
 
 /* ─── Hero ─── */
 .hero {

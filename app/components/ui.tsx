@@ -3,6 +3,8 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import Link from 'next/link'
+import { getPerfMode, setPerfMode } from './perf-mode'
+import type { PerfMode } from './perf-mode'
 
 export type Lang = 'en' | 'ne'
 
@@ -103,11 +105,33 @@ export function LangToggle() {
 }
 
 const THEMES = [
-  { id: 'light', icon: '☀️', label: 'Light' },
-  { id: 'dark',  icon: '🌙', label: 'Dark' },
+  { id: 'light',  icon: '☀️', label: 'Light' },
+  { id: 'dark',   icon: '🌙', label: 'Dark' },
   { id: 'forest', icon: '🌿', label: 'Forest' },
   { id: 'ocean',  icon: '🌊', label: 'Ocean' },
 ] as const
+
+export function PerfToggle() {
+  const [mode, setMode] = useState<PerfMode>('full')
+  useEffect(() => {
+    setMode(getPerfMode())
+  }, [])
+  const toggle = () => {
+    const next = mode === 'full' ? 'lite' : 'full'
+    setPerfMode(next)
+    setMode(next)
+  }
+  return (
+    <button
+      className={`theme-switcher-btn perf-toggle${mode === 'full' ? ' perf-full' : ''}`}
+      onClick={toggle}
+      title={mode === 'full' ? '✨ Full effects' : '🔋 Lite mode'}
+      aria-label={mode === 'full' ? 'Switch to lite mode' : 'Switch to full effects'}
+    >
+      {mode === 'full' ? '✨' : '🔋'}
+    </button>
+  )
+}
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<typeof THEMES[number]['id']>('light')
@@ -207,6 +231,7 @@ export function TopBar() {
         </div>
       </Link>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <PerfToggle />
         <ThemeToggle />
         <SupportButton />
         <LangToggle />
