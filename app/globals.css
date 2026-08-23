@@ -974,8 +974,8 @@ html body {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 22px;
-  padding: 28px 24px 22px;
-  width: 100%; max-width: 340px;
+  padding: 22px 22px 18px;
+  width: 100%; max-width: 320px;
   max-height: 92vh;
   overflow-y: auto;
   text-align: center;
@@ -999,16 +999,9 @@ html body {
   from { opacity: 0; transform: scale(0.85) translateY(14px) }
   to { opacity: 1; transform: scale(1) translateY(0) }
 }
-.support-close {
-  position: absolute; top: 10px; right: 12px;
-  background: none; border: none;
-  font-size: 16px; color: var(--muted);
-  cursor: pointer; padding: 6px;
-}
-.support-close:hover { color: var(--text); }
 .support-hearts {
-  display: flex; justify-content: center; gap: 10px;
-  font-size: 26px; margin-bottom: 8px;
+  display: flex; justify-content: center; gap: 9px;
+  font-size: 21px; margin-bottom: 2px;
 }
 .support-hearts span { display: inline-block; animation: heart-bounce 1.2s ease-in-out infinite; }
 .support-hearts span:nth-child(2) { animation-delay: 0.15s; }
@@ -1030,9 +1023,9 @@ html body {
    camera can read it off a screen. It's opaque white on top of the mote
    field — motes never sit over the code itself. */
 .support-qr-big {
-  width: 210px; height: 210px;
-  background: #fff; border-radius: 14px;
-  padding: 0; margin: 16px auto 10px;
+  width: 190px; height: 190px;
+  background: #fff; border-radius: 12px;
+  padding: 0; margin: 12px auto 6px;
   box-shadow: 0 8px 28px rgba(0,0,0,0.18);
   position: relative;
   display: flex; align-items: center; justify-content: center;
@@ -1051,8 +1044,8 @@ html body {
   0%, 100% { box-shadow: 0 8px 28px rgba(0,0,0,0.18) }
   50% { box-shadow: 0 8px 34px rgba(79,70,229,0.45) }
 }
-.support-scan { font-size: 12px; color: var(--muted); font-weight: 700; margin-bottom: 14px; }
-.support-proof { font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 14px; }
+.support-scan { font-size: 12px; color: var(--muted); font-weight: 700; margin: 8px 0 2px; }
+.support-proof { font-size: 11px; color: var(--muted); font-weight: 600; margin: 0 0 12px; }
 
 /* ─── Support button in topbar ─── */
 .support-btn {

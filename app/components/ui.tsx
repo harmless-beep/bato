@@ -282,7 +282,6 @@ export function SupportButton() {
         <div className="support-modal" onClick={() => setOpen(false)}>
           <div className="support-modal-card" onClick={e => e.stopPropagation()}>
             <QrBackdrop />
-            <button className="support-close" onClick={() => setOpen(false)} aria-label="Close">✕</button>
             <div className="support-hearts">
               <span>☕</span><span>❤️</span><span>☕</span>
             </div>
