@@ -1015,23 +1015,29 @@ html body {
 .support-qr-big {
   width: 200px; height: 200px;
   background: #fff; border-radius: 16px;
-  padding: 10px; margin: 16px auto 10px;
+  padding: 0; margin: 16px auto 10px;
   box-shadow: 0 8px 28px rgba(0,0,0,0.18);
   animation: qr-pulse 2.4s ease-in-out infinite;
   position: relative;
-  overflow: hidden;
+  overflow: hidden;             /* motes clipped to the rounded card */
+  display: flex; align-items: center; justify-content: center;
 }
+/* The canvas fills the card; the QR sits on an opaque white tile in the
+   center, so motes paint a themed interactive ring AROUND the QR and
+   never cover or bleed through it — the code stays clean & scannable. */
 .support-qr-big canvas {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   border-radius: 16px;
-  pointer-events: auto;
+  pointer-events: none;         /* don't steal hover from the QR/box */
+  z-index: 0;
 }
 .support-qr-big img {
   position: relative;
   z-index: 1;
-  width: 100%; height: 100%;
-  display: block; border-radius: 9px;
+  background: #fff;
+  width: 80%; height: 80%;
+  display: block; border-radius: 8px;
   object-fit: contain;
 }
 @keyframes qr-pulse {

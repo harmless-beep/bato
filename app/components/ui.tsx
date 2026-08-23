@@ -209,11 +209,16 @@ function QrBackdrop() {
     }
     resize()
     window.addEventListener('resize', resize)
-    canvas.addEventListener('mousemove', (e) => {
-      const r = canvas.getBoundingClientRect()
+    // listen on the container (not just the canvas) so the whole box is interactive
+    const box = canvas.parentElement
+    const onMove = (e: MouseEvent) => {
+      if (!box) return
+      const r = box.getBoundingClientRect()
       mx = e.clientX - r.left; my = e.clientY - r.top
-    })
-    canvas.addEventListener('mouseleave', () => { mx = -9999; my = -9999 })
+    }
+    const onLeave = () => { mx = -9999; my = -9999 }
+    box?.addEventListener('mousemove', onMove)
+    box?.addEventListener('mouseleave', onLeave)
 
     const mo = new MutationObserver(() => { motes = mk() })
     mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
@@ -258,6 +263,8 @@ function QrBackdrop() {
     return () => {
       cancelAnimationFrame(raf)
       window.removeEventListener('resize', resize)
+      box?.removeEventListener('mousemove', onMove)
+      box?.removeEventListener('mouseleave', onLeave)
       mo.disconnect()
     }
   }, [])
@@ -287,12 +294,12 @@ export function SupportButton() {
               <span>☕</span><span>❤️</span><span>☕</span>
             </div>
             <div className="support-thanks">
-              {isNe ? 'तपाईंले बाटोलाई मुफ्त राख्नुहुन्छ!' : 'You keep बाटो free!'}
+              {isNe ? 'नि:शुल्क, र हामी त्यस्तै राख्न चाहन्छौं' : 'Free, and we\'d like to keep it that way'}
             </div>
             <div className="support-thanks-sub">
               {isNe
-                ? 'कुनै विज्ञापन छैन। कुनै शुल्क छैन। कहिल्यै पनि। किनभने विद्यार्थीहरूले चिया किन्छन्। ☕'
-                : 'No ads. No fees. Ever. Because students like you buy a chai. ☕'}
+                ? 'कुनै विज्ञापन छैन। कुनै शुल्क छैन। विद्यार्थीले नै विद्यार्थीलाई साथ दिने चलन हो। बाटोले मद्दत गरेको छ भने, एउटा चिया नै काफी हुन्छ। ☕'
+                : 'No ads, no fees. Just students helping students. If बाटो helped you, a single chai means the world — and keeps it going for the next learner. ☕'}
             </div>
             <div className="support-qr-big">
               <QrBackdrop />
@@ -300,10 +307,10 @@ export function SupportButton() {
               <img src="/bato/qr-donate.png" alt="Donate QR" />
             </div>
             <div className="support-scan">
-              {isNe ? 'QR scan गरेर दान गर्नुहोस्' : 'Scan the QR to donate'}
+              {isNe ? 'QR scan गरेर साथ दिनुहोस्' : 'Scan the QR to send a chai'}
             </div>
             <div className="support-proof">
-              {isNe ? 'हरेक चियाले बाटोलाई विज्ञापन-मुक्त राख्छ' : 'Every chai keeps बाटो ad-free'}
+              {isNe ? 'हरेक चियाले बाटोलाई सबैका लागि नि:शुल्क राख्छ' : 'One chai keeps बाटो free for everyone'}
             </div>
             <button className="btn btn-gold btn-sm" onClick={() => setOpen(false)}>
               {isNe ? 'बन्द गर्नुहोस्' : 'Close'}
