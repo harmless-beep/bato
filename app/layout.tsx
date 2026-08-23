@@ -4,6 +4,7 @@ import { LangProvider } from './components/ui'
 import EasterEggs from './components/easter-eggs'
 import Companion from './components/companion'
 import SuggestFab from './components/suggest-fab'
+import AmbientBg from './components/ambient-bg'
 
 export const metadata: Metadata = {
   title: 'बाटो — IOE/KU Engineering Prep',
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: `if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/bato/sw.js').catch(function(){})})}` }} />
       </head>
       <body>
+        <AmbientBg />
         <LangProvider>
           {children}
           <EasterEggs />
