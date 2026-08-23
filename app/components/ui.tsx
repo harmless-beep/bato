@@ -242,16 +242,8 @@ function QrBackdrop() {
         if (m.y < -10) m.y = H + 10
         if (m.y > H + 10) m.y = -10
         m.ph += 0.02
-        const tw = 0.55 + 0.45 * Math.sin(m.ph)
-        const g = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.s * 3.2)
-        g.addColorStop(0, m.c)
-        g.addColorStop(1, 'transparent')
-        ctx.globalAlpha = 0.35 * tw
-        ctx.fillStyle = g
-        ctx.beginPath()
-        ctx.arc(m.x, m.y, m.s * 3.2, 0, Math.PI * 2)
-        ctx.fill()
-        ctx.globalAlpha = 0.9
+        const tw = 0.45 + 0.4 * Math.sin(m.ph)
+        ctx.globalAlpha = 0.16 * tw
         ctx.fillStyle = m.c
         ctx.beginPath()
         ctx.arc(m.x, m.y, m.s, 0, Math.PI * 2)

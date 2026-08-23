@@ -1026,33 +1026,26 @@ html body {
   50% { opacity: 0.65 }
 }
 .support-thanks-sub { font-size: 12.5px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+/* The QR is rendered at full size with pixelated rendering so a phone
+   camera can read it off a screen. It's opaque white on top of the mote
+   field — motes never sit over the code itself. */
 .support-qr-big {
-  width: 200px; height: 200px;
-  background: #fff; border-radius: 16px;
+  width: 210px; height: 210px;
+  background: #fff; border-radius: 14px;
   padding: 0; margin: 16px auto 10px;
   box-shadow: 0 8px 28px rgba(0,0,0,0.18);
-  animation: qr-pulse 2.4s ease-in-out infinite;
   position: relative;
-  overflow: hidden;             /* motes clipped to the rounded card */
   display: flex; align-items: center; justify-content: center;
-}
-/* The canvas fills the card; the QR sits on an opaque white tile in the
-   center, so motes paint a themed interactive ring AROUND the QR and
-   never cover or bleed through it — the code stays clean & scannable. */
-.support-qr-big canvas {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  border-radius: 16px;
-  pointer-events: none;         /* don't steal hover from the QR/box */
-  z-index: 0;
+  z-index: 2;                    /* sits above the mote field */
 }
 .support-qr-big img {
   position: relative;
   z-index: 1;
   background: #fff;
-  width: 80%; height: 80%;
-  display: block; border-radius: 8px;
+  width: 100%; height: 100%;
+  display: block; border-radius: 10px;
   object-fit: contain;
+  image-rendering: pixelated;    /* keep modules crisp for scanning */
 }
 @keyframes qr-pulse {
   0%, 100% { box-shadow: 0 8px 28px rgba(0,0,0,0.18) }
