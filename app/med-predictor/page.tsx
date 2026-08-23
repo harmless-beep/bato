@@ -2,32 +2,34 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { medicalCutoffs, medRankBands } from '@/data/medical-cutoffs'
+import { medicalCutoffs, PROGRAMS, medRankBands } from '@/data/medical-cutoffs'
 import { useLang } from '../components/ui'
 
 export default function MedPredictor() {
   const { lang } = useLang()
   const isNe = lang === 'ne'
   const [rank, setRank] = useState('')
+  const [program, setProgram] = useState<typeof PROGRAMS[number]>('MBBS')
 
   const r = parseInt(rank, 10)
   const valid = !isNaN(r) && r > 0
 
   const band = valid ? medRankBands.find(b => r >= b.min && r <= b.max) : null
 
+  const filtered = medicalCutoffs.filter(c => c.program === program)
   const result = valid
-    ? medicalCutoffs.map(c => {
+    ? filtered.map(c => {
         const sch = c.cutoffs.scholarship !== null && r <= c.cutoffs.scholarship
         const pay = c.cutoffs.paying !== null && r <= c.cutoffs.paying
         const status = sch ? 'scholarship' : pay ? 'paying' : 'no'
         return { ...c, status }
-      })
+      }).sort((a, b) => (a.cutoffs.paying ?? Infinity) - (b.cutoffs.paying ?? Infinity))
     : []
 
   const statusMeta: Record<'scholarship' | 'paying' | 'no', { en: string; ne: string; cls: string }> = {
     scholarship: { en: 'Scholarship', ne: 'स्कॉलरशिप', cls: 'tier-safe' },
-    paying: { en: 'Paying', ne: 'Paying', cls: 'tier-likely' },
-    no: { en: 'Not likely', ne: 'भेटिएन', cls: 'tier-reach' },
+    paying:      { en: 'Paying',      ne: 'Paying',      cls: 'tier-likely' },
+    no:          { en: 'Not likely', ne: 'भेटिएन',      cls: 'tier-reach' },
   }
 
   return (
@@ -47,6 +49,29 @@ export default function MedPredictor() {
               : 'Enter your MECEE-BL (2082) rank. Lower rank = better. Scholarship and paying seats are separate.'}
           </div>
 
+          {/* Program selector */}
+          <div style={{ display: 'flex', gap: 8, marginBottom: 14, flexWrap: 'wrap' }}>
+            {PROGRAMS.map(p => (
+              <button
+                key={p}
+                onClick={() => setProgram(p)}
+                style={{
+                  padding: '4px 10px',
+                  borderRadius: 20,
+                  border: 'none',
+                  fontSize: 12,
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  background: program === p ? 'var(--primary)' : 'rgba(255,255,255,0.15)',
+                  color: program === p ? '#fff' : 'rgba(255,255,255,0.8)',
+                  transition: 'all 0.15s',
+                }}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+
           <div className="ph-row">
             <div className="score-input-wrap">
               <input
@@ -58,7 +83,6 @@ export default function MedPredictor() {
               />
               <span className="unit">{isNe ? 'rank' : 'rank'}</span>
             </div>
-            <button className="btn btn-gold" onClick={() => {}}>{isNe ? 'हेर्नुहोस्' : 'Predict'}</button>
           </div>
 
           <div style={{ display: 'flex', gap: 8, marginTop: 14, flexWrap: 'wrap' }}>
@@ -87,25 +111,40 @@ export default function MedPredictor() {
             </div>
 
             <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--muted)', marginBottom: 10 }}>
-              {isNe ? `Rank ${r} मा — ${result.filter(x => x.status !== 'no').length} वटा college` : `At rank ${r} — ${result.filter(x => x.status !== 'no').length} colleges`}
+              {isNe
+                ? `${program} मा — Rank ${r} मा ${result.filter(x => x.status !== 'no').length} वटा college`
+                : `${program} — ${result.filter(x => x.status !== 'no').length} colleges at rank ${r}`}
             </div>
 
             {result.map((c, i) => (
-              <div key={c.id} className="branch-result" style={{ opacity: c.status === 'no' ? 0.5 : 1 }}>
+              <div key={c.id} className="branch-result" style={{ opacity: c.status === 'no' ? 0.45 : 1 }}>
                 <div className={`branch-rank ${c.status === 'no' ? 'rank-other' : c.status === 'scholarship' ? 'rank-1' : 'rank-2'}`}>
                   {i + 1}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div className="branch-name" style={{ fontSize: 14 }}>{c.college}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                    <span className="branch-name" style={{ fontSize: 14 }}>{c.college}</span>
+                    {c.website && (
+                      <a href={c.website} target="_blank" rel="noopener noreferrer"
+                        style={{ fontSize: 11, color: 'var(--primary)', textDecoration: 'none' }}
+                        aria-label={`Visit ${c.college} website`}>🔗</a>
+                    )}
+                  </div>
                   <div className="branch-college">
-                    {c.type} • {c.mbbsSeats} {isNe ? 'सिट' : 'seats'} • {c.feeNote}
+                    {c.type} • {c.seats} {isNe ? 'सिट' : 'seats'} • {c.feeNote}
+                  </div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>
+                    {isNe ? 'छुट्टै cutoff: ' : 'Separate cutoff: '}
+                    {c.cutoffs.scholarship !== null && `Scholarship ≤${c.cutoffs.scholarship}`}
+                    {c.cutoffs.scholarship !== null && c.cutoffs.paying !== null && ' | '}
+                    {c.cutoffs.paying !== null && `Paying ≤${c.cutoffs.paying}`}
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
                     <div className="meter" style={{ flex: 1, maxWidth: 140 }}>
                       <div
                         className="meter-fill"
                         style={{
-                          width: `${Math.max(8, 100 - (c.cutoffs.scholarship ?? 3000) / 60)}%`,
+                          width: `${Math.max(8, Math.min(100, 100 - (c.cutoffs.paying ?? 3000) / 30))}%`,
                           background: c.status === 'scholarship' ? 'var(--success)' : c.status === 'paying' ? 'var(--gold)' : 'var(--muted)',
                         }}
                       />
