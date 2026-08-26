@@ -114,10 +114,10 @@ function drawFullLight(
 
     // draw filled morphing shape
     const grd = ctx.createRadialGradient(b.cx, b.cy, 0, b.cx, b.cy, b.r * 1.5)
-    grd.addColorStop(0, b.color + '28')
-    grd.addColorStop(0.5, b.colorB + '18')
+    grd.addColorStop(0, b.color + '4d')
+    grd.addColorStop(0.5, b.colorB + '33')
     grd.addColorStop(1, 'transparent')
-    ctx.globalAlpha = 0.55
+    ctx.globalAlpha = 0.8
     ctx.fillStyle = grd
     ctx.beginPath()
     ctx.moveTo(b.cx + b.pts[0], b.cy + b.pts[1])
@@ -320,8 +320,17 @@ function drawLiteForest(ctx: CanvasRenderingContext2D, fs: Fly[], W: number, H: 
 // OCEAN — ripples
 // ══════════════════════════════════════════════════════════════════════════════
 
-function drawFullOcean(ctx: CanvasRenderingContext2D, ripples: Ripple[], pal: string[], mx: number, my: number, lastT: { v: number }) {
+// shared ambient ticker — only one ocean draw fn runs at a time
+const ambientT = { v: 0 }
+
+function drawFullOcean(ctx: CanvasRenderingContext2D, ripples: Ripple[], pal: string[], mx: number, my: number, W: number, H: number, lastT: { v: number }) {
   const now = Date.now()
+  // ambient ripples: a phone at rest still shows life (was blank with no touch)
+  if (now - ambientT.v > (mx > 0 ? 2400 : 1200)) {
+    ambientT.v = now
+    ripples.push({ x: Math.random() * W, y: Math.random() * H, r: 4, maxR: 80 + Math.random() * 90,
+      color: pal[Math.floor(Math.random() * pal.length)], alpha: 0.55, born: now })
+  }
   if (mx > 0 && now - lastT.v > 60) {
     ripples.push({
       x: mx, y: my, r: 4, maxR: 150 + Math.random() * 60,
@@ -343,8 +352,13 @@ function drawFullOcean(ctx: CanvasRenderingContext2D, ripples: Ripple[], pal: st
   ctx.globalAlpha = 1
 }
 
-function drawLiteOcean(ctx: CanvasRenderingContext2D, ripples: Ripple[], pal: string[], mx: number, my: number, lastT: { v: number }) {
+function drawLiteOcean(ctx: CanvasRenderingContext2D, ripples: Ripple[], pal: string[], mx: number, my: number, W: number, H: number, lastT: { v: number }) {
   const now = Date.now()
+  if (now - ambientT.v > (mx > 0 ? 2800 : 1600)) {
+    ambientT.v = now
+    ripples.push({ x: Math.random() * W, y: Math.random() * H, r: 4, maxR: 70 + Math.random() * 60,
+      color: pal[Math.floor(Math.random() * pal.length)], alpha: 0.5, born: now })
+  }
   if (mx > 0 && now - lastT.v > 120) {
     ripples.push({ x: mx, y: my, r: 5, maxR: 90,
       color: pal[0], alpha: 0.7, born: now })
@@ -461,8 +475,8 @@ export default function AmbientBg() {
         if (perf === 'full') drawFullForest(ctx, flies, W, H, mx, my)
         else drawLiteForest(ctx, flies, W, H, mx, my)
       } else if (t === 'ocean') {
-        if (perf === 'full') drawFullOcean(ctx, ripples, pal(), mx, my, lastRippleT)
-        else drawLiteOcean(ctx, ripples, pal(), mx, my, lastRippleT)
+        if (perf === 'full') drawFullOcean(ctx, ripples, pal(), mx, my, W, H, lastRippleT)
+        else drawLiteOcean(ctx, ripples, pal(), mx, my, W, H, lastRippleT)
       }
       raf = requestAnimationFrame(frame)
     }
