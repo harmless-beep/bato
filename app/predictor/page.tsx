@@ -34,8 +34,8 @@ export default function Predictor() {
   const [result, setResult] = useState<{ c: typeof cutoffs[number]; tier: Tier; margin: number }[] | null>(null)
 
   const predict = () => {
-    const r = parseInt(rank)
-    if (isNaN(r) || r < 1 || r > 9000) return
+    const r = Math.min(9000, Math.max(1, parseInt(rank)))
+    if (isNaN(r)) return
     const rows = cutoffs
       .filter(c => campus === 'All' || c.campus === campus)
       .map(c => {
@@ -44,7 +44,7 @@ export default function Predictor() {
         return { c, tier: tierFor(margin), margin }
       })
       .filter(r => r.tier !== 'none')
-      .sort((a, b) => b.margin - a.margin)
+      .sort((a, b) => a.margin - b.margin) // most competitive reachable first
     setResult(rows)
   }
 
@@ -125,8 +125,8 @@ export default function Predictor() {
                 <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>
                   {result[0]
                     ? isNe
-                      ? `सबैभन्दा प्रतिस्पर्धी: ${result[0].c.campus} — cutoff rank ${fee === 'regular' ? result[0].c.regular : result[0].c.fullFee} (तपाईं ${Math.max(0, (fee === 'regular' ? result[0].c.regular : result[0].c.fullFee) - Number(rank))} rank माथि)`
-                      : `Best option: ${result[0].c.campus} — cutoff ${fee === 'regular' ? result[0].c.regular : result[0].c.fullFee} (you are ${Math.max(0, (fee === 'regular' ? result[0].c.regular : result[0].c.fullFee) - Number(rank))} ranks above)`
+                      ? `सबैभन्दा प्रतिस्पर्धी: ${result[0].c.campus} — cutoff rank ${fee === 'regular' ? result[0].c.regular : result[0].c.fullFee} (${result[0].margin >= 0 ? `तपाईं ${result[0].margin} rank माथि` : `${-result[0].margin} तल — च्हरिन्छ`})`
+                      : `Best option: ${result[0].c.campus} — cutoff ${fee === 'regular' ? result[0].c.regular : result[0].c.fullFee} (${result[0].margin >= 0 ? `you are ${result[0].margin} ranks above` : `${-result[0].margin} below — stretch`})`
                     : isNe ? 'कुनै option छैन' : 'No options'}
                 </div>
               </div>
@@ -150,7 +150,7 @@ export default function Predictor() {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
                       <div className="meter" style={{ flex: 1, maxWidth: 140 }}>
-                        <div className="meter-fill" style={{ width: `${Math.max(8, 100 - (r.c.regular / 90))}%`, background: r.tier === 'safe' ? 'var(--success)' : r.tier === 'likely' ? 'var(--primary)' : 'var(--gold)' }} />
+                        <div className="meter-fill" style={{ width: `${Math.max(8, 100 - ((fee === 'regular' ? r.c.regular : r.c.fullFee) / 90))}%`, background: r.tier === 'safe' ? 'var(--success)' : r.tier === 'likely' ? 'var(--primary)' : 'var(--gold)' }} />
                       </div>
                       <span className={`tier-badge ${T[r.tier as Exclude<Tier, 'none'>].cls}`}>{isNe ? T[r.tier as Exclude<Tier, 'none'>].ne : T[r.tier as Exclude<Tier, 'none'>].en}</span>
                     </div>
