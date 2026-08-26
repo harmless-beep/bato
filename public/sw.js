@@ -1,5 +1,5 @@
 /* बाटो service worker — offline cache for static export */
-const CACHE = 'bato-v5'
+const CACHE = 'bato-v6'
 const BASE = self.location.pathname.slice(0, self.location.pathname.lastIndexOf('/sw.js')) || ''
 
 self.addEventListener('install', (e) => {
