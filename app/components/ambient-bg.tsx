@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { getPerfMode, setPerfMode } from './perf-mode'
+import { getPerfMode } from './perf-mode'
 import type { PerfMode } from './perf-mode'
 export type { PerfMode }
 
@@ -43,15 +43,13 @@ interface Blob {
   basePts: number[]              // original offsets
 }
 
-function mkBlob(W: number, H: number, pal: string[]): Blob {
+function mkBlob(W: number, H: number, pal: string[], cx = Math.random() * W, cy = Math.random() * H): Blob {
   const color = pal[Math.floor(Math.random() * pal.length)]
   const colorB = pal[Math.floor(Math.random() * pal.length)]
-  const cx = Math.random() * W
-  const cy = Math.random() * H
   const nPts = 8
   const pts: number[] = []
   const basePts: number[] = []
-  const r = 140 + Math.random() * 180
+  const r = Math.min(W, H) * (0.38 + Math.random() * 0.22)
   for (let i = 0; i < nPts; i++) {
     const a = (i / nPts) * Math.PI * 2
     const jitter = 0.7 + Math.random() * 0.6
@@ -65,12 +63,12 @@ function mkBlob(W: number, H: number, pal: string[]): Blob {
   }
 }
 
-function mkMote(W: number, H: number): Particle {
+function mkMote(W: number, H: number, pal: string[]): Particle {
   return {
     x: Math.random() * W, y: Math.random() * H,
     vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
-    size: Math.random() * 2 + 1,
-    color: '#ffffff',
+    size: Math.random() * 2.4 + 1.4,
+    color: pal[Math.floor(Math.random() * pal.length)],
     phase: Math.random() * Math.PI * 2,
   }
 }
@@ -114,10 +112,10 @@ function drawFullLight(
 
     // draw filled morphing shape
     const grd = ctx.createRadialGradient(b.cx, b.cy, 0, b.cx, b.cy, b.r * 1.5)
-    grd.addColorStop(0, b.color + '4d')
-    grd.addColorStop(0.5, b.colorB + '33')
+    grd.addColorStop(0, b.color + 'b8')
+    grd.addColorStop(0.45, b.colorB + '85')
     grd.addColorStop(1, 'transparent')
-    ctx.globalAlpha = 0.8
+    ctx.globalAlpha = 1
     ctx.fillStyle = grd
     ctx.beginPath()
     ctx.moveTo(b.cx + b.pts[0], b.cy + b.pts[1])
@@ -144,20 +142,51 @@ function drawFullLight(
     if (m.x < 0) m.x = W; if (m.x > W) m.x = 0
     if (m.y < 0) m.y = H; if (m.y > H) m.y = 0
     m.phase += 0.018
-    const a = (Math.sin(m.phase) * 0.35 + 0.65) * 0.7
-    // glow
-    ctx.globalAlpha = a * 0.3
-    const grd = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.size * 3)
-    grd.addColorStop(0, '#a78bfa'); grd.addColorStop(1, 'transparent')
+    const a = (Math.sin(m.phase) * 0.35 + 0.65) * 0.85
+    ctx.globalAlpha = a * 0.45
+    const grd = ctx.createRadialGradient(m.x, m.y, 0, m.x, m.y, m.size * 4)
+    grd.addColorStop(0, m.color); grd.addColorStop(1, 'transparent')
     ctx.fillStyle = grd
-    ctx.beginPath(); ctx.arc(m.x, m.y, m.size * 3, 0, Math.PI * 2); ctx.fill()
-    ctx.globalAlpha = a; ctx.fillStyle = '#e9d5ff'
+    ctx.beginPath(); ctx.arc(m.x, m.y, m.size * 4, 0, Math.PI * 2); ctx.fill()
+    ctx.globalAlpha = a; ctx.fillStyle = m.color
     ctx.beginPath(); ctx.arc(m.x, m.y, m.size, 0, Math.PI * 2); ctx.fill()
   }
   ctx.globalAlpha = 1
 }
 
-function drawLiteLight(ctx: CanvasRenderingContext2D, motes: Particle[], W: number, H: number, mx: number, my: number) {
+function drawLiteLight(ctx: CanvasRenderingContext2D, motes: Particle[], blobs: Blob[], W: number, H: number, mx: number, my: number) {
+  // Lite still paints blobs — phones in Lite mode saw a blank page before.
+  for (const b of blobs) {
+    b.cx += b.vx; b.cy += b.vy
+    if (b.cx < -b.r * 2) b.cx = W + b.r
+    if (b.cx > W + b.r * 2) b.cx = -b.r
+    if (b.cy < -b.r * 2) b.cy = H + b.r
+    if (b.cy > H + b.r * 2) b.cy = -b.r
+    b.vx *= 0.99; b.vy *= 0.99
+    b.phase += b.speed
+    for (let i = 0; i < b.nPts; i++) {
+      const bp = b.basePts[i * 2], bq = b.basePts[i * 2 + 1]
+      const mag = Math.sqrt(bp * bp + bq * bq)
+      const ang = Math.atan2(bq, bp)
+      const wave = Math.sin(b.phase + i * 0.8) * 0.28 + Math.sin(b.phase * 1.7 + i * 1.3) * 0.14
+      b.pts[i * 2] = Math.cos(ang) * mag * (1 + wave)
+      b.pts[i * 2 + 1] = Math.sin(ang) * mag * (1 + wave)
+    }
+    const grd = ctx.createRadialGradient(b.cx, b.cy, 0, b.cx, b.cy, b.r * 1.5)
+    grd.addColorStop(0, b.color + 'b8'); grd.addColorStop(0.45, b.colorB + '85'); grd.addColorStop(1, 'transparent')
+    ctx.globalAlpha = 1; ctx.fillStyle = grd
+    ctx.beginPath()
+    ctx.moveTo(b.cx + b.pts[0], b.cy + b.pts[1])
+    for (let i = 1; i <= b.nPts; i++) {
+      const curr = i % b.nPts, next = (i + 1) % b.nPts
+      const currX = b.cx + b.pts[curr * 2], currY = b.cy + b.pts[curr * 2 + 1]
+      const nextX = b.cx + b.pts[next * 2], nextY = b.cy + b.pts[next * 2 + 1]
+      const midX = (b.cx + b.pts[i % b.nPts * 2] + nextX) / 2
+      const midY = (b.cy + b.pts[i % b.nPts * 2 + 1] + nextY) / 2
+      ctx.quadraticCurveTo(currX, currY, midX, midY)
+    }
+    ctx.closePath(); ctx.fill()
+  }
   for (const m of motes) {
     const dx = m.x - mx, dy = m.y - my
     const dist = Math.sqrt(dx * dx + dy * dy)
@@ -167,8 +196,8 @@ function drawLiteLight(ctx: CanvasRenderingContext2D, motes: Particle[], W: numb
     if (m.x < 0) m.x = W; if (m.x > W) m.x = 0
     if (m.y < 0) m.y = H; if (m.y > H) m.y = 0
     m.phase += 0.025
-    const a = (Math.sin(m.phase) * 0.35 + 0.65) * 0.75
-    ctx.globalAlpha = a; ctx.fillStyle = '#c4b5fd'
+    const a = (Math.sin(m.phase) * 0.35 + 0.65) * 0.85
+    ctx.globalAlpha = a; ctx.fillStyle = m.color
     ctx.beginPath(); ctx.arc(m.x, m.y, m.size, 0, Math.PI * 2); ctx.fill()
   }
   ctx.globalAlpha = 1
@@ -438,10 +467,10 @@ export default function AmbientBg() {
     const N_LITE_NODES = 35, N_FULL_NODES = 60
     const N_LITE_FLIES = 40, N_FULL_FLIES = 80
     const N_LITE_MOTES = 35, N_FULL_MOTES = 60
-    const N_BLOBS_FULL = 4, N_BLOBS_LITE = 0
+    const N_BLOBS_FULL = 4, N_BLOBS_LITE = 3
 
     function mkBlobs() { blobs = Array.from({ length: perf === 'full' ? N_BLOBS_FULL : N_BLOBS_LITE }, () => mkBlob(W, H, pal())) }
-    function mkMotes() { motes = Array.from({ length: perf === 'full' ? N_FULL_MOTES : N_LITE_MOTES }, () => mkMote(W, H)) }
+    function mkMotes() { motes = Array.from({ length: perf === 'full' ? N_FULL_MOTES : N_LITE_MOTES }, () => mkMote(W, H, pal())) }
     function mkNodes2() { nodes = mkNodes(perf === 'full' ? N_FULL_NODES : N_LITE_NODES, W, H, pal()) }
     function mkFlies2() { flies = mkFlies(perf === 'full' ? N_FULL_FLIES : N_LITE_FLIES, W, H, pal()) }
     function mkRipples2() { ripples = []; lastRippleT = { v: 0 } }
@@ -467,7 +496,7 @@ export default function AmbientBg() {
       const t = theme()
       if (t === 'light') {
         if (perf === 'full') drawFullLight(ctx, blobs, motes, W, H, mx, my, frameT)
-        else drawLiteLight(ctx, motes, W, H, mx, my)
+        else drawLiteLight(ctx, motes, blobs, W, H, mx, my)
       } else if (t === 'dark') {
         if (perf === 'full') drawFullDark(ctx, nodes, W, H, mx, my)
         else drawLiteDark(ctx, nodes, W, H, mx, my)
@@ -481,7 +510,14 @@ export default function AmbientBg() {
       raf = requestAnimationFrame(frame)
     }
 
-    function start() { if (!reduced) raf = requestAnimationFrame(frame) }
+    function start() {
+      if (!reduced) {
+        raf = requestAnimationFrame(frame)
+      } else {
+        // reduced-motion: still paint one static frame so background isn't blank
+        frame()
+      }
+    }
     function stop() { running = false; cancelAnimationFrame(raf) }
 
     const onVis = () => { if (document.hidden) stop(); else start() }
