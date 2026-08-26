@@ -25,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('bato-theme');if(t==='light'||t==='dark'||t==='forest'||t==='ocean')document.documentElement.dataset.theme=t;else if(!t&&matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.dataset.theme='dark'}catch(e){}` }} />
         <script dangerouslySetInnerHTML={{ __html: `if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('${BASE}/sw.js').catch(function(){})})}` }} />
+        <script defer src="https://analytics.open-domains.com/script.js" data-website-id="dc6ff702-f1d9-425f-a6ca-33d4b362f99f" />
       </head>
       <body>
         <AmbientBg />
