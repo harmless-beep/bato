@@ -6,6 +6,8 @@ import Companion from './components/companion'
 import SuggestFab from './components/suggest-fab'
 import AmbientBg from './components/ambient-bg'
 
+const BASE = process.env.NEXT_PUBLIC_BATO_BASE_PATH || ''
+
 export const metadata: Metadata = {
   title: 'बाटो — IOE/KU Engineering Prep',
   description: 'Free IOE & KU engineering entrance prep: mock tests, past papers, branch predictor. निःशुल्क प्रवेश परीक्षा तयारी।',
@@ -17,12 +19,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet"/>
-        <link rel="manifest" href="/bato/manifest.webmanifest" />
-        <link rel="icon" href="/bato/icon-192.png" />
+        <link rel="manifest" href={`${BASE}/manifest.webmanifest`} />
+        <link rel="icon" href={`${BASE}/icon-192.png`} />
         <meta name="theme-color" content="#0f1117" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('bato-theme');if(t==='light'||t==='dark'||t==='forest'||t==='ocean')document.documentElement.dataset.theme=t;else if(!t&&matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.dataset.theme='dark'}catch(e){}` }} />
-        <script dangerouslySetInnerHTML={{ __html: `if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('/bato/sw.js').catch(function(){})})}` }} />
+        <script dangerouslySetInnerHTML={{ __html: `if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('${BASE}/sw.js').catch(function(){})})}` }} />
       </head>
       <body>
         <AmbientBg />

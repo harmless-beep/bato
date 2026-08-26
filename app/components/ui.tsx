@@ -295,7 +295,7 @@ export function SupportButton() {
             </div>
             <div className="support-qr-big">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/bato/qr-donate.png" alt="Donate QR" />
+              <img src={`${process.env.NEXT_PUBLIC_BATO_BASE_PATH || ''}/qr-donate.png`} alt="Donate QR" />
             </div>
             <div className="support-scan">
               {isNe ? 'QR scan गरेर साथ दिनुहोस्' : 'Scan the QR to send a chai'}

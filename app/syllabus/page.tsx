@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { useLang } from '../components/ui'
 
+const BASE = process.env.NEXT_PUBLIC_BATO_BASE_PATH || ''
+
 const examPatterns = [
   {
     exam: 'IOE Entrance (BE/B.Arch)',
@@ -18,7 +20,7 @@ const examPatterns = [
       { label: 'Fee', value: 'Rs. 2,500' },
       { label: 'Portal', value: 'entrance.ioe.edu.np' },
     ],
-    pdf: '/bato/pdfs/ioe-entrance-syllabus.pdf',
+    pdf: `${BASE}/pdfs/ioe-entrance-syllabus.pdf`,
     pdfLabel: 'IOE Full Syllabus PDF →',
   },
   {
@@ -34,7 +36,7 @@ const examPatterns = [
       { label: 'Fee', value: 'Rs. 2,000 (via eSewa/Khalti)' },
       { label: 'Portal', value: 'apply.ku.edu.np/cbt' },
     ],
-    pdf: '/bato/pdfs/ku-kucat-syllabus-2026.pdf',
+    pdf: `${BASE}/pdfs/ku-kucat-syllabus-2026.pdf`,
     pdfLabel: 'KU KUCAT 2026 Syllabus PDF →',
   },
   {
@@ -53,7 +55,7 @@ const examPatterns = [
       { label: 'Fee', value: 'Rs. 6,000 (one-time, covers all programs)' },
       { label: 'Portal', value: 'entrance.meded.gov.np' },
     ],
-    pdf: '/bato/pdfs/mecee-bl-syllabus.pdf',
+    pdf: `${BASE}/pdfs/mecee-bl-syllabus.pdf`,
     pdfLabel: 'MECEE-BL Full Syllabus PDF →',
   },
 ]
