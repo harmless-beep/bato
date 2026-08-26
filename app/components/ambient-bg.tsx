@@ -378,8 +378,18 @@ export default function AmbientBg() {
     let mx = -9999, my = -9999
     const onMove = (e: MouseEvent) => { mx = e.clientX; my = e.clientY }
     const onLeave = () => { mx = -9999; my = -9999 }
+    // touch = same pointer. without this, mobile gets no pushes, no links,
+    // and ocean ripples never spawn (they key off pointer position).
+    const onTouch = (e: TouchEvent) => {
+      const t = e.touches[0] || e.changedTouches[0]
+      if (t) { mx = t.clientX; my = t.clientY }
+    }
+    const onTouchEnd = (e: TouchEvent) => { if (e.touches.length === 0) { mx = -9999; my = -9999 } }
     window.addEventListener('mousemove', onMove)
     window.addEventListener('mouseleave', onLeave)
+    window.addEventListener('touchstart', onTouch, { passive: true })
+    window.addEventListener('touchmove', onTouch, { passive: true })
+    window.addEventListener('touchend', onTouchEnd, { passive: true })
 
     let W = 0, H = 0, DPR = 1
     const resize = () => {
@@ -470,6 +480,9 @@ export default function AmbientBg() {
       stop()
       window.removeEventListener('mousemove', onMove)
       window.removeEventListener('mouseleave', onLeave)
+      window.removeEventListener('touchstart', onTouch)
+      window.removeEventListener('touchmove', onTouch)
+      window.removeEventListener('touchend', onTouchEnd)
       window.removeEventListener('resize', resize)
       window.removeEventListener('bato-perf-change', onPerf)
       document.removeEventListener('visibilitychange', onVis)
