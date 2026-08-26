@@ -17,6 +17,8 @@ self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url)
   // Only handle same-origin GET under /bato/
   if (e.request.method !== 'GET' || url.origin !== location.origin || !url.pathname.startsWith(BASE)) return
+  // never serve the worker from cache — byte-diff updates must see fresh bytes
+  if (url.pathname.endsWith('/sw.js')) return
 
   // Navigation (HTML): network-first so users always get the latest build
   if (e.request.mode === 'navigate') {
