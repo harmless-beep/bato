@@ -49,7 +49,7 @@ function mkBlob(W: number, H: number, pal: string[], cx = Math.random() * W, cy 
   const nPts = 8
   const pts: number[] = []
   const basePts: number[] = []
-  const r = Math.min(W, H) * (0.38 + Math.random() * 0.22)
+  const r = Math.min(W, H) * (0.2 + Math.random() * 0.14)
   for (let i = 0; i < nPts; i++) {
     const a = (i / nPts) * Math.PI * 2
     const jitter = 0.7 + Math.random() * 0.6
@@ -112,10 +112,10 @@ function drawFullLight(
 
     // draw filled morphing shape
     const grd = ctx.createRadialGradient(b.cx, b.cy, 0, b.cx, b.cy, b.r * 1.5)
-    grd.addColorStop(0, b.color + 'b8')
-    grd.addColorStop(0.45, b.colorB + '85')
+    grd.addColorStop(0, b.color + '70')
+    grd.addColorStop(0.45, b.colorB + '52')
     grd.addColorStop(1, 'transparent')
-    ctx.globalAlpha = 1
+    ctx.globalAlpha = 0.9
     ctx.fillStyle = grd
     ctx.beginPath()
     ctx.moveTo(b.cx + b.pts[0], b.cy + b.pts[1])
@@ -173,8 +173,8 @@ function drawLiteLight(ctx: CanvasRenderingContext2D, motes: Particle[], blobs: 
       b.pts[i * 2 + 1] = Math.sin(ang) * mag * (1 + wave)
     }
     const grd = ctx.createRadialGradient(b.cx, b.cy, 0, b.cx, b.cy, b.r * 1.5)
-    grd.addColorStop(0, b.color + 'b8'); grd.addColorStop(0.45, b.colorB + '85'); grd.addColorStop(1, 'transparent')
-    ctx.globalAlpha = 1; ctx.fillStyle = grd
+    grd.addColorStop(0, b.color + '70'); grd.addColorStop(0.45, b.colorB + '52'); grd.addColorStop(1, 'transparent')
+    ctx.globalAlpha = 0.9; ctx.fillStyle = grd
     ctx.beginPath()
     ctx.moveTo(b.cx + b.pts[0], b.cy + b.pts[1])
     for (let i = 1; i <= b.nPts; i++) {
@@ -355,10 +355,10 @@ const ambientT = { v: 0 }
 function drawFullOcean(ctx: CanvasRenderingContext2D, ripples: Ripple[], pal: string[], mx: number, my: number, W: number, H: number, lastT: { v: number }) {
   const now = Date.now()
   // ambient ripples: a phone at rest still shows life (was blank with no touch)
-  if (now - ambientT.v > (mx > 0 ? 2400 : 1200)) {
+  if (now - ambientT.v > (mx > 0 ? 1600 : 800)) {
     ambientT.v = now
-    ripples.push({ x: Math.random() * W, y: Math.random() * H, r: 4, maxR: 80 + Math.random() * 90,
-      color: pal[Math.floor(Math.random() * pal.length)], alpha: 0.55, born: now })
+    ripples.push({ x: Math.random() * W, y: Math.random() * H, r: 4, maxR: 140 + Math.random() * 110,
+      color: pal[Math.floor(Math.random() * pal.length)], alpha: 0.9, born: now })
   }
   if (mx > 0 && now - lastT.v > 60) {
     ripples.push({
@@ -371,10 +371,21 @@ function drawFullOcean(ctx: CanvasRenderingContext2D, ripples: Ripple[], pal: st
   ripples.length = 0; ripples.push(...alive)
   for (const rp of alive) {
     rp.r += 2.4; rp.alpha = Math.max(0, (1 - rp.r / rp.maxR) * 0.85)
-    ctx.globalAlpha = rp.alpha; ctx.strokeStyle = rp.color; ctx.lineWidth = 1.5
+    // soft filled disc — light through water (this is what's visible at rest)
+    if (rp.r > 12) {
+      const fill = ctx.createRadialGradient(rp.x, rp.y, 0, rp.x, rp.y, rp.r)
+      fill.addColorStop(0, rp.color + '59')
+      fill.addColorStop(0.7, rp.color + '30')
+      fill.addColorStop(1, 'transparent')
+      ctx.globalAlpha = rp.alpha; ctx.fillStyle = fill
+      ctx.beginPath(); ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2); ctx.fill()
+    }
+    // crisp ring
+    ctx.globalAlpha = rp.alpha; ctx.strokeStyle = rp.color; ctx.lineWidth = 2.5
     ctx.beginPath(); ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2); ctx.stroke()
     if (rp.r > 20) {
-      ctx.globalAlpha = rp.alpha * 0.45
+      ctx.globalAlpha = rp.alpha * 0.6
+      ctx.lineWidth = 1.5
       ctx.beginPath(); ctx.arc(rp.x, rp.y, rp.r * 0.55, 0, Math.PI * 2); ctx.stroke()
     }
   }
@@ -383,10 +394,10 @@ function drawFullOcean(ctx: CanvasRenderingContext2D, ripples: Ripple[], pal: st
 
 function drawLiteOcean(ctx: CanvasRenderingContext2D, ripples: Ripple[], pal: string[], mx: number, my: number, W: number, H: number, lastT: { v: number }) {
   const now = Date.now()
-  if (now - ambientT.v > (mx > 0 ? 2800 : 1600)) {
+  if (now - ambientT.v > (mx > 0 ? 2000 : 1100)) {
     ambientT.v = now
-    ripples.push({ x: Math.random() * W, y: Math.random() * H, r: 4, maxR: 70 + Math.random() * 60,
-      color: pal[Math.floor(Math.random() * pal.length)], alpha: 0.5, born: now })
+    ripples.push({ x: Math.random() * W, y: Math.random() * H, r: 4, maxR: 110 + Math.random() * 80,
+      color: pal[Math.floor(Math.random() * pal.length)], alpha: 0.8, born: now })
   }
   if (mx > 0 && now - lastT.v > 120) {
     ripples.push({ x: mx, y: my, r: 5, maxR: 90,
@@ -397,7 +408,13 @@ function drawLiteOcean(ctx: CanvasRenderingContext2D, ripples: Ripple[], pal: st
   ripples.length = 0; ripples.push(...alive)
   for (const rp of alive) {
     rp.r += 2; rp.alpha = Math.max(0, (1 - rp.r / rp.maxR) * 0.7)
-    ctx.globalAlpha = rp.alpha; ctx.strokeStyle = rp.color; ctx.lineWidth = 1.2
+    if (rp.r > 12) {
+      const fill = ctx.createRadialGradient(rp.x, rp.y, 0, rp.x, rp.y, rp.r)
+      fill.addColorStop(0, rp.color + '4d'); fill.addColorStop(1, 'transparent')
+      ctx.globalAlpha = rp.alpha; ctx.fillStyle = fill
+      ctx.beginPath(); ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2); ctx.fill()
+    }
+    ctx.globalAlpha = rp.alpha; ctx.strokeStyle = rp.color; ctx.lineWidth = 1.6
     ctx.beginPath(); ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2); ctx.stroke()
   }
   ctx.globalAlpha = 1
