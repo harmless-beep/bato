@@ -1,10 +1,10 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --bg: #f5f6fa;
-  --surface: #f8fafc;
-  --surface-2: #eef0f5;
-  --card: color-mix(in srgb, #ffffff 88%, transparent);
+  --bg: #fbfaf8;
+  --surface: #fffdfb;
+  --surface-2: #f1efeb;
+  --card: color-mix(in srgb, #ffffff 90%, transparent);
   --primary: #4f46e5;
   --primary-soft: #eef2ff;
   --violet: #7c3aed;
@@ -619,8 +619,9 @@ html[data-theme="ocean"] {
 html body {
   background-color: var(--bg);
   background-image:
-    radial-gradient(1100px 620px at 12% -10%, rgba(239,230,214,0.55) 0, transparent 55%),
-    radial-gradient(900px 520px at 100% 12%, rgba(228,234,242,0.5) 0, transparent 50%);
+    radial-gradient(1000px 680px at 8% -12%, rgba(255,231,214,0.72) 0, transparent 58%),
+    radial-gradient(920px 600px at 104% 8%, rgba(220,238,255,0.7) 0, transparent 56%),
+    radial-gradient(780px 520px at 48% 110%, rgba(228,229,255,0.52) 0, transparent 58%);
   background-attachment: fixed;
   background-repeat: no-repeat;
 }

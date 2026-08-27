@@ -11,8 +11,8 @@ function getTheme(): string {
 
 // ── Palette per theme ────────────────────────────────────────────────────────
 const PAL: Record<string, string[]> = {
-  // milky cream / pearl — saturated indigo+gold on white is what looked bad
-  light:  ['#efe6d6', '#e4eaf2', '#f2eadc', '#ebe4d8', '#dde4ee'],
+  // pearl aurora: visible on warm white, never saturated or noisy
+  light:  ['#e4e5ff', '#dceeff', '#ffe7d6', '#dff2e8'],
   dark:   ['#818cf8', '#a78bfa', '#fbbf24', '#38bdf8', '#34d399'],
   forest: ['#34d399', '#4ade80', '#fbbf24', '#f97316', '#86efac'],
   ocean:  ['#38bdf8', '#0ea5e9', '#818cf8', '#06b6d4', '#22d3ee'],
@@ -58,9 +58,9 @@ function mkBlob(W: number, H: number, pal: string[], cx = Math.random() * W, cy 
     basePts.push(pts[pts.length - 2], pts[pts.length - 1])
   }
   return {
-    cx, cy, vx: (Math.random() - 0.5) * 0.25, vy: (Math.random() - 0.5) * 0.25,
+    cx, cy, vx: (Math.random() - 0.5) * 0.12, vy: (Math.random() - 0.5) * 0.12,
     r, color, colorB, phase: Math.random() * Math.PI * 2,
-    speed: 0.008 + Math.random() * 0.012, nPts, pts, basePts,
+    speed: 0.002 + Math.random() * 0.003, nPts, pts, basePts,
   }
 }
 
@@ -113,10 +113,10 @@ function drawFullLight(
 
     // draw filled morphing shape
     const grd = ctx.createRadialGradient(b.cx, b.cy, 0, b.cx, b.cy, b.r * 1.5)
-    grd.addColorStop(0, b.color + 'c8')
-    grd.addColorStop(0.5, b.colorB + '8a')
+    grd.addColorStop(0, b.color + 'b0')
+    grd.addColorStop(0.48, b.colorB + '70')
     grd.addColorStop(1, 'transparent')
-    ctx.globalAlpha = 1
+    ctx.globalAlpha = 0.95
     ctx.fillStyle = grd
     ctx.beginPath()
     ctx.moveTo(b.cx + b.pts[0], b.cy + b.pts[1])
@@ -174,8 +174,8 @@ function drawLiteLight(ctx: CanvasRenderingContext2D, motes: Particle[], blobs: 
       b.pts[i * 2 + 1] = Math.sin(ang) * mag * (1 + wave)
     }
     const grd = ctx.createRadialGradient(b.cx, b.cy, 0, b.cx, b.cy, b.r * 1.5)
-    grd.addColorStop(0, b.color + 'c8'); grd.addColorStop(0.5, b.colorB + '8a'); grd.addColorStop(1, 'transparent')
-    ctx.globalAlpha = 1; ctx.fillStyle = grd
+    grd.addColorStop(0, b.color + 'b0'); grd.addColorStop(0.48, b.colorB + '70'); grd.addColorStop(1, 'transparent')
+    ctx.globalAlpha = 0.95; ctx.fillStyle = grd
     ctx.beginPath()
     ctx.moveTo(b.cx + b.pts[0], b.cy + b.pts[1])
     for (let i = 1; i <= b.nPts; i++) {
