@@ -98,7 +98,10 @@ export default function Home() {
 
   const [stats, setStats] = useState({ questions: 0, accuracy: 0, streak: 0, days: [] as string[] })
   const [mounted, setMounted] = useState(false)
-  const [quote, setQuote] = useState<{ en: string; np?: string; by: string; byNp?: string }>(() => randomQuote())
+  const [quote, setQuote] = useState<{ en: string; np?: string; by: string; byNp?: string }>(quotes[0])
+
+  // Pick randomly after hydration; random server/client initial state causes React #418.
+  useEffect(() => { setQuote(randomQuote()) }, [])
   const [daysLeft, setDaysLeft] = useState<{ ioe: number; cee: number } | null>(null)
 
   const newQuote = useCallback(() => setQuote(randomQuote()), [])

@@ -619,8 +619,8 @@ html[data-theme="ocean"] {
 html body {
   background-color: var(--bg);
   background-image:
-    radial-gradient(1100px 620px at 12% -10%, rgba(79,70,229,0.09) 0, transparent 55%),
-    radial-gradient(900px 520px at 100% 12%, rgba(124,58,237,0.08) 0, transparent 50%);
+    radial-gradient(1100px 620px at 12% -10%, rgba(239,230,214,0.55) 0, transparent 55%),
+    radial-gradient(900px 520px at 100% 12%, rgba(228,234,242,0.5) 0, transparent 50%);
   background-attachment: fixed;
   background-repeat: no-repeat;
 }
