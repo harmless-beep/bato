@@ -484,7 +484,8 @@ export default function AmbientBg() {
     const N_LITE = 30, N_FULL = 55
     const N_LITE_NODES = 35, N_FULL_NODES = 60
     const N_LITE_FLIES = 40, N_FULL_FLIES = 80
-    const N_LITE_MOTES = 35, N_FULL_MOTES = 60
+    // Light mode uses blobs only; tiny motes looked like dust on mobile.
+    const N_LITE_MOTES = 0, N_FULL_MOTES = 0
     const N_BLOBS_FULL = 4, N_BLOBS_LITE = 3
 
     function mkBlobs() { blobs = Array.from({ length: perf === 'full' ? N_BLOBS_FULL : N_BLOBS_LITE }, () => mkBlob(W, H, pal())) }
